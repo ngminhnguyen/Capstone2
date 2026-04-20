@@ -20,7 +20,7 @@ const ip = getLocalIP();
 console.log(`🚀 Local:   http://localhost:3000`);
 console.log(`🌐 Network: http://${ip}:3000`);
 
-spawn("npx", ["next", "dev", "--hostname", ip, "--port", "3000"], {
+spawn("npx", ["next", "dev", "--hostname", "0.0.0.0", "--port", "3000"], {
     stdio: "inherit",
     shell: true,
 });
