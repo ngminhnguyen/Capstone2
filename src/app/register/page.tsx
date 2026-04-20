@@ -48,11 +48,11 @@ export default function RegisterPage() {
             {step === 3 && (
                 <Step2
                     nextStep={() => goToStep(4)}
-                    // prevStep={() => goToStep(2)}
+                    prevStep={() => goToStep(2)}
                 />
             )}
 
-            {/* {step === 4 && <Result prevStep={() => goToStep(3)} />} */}
+            {step === 4 && <Result prevStep={() => goToStep(3)} />}
 
             <Footer />
         </div>
