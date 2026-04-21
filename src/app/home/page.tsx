@@ -68,6 +68,7 @@ export default function Home() {
         >
             <Navbar />
             <main>
+                {/*Header*/}
                 <section className="relative overflow-hidden bg-[#b63b5d] text-[#4E0706] ">
                     <div className="mx-auto max-w-7xl px-4 py-16 md:px-6 lg:px-8">
                         <div className="flex flex-col items-center gap-10 md:flex-row">
@@ -159,6 +160,7 @@ export default function Home() {
                         </svg>
                     </div>
                 </section>
+                {/*Main Body*/}
                 <section className="mx-auto max-w-6xl px-4 py-8 gap-4 flex flex-col">
                     <div className="px-10 py-10 md:grid-cols-2 rounded-2xl text-center">
                         <h2 className="text-[24px] font-bold">
@@ -244,6 +246,7 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+                {/*Support Section*/}
                 <section className="mx-auto max-w-6xl px-4 py-16">
                     <div className="mb-12 text-center max-w-2xl mx-auto">
                         <h2 className="text-[24px] font-bold">
