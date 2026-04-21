@@ -62,9 +62,11 @@ export default function Navbar() {
           ? "bg-[#b63b5d] text-white"
           : pathname === "/home"
             ? "bg-[#b63b5d] text-white"
-            : pathname === "/register"
-              ? "bg-[#FDECE4] text-[#4E0706]"
-              : "bg-[#FDECE4] text-[#4E0706]";
+            : pathname === "/recipes"
+              ? "bg-linear-to-r from-purple-700 to-fuchsia-600 text-white"
+              : pathname === "/register"
+                ? "bg-[#FDECE4] text-[#4E0706]"
+                : "bg-[#FDECE4] text-[#4E0706]";
 
     return (
         <Disclosure
