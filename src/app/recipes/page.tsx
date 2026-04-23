@@ -3,8 +3,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
+import CustomDropdown from "@/components/layout/CustomDropdown";
 
 const baloo = Baloo_2({
     subsets: ["latin"],
@@ -12,8 +12,27 @@ const baloo = Baloo_2({
 });
 
 export default function Recipes() {
+    const [ageFilter, setAgeFilter] = useState<string[]>([]);
+    const [methodFilter, setMethodFilter] = useState<string[]>([]);
+    const [dietaryFilter, setDietaryFilter] = useState<string[]>([]);
+    const [recipeTypeFilter, setRecipeTypeFilter] = useState<string[]>([]);
+    const [OccasionFilter, setOccasionFilter] = useState<string[]>([]);
+
+    // DATA demo
+    const recipes = [
+        { name: "Recipe 1", age: "6 months +" },
+        { name: "Recipe 2", age: "7 months +" },
+        { name: "Recipe 3", age: "10 months +" },
+    ];
+
+    // FILTER LOGIC
+    const filteredData =
+        ageFilter.length === 0
+            ? recipes
+            : recipes.filter((item) => ageFilter.includes(item.age));
+
     return (
-        <body
+        <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
             <Navbar />
@@ -75,25 +94,103 @@ export default function Recipes() {
                         >
                             <path
                                 d="M0,40 C240,80 360,120 720,60 C1080,0 1200,100 1440,80 L1440,120 L0,120 Z"
-                                className="fill-[#f5ebe6]"
+                                className="fill-[#FDECE4]"
                             />
                         </svg>
                     </div>
                 </section>
-                {/*Main Body*/}
-                <div className="mx-auto max-w-6xl">
-                    <p>Filter by:</p>
-                    <div className="flex justify-between">
-                        <div className="flex border border-amber-950 p-2">
-                            <p>Age(0)</p>
-                            <span className="">
-                                <FontAwesomeIcon icon={faAngleDown} />
-                            </span>
+                {/*Main Body Filter*/}
+                <div className="mx-auto max-w-6xl px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                    {/* FILTER */}
+                    <div className="flex flex-col items-center md:items-start gap-3">
+                        <span className="font-medium">Filter by:</span>
+
+                        <div className="flex items-center gap-3 flex-wrap">
+                            <CustomDropdown
+                                label="Age (s)"
+                                options={[
+                                    "5-6 months",
+                                    "7-8 months",
+                                    "9-11 months",
+                                    "12-18 months",
+                                ]}
+                                selectedValues={ageFilter}
+                                setSelectedValues={setAgeFilter}
+                            />
+                            {/* RESULT */}
+                            {/* <div className="mt-6">
+                                {filteredData.map((item, index) => (
+                                    <div key={index} className="p-2 border-b">
+                                        {item.name} - {item.age}
+                                    </div>
+                                ))}
+                            </div> */}
+                            <CustomDropdown
+                                label="Weaning method (s)"
+                                options={[
+                                    "Baby-led weaning (BLW)",
+                                    "Traditional weaning",
+                                    "Japanese-style weaning",
+                                ]}
+                                selectedValues={methodFilter}
+                                setSelectedValues={setMethodFilter}
+                            />
+
+                            <CustomDropdown
+                                label="Dietary needs (s)"
+                                options={[
+                                    "Vegetarian",
+                                    "Soya free",
+                                    "Nut free",
+                                    "Gluten free",
+                                    "Dairy free",
+                                    "Egg free",
+                                ]}
+                                selectedValues={dietaryFilter}
+                                setSelectedValues={setDietaryFilter}
+                            />
+                            <CustomDropdown
+                                label="Recipe type (s)"
+                                options={[
+                                    "First tastes",
+                                    "Veg puree",
+                                    "Finger food",
+                                    "Dips",
+                                ]}
+                                selectedValues={recipeTypeFilter}
+                                setSelectedValues={setRecipeTypeFilter}
+                            />
+
+                            <CustomDropdown
+                                label="Occasion (s)"
+                                options={[
+                                    "Breakfast",
+                                    "Lunch",
+                                    "Dinner",
+                                    "Snacks",
+                                    "Pudding",
+                                    "Parties",
+                                ]}
+                                selectedValues={OccasionFilter}
+                                setSelectedValues={setOccasionFilter}
+                            />
                         </div>
                     </div>
+
+                    {/* ORDER */}
+                    {/* <div className="flex items-center gap-3">
+                                    <span className="font-medium text-[#4E0706]">
+                                        Order by:
+                                    </span>
+                
+                                    <CustomDropdown
+                                        label="What's new"
+                                        options={["What's new", "Popular", "Oldest"]}
+                                    />
+                                </div> */}
                 </div>
             </main>
             <Footer />
-        </body>
+        </div>
     );
 }
