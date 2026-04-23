@@ -19,7 +19,7 @@ export default function Recipes() {
     const [OccasionFilter, setOccasionFilter] = useState<string[]>([]);
 
     // DATA demo
-    const recipes = [
+    const recipesFind = [
         { name: "Recipe 1", age: "6 months +" },
         { name: "Recipe 2", age: "7 months +" },
         { name: "Recipe 3", age: "10 months +" },
@@ -28,8 +28,42 @@ export default function Recipes() {
     // FILTER LOGIC
     const filteredData =
         ageFilter.length === 0
-            ? recipes
-            : recipes.filter((item) => ageFilter.includes(item.age));
+            ? recipesFind
+            : recipesFind.filter((item) => ageFilter.includes(item.age));
+
+    //Recipes
+    const recipesPopular = [
+        {
+            title: "Golden pumpkin spiced porridge",
+            img: "/images/popularRecipe1.webp",
+            age: "7+ months",
+            color: "bg-purple-500",
+        },
+        {
+            title: "Broccoli puree recipe",
+            img: "/images/popularRecipe2.webp",
+            age: "4-6 months",
+            color: "bg-pink-500",
+        },
+        {
+            title: "Easy Cheesy Eggy Bread",
+            img: "/images/popularRecipe3.webp",
+            age: "7+ months",
+            color: "bg-purple-500",
+        },
+        {
+            title: "Dairy Free Sweetcorn and Chive Pancake Fingers",
+            img: "/images/popularRecipe4.webp",
+            age: "7+ months",
+            color: "bg-purple-500",
+        },
+        {
+            title: "My first chicken curry",
+            img: "/images/popularRecipe5.webp",
+            age: "7+ months",
+            color: "bg-purple-500",
+        },
+    ];
 
     return (
         <div
@@ -189,6 +223,86 @@ export default function Recipes() {
                                     />
                                 </div> */}
                 </div>
+                {/* RECIPES */}
+                <section className="relative w-full py-16">
+                    {/* BACKGROUND 1/2 */}
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-[#EFD36A] z-0"></div>
+
+                    {/* CONTENT */}
+                    <div className="relative z-10">
+                        {/* TITLE */}
+                        <h2 className="text-center text-4xl md:text-5xl font-serif text-[#5A0A0A] mb-12">
+                            most popular recipes
+                        </h2>
+
+                        {/* CARDS */}
+                        <div className="flex justify-center gap-6 px-6">
+                            {recipesPopular.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="relative flex flex-col items-center"
+                                >
+                                    {/* BADGE */}
+                                    <div
+                                        className={`absolute -top-8 left-1/2 -translate-x-1/2 z-20`}
+                                    >
+                                        <div
+                                            className={`
+                                     ${item.color}
+                                    w-15 h-15
+                                    flex flex-col items-center justify-center
+                                     text-white
+                                    border-2 border-[#5A0A0A]
+                                    shadow-md
+                                    rotate-[8deg]
+                                    rounded-[60%_40%_55%_45%/55%_60%_40%_45%]
+                                    `}
+                                        >
+                                            <span className="text-[14px] font-bold leading-none">
+                                                {item.age.split(" ")[0]}
+                                            </span>
+                                            <span className="text-[12px] leading-none">
+                                                {item.age.split(" ")[1]}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {/* CARD */}
+                                    <div className=" w-55 overflow-visible">
+                                        {/* IMAGE */}
+                                        <div className="border-3 border-amber-950 rounded-2xl">
+                                            <img
+                                                src={item.img}
+                                                alt={item.title}
+                                                className="w-full object-cover rounded-2xl"
+                                                width={400}
+                                                height={300}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* TITLE */}
+                                    <p className="mt-4 text-center text-[#5A0A0A] font-medium max-w-50">
+                                        {item.title}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* DOTS */}
+                        <div className="flex justify-center gap-4 mt-6">
+                            {[0, 1, 2, 3, 4].map((dot) => (
+                                <div
+                                    key={dot}
+                                    className={`w-5 h-5 rounded-full border-2 border-white ${
+                                        dot === 2
+                                            ? "bg-orange-400"
+                                            : "bg-[#E6C06A]"
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </section>
             </main>
             <Footer />
         </div>
