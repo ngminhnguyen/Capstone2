@@ -155,7 +155,7 @@ export default function Home() {
                         >
                             <path
                                 d="M0,40 C240,80 360,120 720,60 C1080,0 1200,100 1440,80 L1440,120 L0,120 Z"
-                                className="fill-[#f5ebe6]"
+                                className="fill-[#FDECE4]"
                             />
                         </svg>
                     </div>
@@ -166,7 +166,10 @@ export default function Home() {
                         <h2 className="text-[24px] font-bold">
                             Baby Feeding Tips & Essentials
                         </h2>
-                        <p>Helpful guides, tools, and quick tips for easier baby meal preparation</p>
+                        <p>
+                            Helpful guides, tools, and quick tips for easier
+                            baby meal preparation
+                        </p>
                     </div>
                     <div className="grid grid-cols-1 gap-5 px-10 py-10 md:grid-cols-2 bg-[#F99191] rounded-2xl">
                         <div className="md:text-left  flex flex-col justify-center gap-2 text-center">
