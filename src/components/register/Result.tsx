@@ -8,17 +8,32 @@ type Props = {
 };
 export default function Result({ prevStep }: Props) {
     return (
-        <div className="sm:w-[80%] mx-auto bg-[#fdece4] text-[#5a0000] flex flex-col items-center py-5">
+        <div className="sm:w-[80%] mx-auto bg-[#fdece4] text-amber-950 flex flex-col items-center py-5">
             {/* Progress */}
-            <div className="relative w-[60%] h-20 flex items-center justify-between mb-10 pl-20 pr-20">
-                <div className="absolute top-1/2 left-0 w-full h-2 bg-cyan-700 -translate-y-1/2 rounded-full"></div>
-
-                <div
-                    className={`relative z-20 w-16 h-16 flex items-center justify-center ${handlee.className}`}
-                >
-                    <span className="absolute text-3xl font-bold z-10">
-                        Finish
-                    </span>
+            <div className="w-[60%] h-20 flex items-center justify-center mb-10 pl-20 pr-20 mx-auto">
+                <div className="flex flex-col items-center">
+                    <div
+                        className={`flex z-10 w-16 h-16 items-center justify-center text-center ${handlee.className}`}
+                    >
+                        <span className="text-3xl font-bold">
+                            Finish
+                            {/* Wave */}
+                            <svg
+                                className=""
+                                width="120"
+                                height="20"
+                                viewBox="0 0 120 20"
+                                fill="none"
+                            >
+                                <path
+                                    d="M0 10 Q10 0 20 10 T40 10 T60 10 T80 10 T100 10 T120 10"
+                                    stroke="#78350f"
+                                    strokeWidth="4"
+                                    fill="transparent"
+                                />
+                            </svg>
+                        </span>
+                    </div>
                 </div>
             </div>
             {/* Button Step*/}
