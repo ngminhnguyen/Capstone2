@@ -10,6 +10,7 @@ const recipes = [
         img: "/images/recipe1.webp",
         mealTime: "Luch",
         color: "bg-purple-500",
+        colorMonth: "bg-green-500",
     },
     {
         id: "2",
@@ -18,6 +19,7 @@ const recipes = [
         img: "/images/recipe2.webp",
         mealTime: "Snack",
         color: "bg-yellow-500",
+        colorMonth: "bg-green-500",
     },
     {
         id: "3",
@@ -26,6 +28,7 @@ const recipes = [
         img: "/images/recipe3.webp",
         mealTime: "Breakfast",
         color: "bg-pink-500",
+        colorMonth: "bg-green-500",
     },
     {
         id: "4",
@@ -34,6 +37,7 @@ const recipes = [
         img: "/images/recipe4.webp",
         mealTime: "Dinner",
         color: "bg-pink-500",
+        colorMonth: "bg-green-500",
     },
     {
         id: "5",
@@ -42,6 +46,7 @@ const recipes = [
         img: "/images/recipe5.webp",
         mealTime: "Snack",
         color: "bg-pink-500",
+        colorMonth: "bg-green-500",
     },
     {
         id: "6",
@@ -50,6 +55,7 @@ const recipes = [
         img: "/images/recipe6.webp",
         mealTime: "Luch",
         color: "bg-orange-500",
+        colorMonth: "bg-green-500",
     },
 ];
 
@@ -73,7 +79,7 @@ export default function RecipeWithPagination() {
                         key={item.id}
                         className={`relative bg-linear-to-b ${item.color}
                         text-white rounded-2xl p-4
-                        h-[500px]
+                        h-180
                         transition-all duration-300
                         hover:-translate-y-2
                         hover:rotate-2
@@ -160,7 +166,7 @@ export default function RecipeWithPagination() {
                                         Age
                                     </span>
                                     <div
-                                        className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.color}`}
+                                        className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
                                     >
                                         <div className="text-center leading-none">
                                             <div>12+</div>

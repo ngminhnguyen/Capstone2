@@ -3,11 +3,37 @@ type Props = {
     prevStep?: () => void;
 };
 import { Handlee } from "next/font/google";
+import { useState } from "react";
 const handlee = Handlee({
     subsets: ["latin"],
     weight: ["400"],
 });
+const allergiesData = [
+    {
+        id: 1,
+        name: "Seafood allergy",
+        foods: ["Shrimp", "crab", "sea", "fish"],
+        symptoms: [
+            "Itching, rash",
+            "Vomiting after eating",
+            "Less common in children under 1 year old, but can still occur.",
+        ],
+    },
+    {
+        id: 2,
+        name: "Milk allergy",
+        foods: ["Cow milk", "cheese"],
+        symptoms: ["Diarrhea", "Skin rash", "Abdominal pain"],
+    },
+    {
+        id: 3,
+        name: "Egg allergy",
+        foods: ["Egg white", "Egg yolk"],
+        symptoms: ["Hives", "Runny nose", "Vomiting"],
+    },
+];
 export default function Step2({ nextStep, prevStep }: Props) {
+    const [selectedId, setSelectedId] = useState<number | null>(null);
     return (
         <div className="sm:w-[80%] mx-auto bg-[#fdece4] text-[#5a0000] flex flex-col items-center py-5">
             {/* Progress */}
@@ -50,44 +76,49 @@ export default function Step2({ nextStep, prevStep }: Props) {
             </div>
             {/* Allergies Choice */}
             <div className="w-[60%] ml-10">
-                <div className="flex flex-col gap-2">
-                    <div>
-                        <div className="flex gap-2 items-center">
-                            <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                            <p>Seafood allergy (Shrimp, crab, sea, fish)</p>
+                <div className="flex flex-col gap-4">
+                    {allergiesData.map((item) => (
+                        <div key={item.id} className="flex gap-2 items-start">
+                            {/* CIRCLE BUTTON */}
+                            <button
+                                onClick={() =>
+                                    setSelectedId(
+                                        selectedId === item.id ? null : item.id,
+                                    )
+                                }
+                                className={`mt-1 w-5 h-5 rounded-full border border-amber-950 hover:bg-amber-300 flex items-center justify-center transition ${selectedId === item.id ? "bg-amber-300" : "bg-white"}`}
+                            >
+                                {/* inner dot when active */}
+                                {selectedId === item.id && (
+                                    <div className="w-2.5 h-2.5 bg-amber-950 rounded-full"></div>
+                                )}
+                            </button>
+
+                            {/* TEXT */}
+                            <div>
+                                <p>
+                                    {item.name}({item.foods.join(", ")})
+                                </p>
+                                <div
+                                    className={`overflow-hidden transition-all duration-300 ${
+                                        selectedId === item.id
+                                            ? "max-h-40 mt-2"
+                                            : "max-h-0"
+                                    }`}
+                                >
+                                    <p>Symptoms:</p>
+                                    <ul className="list-disc ml-5 mt-1 text-sm space-y-1">
+                                        {item.symptoms.map((symptom, index) => (
+                                            <li key={index}>{symptom}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div className="w-[40%] ml-[10%]">
-                            <p className="block text-center">Symptoms:</p>
-                            <p>It ching, rash</p>
-                            <p>Vomiting after eating</p>
-                            <p>
-                                Less common in children under 1 year old, but
-                                can still occur.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                        <p>Cow's milk protein allergy (CMPA)</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                        <p>Soy allergy</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                        <p>Peanut and nut allergy</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                        <p>Egg allergy</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="w-5 h-5 bg-white rounded-full border border-amber-950 hover:bg-amber-300"></span>
-                        <p>None</p>
-                    </div>
+                    ))}
                 </div>
             </div>
+
             {/* Button Step*/}
             <div className="w-[60%] flex justify-between gap-2 mt-8 pl-10 pr-10">
                 <button
