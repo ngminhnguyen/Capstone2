@@ -3,7 +3,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { useRef } from "react";
-import { it } from "node:test";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -52,6 +51,7 @@ const cards = [
         button: "read more",
     },
 ];
+
 export default function Home() {
     const [emblaRef, emblaApi] = useEmblaCarousel(
         {
@@ -62,6 +62,7 @@ export default function Home() {
         //chạy tự động, delay là thời gian chuyển slide, disableOnInteraction: false là khi người dùng tương tác với slider thì vẫn tiếp tục chạy tự động
         // [Autoplay({ delay: 3000 })],
     );
+
     return (
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
@@ -75,7 +76,7 @@ export default function Home() {
                             {/* Content */}
                             <motion.div
                                 initial={{ opacity: 0, x: -40 }}
-                                whileInView={{ opacity: 1, x: 0 }}
+                                animate={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.7 }}
                                 className="w-full md:w-1/2"
@@ -109,7 +110,7 @@ export default function Home() {
                             {/* Image */}
                             <motion.div
                                 initial={{ opacity: 0, x: 40, scale: 0.95 }}
-                                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="w-full md:w-1/2"

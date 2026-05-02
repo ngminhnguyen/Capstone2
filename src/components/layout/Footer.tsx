@@ -63,7 +63,7 @@ export default function Footer() {
                                 placeholder="Email*"
                                 className="flex-1 px-4 py-3 border border-amber-900 rounded-l-lg outline-none"
                             />
-                            <button className="px-4 bg-white text-orange-800 rounded-r-lg hover:bg-yellow-400 transition">
+                            <button className="px-4 bg-white text-orange-800 rounded-r-lg hover:bg-yellow-400 border border-amber-900 transition">
                                 →
                             </button>
                         </div>
