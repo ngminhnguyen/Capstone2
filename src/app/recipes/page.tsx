@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
 import React, { useState } from "react";
 import CustomDropdown from "@/components/layout/CustomDropdown";
+import Link from "next/link";
 
 const baloo = Baloo_2({
     subsets: ["latin"],
@@ -381,9 +382,10 @@ export default function Recipes() {
                     {/* GRID */}
                     <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         {currentData.map((item) => (
-                            <div
-                                key={item.id}
-                                className={`relative bg-linear-to-b ${item.color}
+                            <Link key={item.id} href={`/recipes/${item.id}`}>
+                                <div
+                                    key={item.id}
+                                    className={`relative bg-linear-to-b ${item.color}
                                         text-white rounded-2xl p-4
                                         h-180
                                         transition-all duration-300
@@ -391,118 +393,119 @@ export default function Recipes() {
                                         hover:rotate-2
                                         hover:shadow-[0_25px_50px_rgba(0,0,0,0.3)]
                                         "`}
-                            >
-                                {/* Meal Time */}
-                                <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-sm px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
-                                    {item.mealTime}
-                                </div>
+                                >
+                                    {/* Meal Time */}
+                                    <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-sm px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
+                                        {item.mealTime}
+                                    </div>
 
-                                {/* IMG */}
-                                <div className="rounded-xl overflow-hidden mb-4">
-                                    <img
-                                        src={item.img}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
+                                    {/* IMG */}
+                                    <div className="rounded-xl overflow-hidden mb-4">
+                                        <img
+                                            src={item.img}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
 
-                                {/* TITLE */}
-                                <h3 className="font-bold text-sm mb-2">
-                                    {item.title}
-                                </h3>
+                                    {/* TITLE */}
+                                    <h3 className="font-bold text-sm mb-2">
+                                        {item.title}
+                                    </h3>
 
-                                {/* DESC */}
-                                <p className="text-xs text-gray-200 mb-4">
-                                    {item.desc}
-                                </p>
+                                    {/* DESC */}
+                                    <p className="text-xs text-gray-200 mb-4">
+                                        {item.desc}
+                                    </p>
 
-                                <div className="absolute bottom-4 left-4 right-3 mt-4">
-                                    {/* DOTTED LINE */}
-                                    <div
-                                        className="w-full h-2 mb-4 
+                                    <div className="absolute bottom-4 left-4 right-3 mt-4">
+                                        {/* DOTTED LINE */}
+                                        <div
+                                            className="w-full h-2 mb-4 
                                                         bg-[radial-gradient(circle,#ffffff_3px,transparent_3px)] 
                                                         bg-size-[14px_8px] bg-repeat-x"
-                                    ></div>
-                                    {/* INFO ROW */}
-                                    <div className="flex items-center justify-start gap-3">
-                                        {/* Prep */}
-                                        <div className="flex flex-col items-center gap-1">
-                                            <span className="text-xs opacity-80">
-                                                Prep
-                                            </span>
-                                            <div className="relative">
-                                                <img
-                                                    src="/images/recipeCircle2.png"
-                                                    alt="Recipe Circle 2"
-                                                    className="w-10 h-10"
-                                                />
-                                                <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                    <span className="text-[16px] font-bold">
-                                                        6
-                                                    </span>
-                                                    <span className="text-[8px]">
-                                                        min
-                                                    </span>
+                                        ></div>
+                                        {/* INFO ROW */}
+                                        <div className="flex items-center justify-start gap-3">
+                                            {/* Prep */}
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className="text-xs opacity-80">
+                                                    Prep
                                                 </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Cook */}
-                                        <div className="flex flex-col items-center gap-1">
-                                            <span className="text-xs opacity-80">
-                                                Cook
-                                            </span>
-                                            <div className="relative">
-                                                <img
-                                                    src="/images/recipeCircle2.png"
-                                                    alt="Recipe Circle 2"
-                                                    className="w-10 h-10"
-                                                />
-                                                <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                    <span className="text-[16px] font-bold">
-                                                        6
+                                                <div className="relative">
+                                                    <img
+                                                        src="/images/recipeCircle2.png"
+                                                        alt="Recipe Circle 2"
+                                                        className="w-10 h-10"
+                                                    />
+                                                    <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                        <span className="text-[16px] font-bold">
+                                                            6
+                                                        </span>
+                                                        <span className="text-[8px]">
+                                                            min
+                                                        </span>
                                                     </span>
-                                                    <span className="text-[8px]">
-                                                        min
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* AGE */}
-                                        <div className="flex flex-col items-center gap-1">
-                                            <span className="text-xs opacity-80 invisible">
-                                                Age
-                                            </span>
-                                            <div
-                                                className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
-                                            >
-                                                <div className="text-center leading-none">
-                                                    <div>12+</div>
-                                                    <div>months</div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {/* Love */}
-                                        <div
-                                            onClick={() =>
-                                                setLiked((prev) => ({
-                                                    ...prev,
-                                                    [item.id]: !prev[item.id],
-                                                }))
-                                            }
-                                            className="w-14 h-14 cursor-pointer"
-                                        >
-                                            <svg
-                                                viewBox="0 0 200 200"
-                                                className="w-full h-full"
+                                            {/* Cook */}
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className="text-xs opacity-80">
+                                                    Cook
+                                                </span>
+                                                <div className="relative">
+                                                    <img
+                                                        src="/images/recipeCircle2.png"
+                                                        alt="Recipe Circle 2"
+                                                        className="w-10 h-10"
+                                                    />
+                                                    <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                        <span className="text-[16px] font-bold">
+                                                            6
+                                                        </span>
+                                                        <span className="text-[8px]">
+                                                            min
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* AGE */}
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className="text-xs opacity-80 invisible">
+                                                    Age
+                                                </span>
+                                                <div
+                                                    className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
+                                                >
+                                                    <div className="text-center leading-none">
+                                                        <div>12+</div>
+                                                        <div>months</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Love */}
+                                            <div
+                                                onClick={() =>
+                                                    setLiked((prev) => ({
+                                                        ...prev,
+                                                        [item.id]:
+                                                            !prev[item.id],
+                                                    }))
+                                                }
+                                                className="w-14 h-14 cursor-pointer"
                                             >
-                                                {/* background giữ nguyên */}
-                                                {/* <rect width="200" height="200" fill="#6B21A8" /> */}
+                                                <svg
+                                                    viewBox="0 0 200 200"
+                                                    className="w-full h-full"
+                                                >
+                                                    {/* background giữ nguyên */}
+                                                    {/* <rect width="200" height="200" fill="#6B21A8" /> */}
 
-                                                {/* ❤️ HEART SHAPE (chuẩn hơn) */}
-                                                <path
-                                                    d="
+                                                    {/* ❤️ HEART SHAPE (chuẩn hơn) */}
+                                                    <path
+                                                        d="
                                                         M100 170
                                                         C 40 120, 20 70, 60 50
                                                         C 80 40, 100 60, 100 60
@@ -510,22 +513,23 @@ export default function Recipes() {
                                                         C 180 70, 160 120, 100 170
                                                         Z
                                                         "
-                                                    fill={
-                                                        liked[item.id]
-                                                            ? "#EC4899"
-                                                            : "#E5E5E5"
-                                                    }
-                                                    stroke="#4A0F0F"
-                                                    strokeWidth="6"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    className="transition-all duration-500"
-                                                />
-                                            </svg>
+                                                        fill={
+                                                            liked[item.id]
+                                                                ? "#EC4899"
+                                                                : "#E5E5E5"
+                                                        }
+                                                        stroke="#4A0F0F"
+                                                        strokeWidth="6"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        className="transition-all duration-500"
+                                                    />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
 
