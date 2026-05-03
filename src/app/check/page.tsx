@@ -1,65 +1,36 @@
-export default function ResultSection() {
+"use client";
+import { useState } from "react";
+
+export default function HandDrawnHeart() {
+    const [active, setActive] = useState(false);
+
     return (
-        <section className="relative w-full min-h-screen bg-[#E8CFC8] flex flex-col items-center justify-start py-10 overflow-hidden">
-            {/* Background sọc */}
-            <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,#E8CFC8, #E8CFC8 20px, #E0BEB6 20px, #E0BEB6 40px)] opacity-50" />
+        <div
+            onClick={() => setActive(!active)}
+            className="w-24 h-24 cursor-pointer"
+        >
+            <svg viewBox="0 0 200 200" className="w-full h-full">
+                {/* background giữ nguyên */}
+                {/* <rect width="200" height="200" fill="#6B21A8" /> */}
 
-            {/* Top line + Finish */}
-            <div className="relative w-[80%] flex items-center justify-center mb-10">
-                <div className="absolute top-1/2 left-0 w-full h-[4px] bg-cyan-700 -translate-y-1/2 rounded-full"></div>
-
-                <span className="relative px-4 bg-[#E8CFC8] text-3xl font-bold text-red-900">
-                    Finish
-                </span>
-            </div>
-
-            {/* Content */}
-            <div className="relative text-center max-w-3xl">
-                <h2 className="text-3xl md:text-4xl font-semibold text-red-900 leading-snug">
-                    Growth referenced according to the World Health Organization
-                    (WHO)
-                </h2>
-
-                <p className="mt-6 text-red-900">
-                    Your little is growing at:{" "}
-                    <span className="mx-4">Normal rate</span>
-                </p>
-
-                {/* Stats */}
-                <div className="mt-10 flex justify-center gap-20">
-                    {/* Height */}
-                    <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-full bg-green-200 flex items-center justify-center">
-                            📏
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-red-900">
-                                65 cm
-                            </p>
-                            <p className="text-red-900">height</p>
-                        </div>
-                    </div>
-
-                    {/* Weight */}
-                    <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-full bg-red-300 flex items-center justify-center">
-                            👶
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-red-900">
-                                7 kg
-                            </p>
-                            <p className="text-red-900">weight</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Links */}
-                <div className="mt-10 flex justify-center gap-20 text-red-900 underline">
-                    <a href="#">Go to login page</a>
-                    <a href="#">Get today’s menu suggestions</a>
-                </div>
-            </div>
-        </section>
+                {/* ❤️ HEART SHAPE (chuẩn hơn) */}
+                <path
+                    d="
+                    M100 170
+                    C 40 120, 20 70, 60 50
+                    C 80 40, 100 60, 100 60
+                    C 100 60, 120 40, 140 50
+                    C 180 70, 160 120, 100 170
+                    Z
+                    "
+                    fill={active ? "#EC4899" : "#E5E5E5"}
+                    stroke={active ? "#EC4899" : "#4A0F0F"}
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-all duration-500"
+                />
+            </svg>
+        </div>
     );
 }

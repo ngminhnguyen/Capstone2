@@ -126,13 +126,13 @@ export default function Recipes() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const itemsPerPage = 9;
-
     // 🔥 chia data theo page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = recipes.slice(startIndex, startIndex + itemsPerPage);
 
     const totalPages = Math.ceil(recipes.length / itemsPerPage);
-
+    //Love button
+    const [liked, setLiked] = useState<Record<string, boolean>>({});
     return (
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
@@ -481,6 +481,47 @@ export default function Recipes() {
                                                     <div>months</div>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        {/* Love */}
+                                        <div
+                                            onClick={() =>
+                                                setLiked((prev) => ({
+                                                    ...prev,
+                                                    [item.id]: !prev[item.id],
+                                                }))
+                                            }
+                                            className="w-14 h-14 cursor-pointer"
+                                        >
+                                            <svg
+                                                viewBox="0 0 200 200"
+                                                className="w-full h-full"
+                                            >
+                                                {/* background giữ nguyên */}
+                                                {/* <rect width="200" height="200" fill="#6B21A8" /> */}
+
+                                                {/* ❤️ HEART SHAPE (chuẩn hơn) */}
+                                                <path
+                                                    d="
+                                                        M100 170
+                                                        C 40 120, 20 70, 60 50
+                                                        C 80 40, 100 60, 100 60
+                                                        C 100 60, 120 40, 140 50
+                                                        C 180 70, 160 120, 100 170
+                                                        Z
+                                                        "
+                                                    fill={
+                                                        liked[item.id]
+                                                            ? "#EC4899"
+                                                            : "#E5E5E5"
+                                                    }
+                                                    stroke="#4A0F0F"
+                                                    strokeWidth="6"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="transition-all duration-500"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
