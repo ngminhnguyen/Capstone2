@@ -30,6 +30,6 @@
         ".next/dev/types/**/*.ts",
         "**/*.mts",
         "global.d.ts"
-    ],
+, "src/components/layout/CustomDropdown.jsx"    ],
     "exclude": ["node_modules"]
 }

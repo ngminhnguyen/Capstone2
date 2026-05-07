@@ -1,63 +1,4 @@
-// import React, { useState, useRef, useEffect } from "react";
-
-// export default function CustomDropdown({ label, options }) {
-//     const [open, setOpen] = useState(false);
-//     const [selected, setSelected] = useState(label);
-//     const ref = useRef();
-//     useEffect(() => {
-//         setSelected(label);
-//     }, [label]);
-//     // đóng khi click ra ngoài
-//     useEffect(() => {
-//         const handleClickOutside = (e) => {
-//             if (ref.current && !ref.current.contains(e.target)) {
-//                 setOpen(false);
-//             }
-//         };
-//         document.addEventListener("click", handleClickOutside);
-//         return () => document.removeEventListener("click", handleClickOutside);
-//     }, []);
-
-//     return (
-//         <div ref={ref} className="relative w-50">
-//             {/* BUTTON */}
-//             <button
-//                 onClick={() => setOpen(!open)}
-//                 className="w-full flex justify-between items-center px-4 py-2 rounded-xl border border-[#4E0706] bg-[#ffff] text-[#4E0706]"
-//             >
-//                 {selected}
-//                 <span
-//                     className={`transition-transform ${open ? "rotate-180" : ""}`}
-//                 >
-//                     ▼
-//                 </span>
-//             </button>
-
-//             {/* DROPDOWN */}
-//             {open && (
-//                 <ul className="absolute left-0 mt-2 w-full bg-white border border-[#4E0706] rounded-xl shadow-lg z-50 overflow-hidden">
-//                     {options.map((item, index) => (
-//                         <li
-//                             key={index}
-//                             onClick={() => {
-//                                 setSelected(item);
-//                                 setOpen(false);
-//                             }}
-//                             className="px-4 py-2 hover:bg-amber-400 cursor-pointer"
-//                         >
-//                             {item}
-//                         </li>
-//                     ))}
-//                 </ul>
-//             )}
-//         </div>
-//     );
-// }
-
-//////////////////////////////////////
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 
 export default function CustomDropdown({
@@ -65,6 +6,7 @@ export default function CustomDropdown({
     options,
     selectedValues,
     setSelectedValues,
+    className = "",
 }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
@@ -105,40 +47,54 @@ export default function CustomDropdown({
                         ? selectedValues.join(", ")
                         : label}
                 </span>
-                <FontAwesomeIcon
-                    icon={faAngleDown}
-                    className={`ml-2 shrink-0 transition-transform ${
-                        open ? "rotate-180" : ""
-                    }`}
-                />
+                <div
+                    className="
+                        w-7 h-7
+                        rounded
+                        bg-[#F4B233]
+                        flex items-center justify-center"
+                >
+                    {open ? (
+                        <ChevronUp className="w-5 h-5" />
+                    ) : (
+                        <ChevronDown className="w-5 h-5" />
+                    )}
+                </div>
             </button>
 
             {/* DROPDOWN */}
             {open && (
                 <div className="absolute top-full left-0 mt-2 w-full bg-white border border-[#4E0706] rounded-xl shadow-lg z-50 max-h-50 overflow-y-auto p-2 flex flex-col gap-2">
-                    {options.map((item, index) => {
-                        const checked = selectedValues.includes(item);
+                    <div
+                        className="max-h-65
+                            overflow-y-auto
+                            pr-2
+                            space-y-3"
+                    >
+                        {options.map((item, index) => {
+                            const checked = selectedValues.includes(item);
 
-                        return (
-                            <div
-                                key={index}
-                                onClick={() => handleToggle(item)}
-                                className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer border
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => handleToggle(item)}
+                                    className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer border
                 ${checked ? "bg-[#f5ebe6]" : ""}
               `}
-                            >
-                                <div
-                                    className={`w-4 h-4 border border-[#4E0706] rounded flex items-center justify-center
+                                >
+                                    <div
+                                        className={`w-4 h-4 border border-[#4E0706] rounded flex items-center justify-center
                   ${checked ? "bg-orange-300" : ""}
                 `}
-                                >
-                                    {checked && "✓"}
-                                </div>
+                                    >
+                                        {checked && "✓"}
+                                    </div>
 
-                                <span>{item}</span>
-                            </div>
-                        );
-                    })}
+                                    <span>{item}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
         </div>

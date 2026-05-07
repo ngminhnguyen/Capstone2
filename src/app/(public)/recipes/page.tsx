@@ -13,12 +13,73 @@ const baloo = Baloo_2({
 });
 
 export default function Recipes() {
+    // FILTER STATES
     const [ageFilter, setAgeFilter] = useState<string[]>([]);
     const [methodFilter, setMethodFilter] = useState<string[]>([]);
     const [dietaryFilter, setDietaryFilter] = useState<string[]>([]);
     const [recipeTypeFilter, setRecipeTypeFilter] = useState<string[]>([]);
-    const [OccasionFilter, setOccasionFilter] = useState<string[]>([]);
+    const [occasionFilter, setOccasionFilter] = useState<string[]>([]);
+    const [open, setOpen] = useState(false);
+    // FILTER DATA
+    const filterData = [
+        {
+            label: "Age (s)",
+            options: [
+                "5-6 months",
+                "7-8 months",
+                "9-11 months",
+                "12-18 months",
+            ],
+            selectedValues: ageFilter,
+            setSelectedValues: setAgeFilter,
+        },
 
+        {
+            label: "Weaning method (s)",
+            options: [
+                "Baby-led weaning (BLW)",
+                "Traditional weaning",
+                "Japanese-style weaning",
+            ],
+            selectedValues: methodFilter,
+            setSelectedValues: setMethodFilter,
+        },
+
+        {
+            label: "Dietary needs (s)",
+            options: [
+                "Vegetarian",
+                "Soya free",
+                "Nut free",
+                "Gluten free",
+                "Dairy free",
+                "Egg free",
+            ],
+            selectedValues: dietaryFilter,
+            setSelectedValues: setDietaryFilter,
+        },
+
+        {
+            label: "Recipe type (s)",
+            options: ["First tastes", "Veg puree", "Finger food", "Dips"],
+            selectedValues: recipeTypeFilter,
+            setSelectedValues: setRecipeTypeFilter,
+        },
+
+        {
+            label: "Occasion (s)",
+            options: [
+                "Breakfast",
+                "Lunch",
+                "Dinner",
+                "Snacks",
+                "Pudding",
+                "Parties",
+            ],
+            selectedValues: occasionFilter,
+            setSelectedValues: setOccasionFilter,
+        },
+    ];
     // DATA demo
     const recipesFind = [
         { name: "Recipe 1", age: "6 months +" },
@@ -208,75 +269,22 @@ export default function Recipes() {
                     <div className="flex flex-col items-center md:items-start gap-3">
                         <span className="font-medium">Filter by:</span>
 
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <CustomDropdown
-                                label="Age (s)"
-                                options={[
-                                    "5-6 months",
-                                    "7-8 months",
-                                    "9-11 months",
-                                    "12-18 months",
-                                ]}
-                                selectedValues={ageFilter}
-                                setSelectedValues={setAgeFilter}
-                            />
-                            {/* RESULT */}
-                            {/* <div className="mt-6">
-                                {filteredData.map((item, index) => (
-                                    <div key={index} className="p-2 border-b">
-                                        {item.name} - {item.age}
-                                    </div>
-                                ))}
-                            </div> */}
-                            <CustomDropdown
-                                label="Weaning method (s)"
-                                options={[
-                                    "Baby-led weaning (BLW)",
-                                    "Traditional weaning",
-                                    "Japanese-style weaning",
-                                ]}
-                                selectedValues={methodFilter}
-                                setSelectedValues={setMethodFilter}
-                            />
-
-                            <CustomDropdown
-                                label="Dietary needs (s)"
-                                options={[
-                                    "Vegetarian",
-                                    "Soya free",
-                                    "Nut free",
-                                    "Gluten free",
-                                    "Dairy free",
-                                    "Egg free",
-                                ]}
-                                selectedValues={dietaryFilter}
-                                setSelectedValues={setDietaryFilter}
-                            />
-                            <CustomDropdown
-                                label="Recipe type (s)"
-                                options={[
-                                    "First tastes",
-                                    "Veg puree",
-                                    "Finger food",
-                                    "Dips",
-                                ]}
-                                selectedValues={recipeTypeFilter}
-                                setSelectedValues={setRecipeTypeFilter}
-                            />
-
-                            <CustomDropdown
-                                label="Occasion (s)"
-                                options={[
-                                    "Breakfast",
-                                    "Lunch",
-                                    "Dinner",
-                                    "Snacks",
-                                    "Pudding",
-                                    "Parties",
-                                ]}
-                                selectedValues={OccasionFilter}
-                                setSelectedValues={setOccasionFilter}
-                            />
+                        {/* FILTERS */}
+                        <div className="flex flex-wrap gap-6">
+                            {filterData.map((filter, index) => (
+                                <CustomDropdown
+                                    key={index}
+                                    label={filter.label}
+                                    options={filter.options}
+                                    selectedValues={filter.selectedValues}
+                                    setSelectedValues={filter.setSelectedValues}
+                                    className="
+                                                w-82.5
+                                                rounded-3xl
+                                                border-2 border-[#8B2A16]
+                                                bg-[#F5E7DF]"
+                                />
+                            ))}
                         </div>
                     </div>
 
@@ -425,75 +433,82 @@ export default function Recipes() {
                                                         bg-size-[14px_8px] bg-repeat-x"
                                         ></div>
                                         {/* INFO ROW */}
-                                        <div className="flex items-center justify-start gap-3">
-                                            {/* Prep */}
-                                            <div className="flex flex-col items-center gap-1">
-                                                <span className="text-xs opacity-80">
-                                                    Prep
-                                                </span>
-                                                <div className="relative">
-                                                    <img
-                                                        src="/images/recipeCircle2.png"
-                                                        alt="Recipe Circle 2"
-                                                        className="w-10 h-10"
-                                                    />
-                                                    <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                        <span className="text-[16px] font-bold">
-                                                            6
-                                                        </span>
-                                                        <span className="text-[8px]">
-                                                            min
-                                                        </span>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center justify-start gap-3">
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <span className="text-xs opacity-80">
+                                                        Prep
                                                     </span>
+                                                    <div className="relative">
+                                                        <img
+                                                            src="/images/recipeCircle2.png"
+                                                            alt="Recipe Circle 2"
+                                                            className="w-10 h-10"
+                                                        />
+                                                        <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                            <span className="text-[16px] font-bold">
+                                                                6
+                                                            </span>
+                                                            <span className="text-[8px]">
+                                                                min
+                                                            </span>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            {/* Cook */}
-                                            <div className="flex flex-col items-center gap-1">
-                                                <span className="text-xs opacity-80">
-                                                    Cook
-                                                </span>
-                                                <div className="relative">
-                                                    <img
-                                                        src="/images/recipeCircle2.png"
-                                                        alt="Recipe Circle 2"
-                                                        className="w-10 h-10"
-                                                    />
-                                                    <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                        <span className="text-[16px] font-bold">
-                                                            6
-                                                        </span>
-                                                        <span className="text-[8px]">
-                                                            min
-                                                        </span>
+                                                {/* Cook */}
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <span className="text-xs opacity-80">
+                                                        Cook
                                                     </span>
+                                                    <div className="relative">
+                                                        <img
+                                                            src="/images/recipeCircle2.png"
+                                                            alt="Recipe Circle 2"
+                                                            className="w-10 h-10"
+                                                        />
+                                                        <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                            <span className="text-[16px] font-bold">
+                                                                6
+                                                            </span>
+                                                            <span className="text-[8px]">
+                                                                min
+                                                            </span>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            {/* AGE */}
-                                            <div className="flex flex-col items-center gap-1">
-                                                <span className="text-xs opacity-80 invisible">
-                                                    Age
-                                                </span>
-                                                <div
-                                                    className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
-                                                >
-                                                    <div className="text-center leading-none">
-                                                        <div>12+</div>
-                                                        <div>months</div>
+                                                {/* AGE */}
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <span className="text-xs opacity-80 invisible">
+                                                        Age
+                                                    </span>
+                                                    <div
+                                                        className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
+                                                    >
+                                                        <div className="text-center leading-none">
+                                                            <div>12+</div>
+                                                            <div>months</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            {/* Prep */}
 
-                                            {/* Love */}
+                                            {/* Love Button*/}
                                             <div
-                                                onClick={() =>
+                                                onClick={(e) => {
+                                                    e.preventDefault(); // chặn Link
+                                                    e.stopPropagation(); // chặn bubble
+
                                                     setLiked((prev) => ({
                                                         ...prev,
                                                         [item.id]:
                                                             !prev[item.id],
-                                                    }))
-                                                }
+                                                    }));
+
+                                                    // TODO: call API save favorite
+                                                }}
                                                 className="w-14 h-14 cursor-pointer"
                                             >
                                                 <svg
@@ -506,23 +521,25 @@ export default function Recipes() {
                                                     {/* ❤️ HEART SHAPE (chuẩn hơn) */}
                                                     <path
                                                         d="
-                                                        M100 170
-                                                        C 40 120, 20 70, 60 50
-                                                        C 80 40, 100 60, 100 60
-                                                        C 100 60, 120 40, 140 50
-                                                        C 180 70, 160 120, 100 170
-                                                        Z
-                                                        "
-                                                        fill={
-                                                            liked[item.id]
-                                                                ? "#EC4899"
-                                                                : "#E5E5E5"
-                                                        }
+                                                                M100 170
+                                                                C 40 120, 20 70, 60 50
+                                                                C 80 40, 100 60, 100 60
+                                                                C 100 60, 120 40, 140 50
+                                                                C 180 70, 160 120, 100 170
+                                                                Z
+                                                                "
                                                         stroke="#4A0F0F"
                                                         strokeWidth="6"
                                                         strokeLinecap="round"
                                                         strokeLinejoin="round"
-                                                        className="transition-all duration-500"
+                                                        className={`
+                                                                    transition-all duration-300
+                                                                    hover:fill-pink-500
+                                                                    hover:scale-110
+                                                                    -rotate-20
+                                                                    origin-center
+                                                                    ${liked[item.id] ? "fill-pink-500" : "fill-white"}
+                                                        `}
                                                     />
                                                 </svg>
                                             </div>

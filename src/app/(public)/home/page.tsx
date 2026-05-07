@@ -51,7 +51,73 @@ const cards = [
         button: "read more",
     },
 ];
-
+const weaningJourney = [
+    {
+        img: "/images/startingSoon-Seedstick.png",
+        subtitle: "starting soon",
+        desc: "Top tips on how to grow a Little Veg Lover + what to do on day 1 of weaning",
+        btn: "Let's wean!",
+    },
+    {
+        img: "/images/firstTastes-Seedstick.png",
+        subtitle: "first tastes",
+        desc: "Introduce new yummy tastes and play + learn with finger foods",
+        btn: "Take a peek",
+    },
+    {
+        img: "/images/6Months-Seedstick.png",
+        subtitle: "from 6 months",
+        desc: "Top tips on exploring new textures + exciting tastes at mealtimes",
+        btn: "Find out more",
+    },
+    {
+        img: "/images/7Months-Seedstick.png",
+        subtitle: "from 7 months",
+        desc: "Finger food ideas + top tips on learning to chew",
+        btn: "Explore now",
+    },
+    {
+        img: "/images/10Months-Seedstick.png",
+        subtitle: "from 10 months",
+        desc: "Finger food ideas + top tips on learning to chew",
+        btn: "Explore now",
+    },
+    {
+        img: "/images/12Months-Seedstick.png",
+        subtitle: "from 12 months",
+        desc: "Finger food ideas + top tips on learning to chew",
+        btn: "Explore now",
+    },
+];
+const articles = [
+    {
+        id: 1,
+        title: "planner",
+        mainTitle: "week 1 weaning planner",
+        desc: "Follow our easy peasy weaning planner to help you through the first week of weaning.",
+        months: "6+ months",
+        image: "/images/weaningPlanning1.webp",
+        colorMonths: "bg-[#F8AFA6]",
+    },
+    {
+        id: 2,
+        title: "planner",
+        mainTitle: "week 2 weaning planner",
+        desc: "Follow our handy weaning planner packed full of daily ideas of what to give your little one during week 2.",
+        months: "6+ months",
+        image: "/images/weaningPlanning2.webp",
+        colorMonths: "bg-[#F8AFA6]",
+    },
+    {
+        id: 3,
+        title: "planner",
+        mainTitle: "week 3 weaning planner",
+        desc: "Week 3 of weaning is all about trying thicker purees + exciting new finger foods!",
+        months: "6+ months",
+        image: "/images/weaningPlanning3.webp",
+        colorMonths: "bg-[#F8AFA6]",
+    },
+];
 export default function Home() {
     const [emblaRef, emblaApi] = useEmblaCarousel(
         {
@@ -62,7 +128,18 @@ export default function Home() {
         //chạy tự động, delay là thời gian chuyển slide, disableOnInteraction: false là khi người dùng tương tác với slider thì vẫn tiếp tục chạy tự động
         // [Autoplay({ delay: 3000 })],
     );
+    // 👉 controls
+    const scrollPrev = useCallback(() => {
+        emblaApi && emblaApi.scrollPrev();
+    }, [emblaApi]);
 
+    const scrollNext = useCallback(() => {
+        emblaApi && emblaApi.scrollNext();
+    }, [emblaApi]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const itemsPerPage = 9;
     return (
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
@@ -159,6 +236,109 @@ export default function Home() {
                                 className="fill-[#FDECE4]"
                             />
                         </svg>
+                    </div>
+                </section>
+                {/*Tall Some Things!*/}
+                <div className="mx-auto max-w-7xl px-4 py-16 md:px-6 lg:px-8 flex flex-col gap-2">
+                    <h2 className=" text-2xl font-bold">let's get weaning</h2>
+                    <p className="max-w-2xl">
+                        At BabyNutri, we take the stress out of weaning + put
+                        the fun into mealtimes! Explore our weaning hub as we
+                        guide you through every stage of your little one's
+                        journey.
+                    </p>
+                    <p>Look out for:</p>
+                    <p className="flex items-center gap-2">
+                        <img
+                            src="images/smileFace.png"
+                            className="h-6 w-6 border-2 border-[#B63B5D] rounded-full"
+                        />
+                        What to expect at every stage
+                    </p>
+                    <p className="flex items-center gap-2">
+                        <img
+                            src="images/smileFace.png"
+                            className="h-6 w-6 border-2 border-[#B63B5D] rounded-full"
+                        />
+                        Top tips from nutritionist Claire
+                    </p>
+                    <p className="flex items-center gap-2">
+                        <img
+                            src="images/smileFace.png"
+                            className="h-6 w-6 border-2 border-[#B63B5D] rounded-full"
+                        />
+                        Yummy recipes
+                    </p>
+                    <p>…and much more!</p>
+                </div>
+                {/* Weaning journey carousel */}
+                <section className="w-full bg-[#E5A6CB] ">
+                    <div className="py-16 relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+                        <h2 className="text-center text-3xl md:text-4xl font-semibold mb-12">
+                            Your little one's weaning journey
+                        </h2>
+
+                        {/* arrows */}
+                        <button
+                            onClick={scrollPrev}
+                            className="absolute left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-yellow-400 shadow-md"
+                        >
+                            {"<"}
+                        </button>
+
+                        <button
+                            onClick={scrollNext}
+                            className="absolute right-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-yellow-400 shadow-md"
+                        >
+                            {">"}
+                        </button>
+
+                        {/* embla */}
+                        <div
+                            className="overflow-hidden max-w-6xl mx-auto px-6"
+                            ref={emblaRef}
+                        >
+                            <div className="flex gap-6">
+                                {weaningJourney.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="
+                            min-w-full
+                            sm:min-w-[calc(50%-12px)]
+                            lg:min-w-[calc(25%-18px)]
+                            shrink-0
+                            text-center
+                            "
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            {/* image */}
+                                            <div className="w-24 h-24 rounded-full overflow-hidden">
+                                                <img
+                                                    src={item.img}
+                                                    alt={item.subtitle}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+
+                                            {/* title */}
+                                            <h3 className="mt-6 text-xl font-semibold">
+                                                {item.subtitle}
+                                            </h3>
+
+                                            {/* desc */}
+                                            <p className="mt-3 text-sm max-w-55">
+                                                {item.desc}
+                                            </p>
+
+                                            {/* btn */}
+                                            <button className="mt-3 bg-[#FFBF00] px-5 py-2 rounded-xl hover:scale-105 transition">
+                                                {item.btn}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
                 {/*Main Body*/}
@@ -308,6 +488,90 @@ export default function Home() {
                                     ))}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+                {/* weaningPlanner */}
+                <section className="relative bg-[#F8EEE8] py-20 overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-[38%] bg-[#F2A983] overflow-hidden">
+                        {/* CENTER TOP */}
+                        <img
+                            src="/images/weaningPlanner2.png"
+                            className="absolute w-24 object-cover top-2 left-1/2 -translate-x-1/2 rotate-12"
+                        />
+
+                        {/* LEFT */}
+                        <img
+                            src="/images/weaningPlanner1.png"
+                            className="absolute w-36 object-cover top-20 left-10 -rotate-12"
+                        />
+
+                        {/* RIGHT */}
+                        <img
+                            src="/images/weaningPlanner3.png"
+                            className="absolute w-32 object-cover top-12 right-12 rotate-6"
+                        />
+                    </div>
+                    <div className="relative z-10">
+                        {/* TITLE */}
+
+                        <h2 className="text-center text-3xl font-bold text-[#5A0E0E] mb-14">
+                            weaning planners to support you with your little
+                            one's weaning adventure
+                        </h2>
+
+                        {/* CARDS */}
+                        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-6">
+                            {articles.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="relative bg-[#F8F4F1] rounded-[30px] shadow-md hover:-translate-y-2
+                                                        hover:rotate-2
+                                                        hover:shadow-[0_25px_50px_rgba(0,0,0,0.3)] transition-all duration-300"
+                                >
+                                    {/* TOP LABEL */}
+                                    <div className="absolute -top-5 right-6 rotate-3 bg-[#8ED4FF] border-2 border-[#5A0E0E] px-8 py-2 rounded-lg z-10">
+                                        <span className="text-[#5A0E0E] font-semibold">
+                                            {item.title}
+                                        </span>
+                                    </div>
+
+                                    {/* IMAGE */}
+                                    <div className="p-4">
+                                        <div className="relative w-full h-70 rounded-2xl overflow-hidden">
+                                            <img
+                                                src={item.image}
+                                                alt={item.title}
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* CONTENT */}
+                                    <div className="px-6 pb-8">
+                                        <h3 className="text-lg font-bold text-[#5A0E0E] mb-4">
+                                            {item.mainTitle}
+                                        </h3>
+
+                                        <p className="text-[#5A0E0E] leading-9 mb-10">
+                                            {item.desc}
+                                        </p>
+
+                                        {/* FOOTER */}
+                                        <div className="flex items-center justify-between">
+                                            <button className="text-[#5A0E0E] font-bold text-xl hover:underline">
+                                                Read more &gt;
+                                            </button>
+
+                                            <div className="w-17 h-17 rounded-full bg-[#B1007D] border-2 border-amber-900 flex items-center justify-center text-white text-sm font-bold text-center leading-5 shadow-md">
+                                                <p className="text-sm -rotate-20">
+                                                    {item.months}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
