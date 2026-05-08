@@ -39,7 +39,7 @@ type SidebarProps = {
     onClose?: () => void;
 };
 
-export default function Check({ onClose }: SidebarProps) {
+export function Sidebar({ onClose }: SidebarProps) {
     const pathname = usePathname();
     const [open, setOpen] = useState(true);
 
@@ -47,14 +47,13 @@ export default function Check({ onClose }: SidebarProps) {
         const saved = localStorage.getItem("sidebar-open");
         if (saved) setOpen(saved === "1");
     }, []);
-
     useEffect(() => {
         localStorage.setItem("sidebar-open", open ? "1" : "0");
     }, [open]);
 
     return (
         <aside
-            className={`bg-sidebar-gradient text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full ${
+            className={`bg-sidebar-gradient text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
                 open ? "w-52" : "w-20"
             }`}
             aria-label="Primary navigation"
@@ -64,14 +63,12 @@ export default function Check({ onClose }: SidebarProps) {
                     <div className="size-9 rounded-xl bg-white/20 grid place-items-center font-bold">
                         SH
                     </div>
-
                     <span
                         className={`${open ? "block" : "hidden"} text-sm font-semibold`}
                     >
                         Smart Home
                     </span>
                 </div>
-
                 <button
                     aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
                     onClick={() => setOpen((v) => !v)}
@@ -91,7 +88,6 @@ export default function Check({ onClose }: SidebarProps) {
                         const active =
                             pathname === href ||
                             (href !== "/" && pathname?.startsWith(href));
-
                         return (
                             <li key={href}>
                                 <Link
@@ -101,19 +97,14 @@ export default function Check({ onClose }: SidebarProps) {
                                     className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                                         active
                                             ? "bg-white text-brand"
-                                            : "text-amber-950 hover:bg-white/10"
+                                            : "text-amber-400 hover:bg-white/10"
                                     }`}
                                 >
                                     <Icon
-                                        className={`size-5 ${
-                                            active ? "text-brand" : "text-amber-950"
-                                        }`}
+                                        className={`size-5 ${active ? "text-brand" : "text-amber-400"}`}
                                     />
-
                                     <span
-                                        className={`${
-                                            open ? "block" : "hidden"
-                                        } text-sm`}
+                                        className={`${open ? "block" : "hidden"} text-sm`}
                                     >
                                         {label}
                                     </span>
@@ -125,7 +116,7 @@ export default function Check({ onClose }: SidebarProps) {
             </nav>
 
             <div className="px-3 pb-5 pt-2">
-                <div className="rounded-2xl bg-white/10 p-3">
+                <div className={`rounded-2xl bg-white/10 p-3`}>
                     <p className="text-xs leading-5">
                         {open ? "Control your home with ease." : "Tip"}
                     </p>

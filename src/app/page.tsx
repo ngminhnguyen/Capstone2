@@ -44,6 +44,12 @@ export default function HomePage() {
             >
                 Go to Home
             </a>
+            <a
+                href="/expert"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            >
+                Go to Expert
+            </a>
         </div>
     );
 }

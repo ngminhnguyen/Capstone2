@@ -128,14 +128,18 @@ export default function Home() {
         //chạy tự động, delay là thời gian chuyển slide, disableOnInteraction: false là khi người dùng tương tác với slider thì vẫn tiếp tục chạy tự động
         // [Autoplay({ delay: 3000 })],
     );
+    const [journeyRef, journeyApi] = useEmblaCarousel({
+        loop: true,
+        align: "start",
+    });
     // 👉 controls
     const scrollPrev = useCallback(() => {
-        emblaApi && emblaApi.scrollPrev();
-    }, [emblaApi]);
+        journeyApi?.scrollPrev();
+    }, [journeyApi]);
 
     const scrollNext = useCallback(() => {
-        emblaApi && emblaApi.scrollNext();
-    }, [emblaApi]);
+        journeyApi?.scrollNext();
+    }, [journeyApi]);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -296,7 +300,7 @@ export default function Home() {
                         {/* embla */}
                         <div
                             className="overflow-hidden max-w-6xl mx-auto px-6"
-                            ref={emblaRef}
+                            ref={journeyRef}
                         >
                             <div className="flex gap-6">
                                 {weaningJourney.map((item, index) => (
