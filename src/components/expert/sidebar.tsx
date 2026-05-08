@@ -53,7 +53,7 @@ export function Sidebar({ onClose }: SidebarProps) {
 
     return (
         <aside
-            className={`bg-sidebar-gradient text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
+            className={`bg-linear-to-b from-amber-400 to-amber-600 text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
                 open ? "w-52" : "w-20"
             }`}
             aria-label="Primary navigation"
