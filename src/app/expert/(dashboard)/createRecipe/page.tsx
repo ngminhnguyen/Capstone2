@@ -6,6 +6,7 @@ import { Camera } from "lucide-react";
 
 export default function CreateRecipePage() {
     const [preview, setPreview] = useState<string | null>(null);
+    const [stepImages, setStepImages] = useState<string[]>([]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -13,6 +14,22 @@ export default function CreateRecipePage() {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setPreview(imageUrl);
+        }
+    };
+
+    const handleStepImageChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        index: number,
+    ) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+
+            const updatedImages = [...stepImages];
+            updatedImages[index] = imageUrl;
+
+            setStepImages(updatedImages);
         }
     };
 
@@ -233,9 +250,34 @@ export default function CreateRecipePage() {
                                 </div>
 
                                 {/* Upload Image */}
-                                <div className="mt-4 w-40 h-40 bg-[#f7f5f2] rounded-2xl flex items-center justify-center text-4xl text-gray-300 cursor-pointer hover:bg-[#f1efec] transition">
-                                    <img src="/images/camera.png" alt="Upload Image" className="w-20 h-20" />
-                                </div>
+                                <label
+                                    htmlFor="step-image-1"
+                                    className="mt-4 w-40 h-40 bg-[#f7f5f2] rounded-2xl flex items-center justify-center text-4xl text-gray-300 cursor-pointer hover:bg-[#f1efec] transition overflow-hidden"
+                                >
+                                    {stepImages[0] ? (
+                                        <img
+                                            src={stepImages[0]}
+                                            alt="Preview"
+                                            className="w-full h-full object-cover rounded-2xl"
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/images/camera.png"
+                                            alt="Upload Image"
+                                            className="w-20 h-20"
+                                        />
+                                    )}
+
+                                    <input
+                                        id="step-image-1"
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            handleStepImageChange(e, 0)
+                                        }
+                                    />
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -266,9 +308,35 @@ export default function CreateRecipePage() {
                                     </button>
                                 </div>
 
-                                <div className="mt-4 w-40 h-40 bg-[#f7f5f2] rounded-2xl flex items-center justify-center text-4xl text-gray-300 cursor-pointer hover:bg-[#f1efec] transition">
-                                    <img src="/images/camera.png" alt="Upload Image" className="w-20 h-20" />
-                                </div>
+                                {/* Upload Image */}
+                                <label
+                                    htmlFor="step-image-1"
+                                    className="mt-4 w-40 h-40 bg-[#f7f5f2] rounded-2xl flex items-center justify-center text-4xl text-gray-300 cursor-pointer hover:bg-[#f1efec] transition overflow-hidden"
+                                >
+                                    {stepImages[1] ? (
+                                        <img
+                                            src={stepImages[1]}
+                                            alt="Preview"
+                                            className="w-full h-full object-cover rounded-2xl"
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/images/camera.png"
+                                            alt="Upload Image"
+                                            className="w-20 h-20"
+                                        />
+                                    )}
+
+                                    <input
+                                        id="step-image-1"
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            handleStepImageChange(e, 1)
+                                        }
+                                    />
+                                </label>
                             </div>
                         </div>
                     </div>

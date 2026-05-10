@@ -1,136 +1,149 @@
 "use client";
+import { useState } from "react";
+import { initialRecipeSteps } from "@/data/recipeSteps";
+import { RecipeStep } from "@/typeData/recipe";
 
-import type React from "react";
+export default function Check() {
+    const [steps, setSteps] = useState<RecipeStep[]>(initialRecipeSteps);
+    const handleStepImageChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        index: number,
+    ) => {
+        const file = e.target.files?.[0];
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-    Home,
-    MessageCircle,
-    BarChart3,
-    Shield,
-    TabletSmartphone,
-    UserRound,
-    LogIn,
-    LogOut,
-    ChevronFirst,
-    ChevronLast,
-} from "lucide-react";
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
 
-type Item = {
-    href: string;
-    label: string;
-    icon: React.ComponentType<{ className?: string }>;
-};
+            setSteps(
+                steps.map((step, i) =>
+                    i === index
+                        ? {
+                              ...step,
+                              image: imageUrl,
+                          }
+                        : step,
+                ),
+            );
+        }
+    };
+    const handleAddStep = () => {
+        const newStep: RecipeStep = {
+            id: steps.length + 1,
+            text: "",
+            image: "",
+        };
 
-const items: Item[] = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/messages", label: "Messages", icon: MessageCircle },
-    { href: "/statistics", label: "Statistics", icon: BarChart3 },
-    { href: "/security", label: "Security", icon: Shield },
-    { href: "/devices", label: "Devices", icon: TabletSmartphone },
-    { href: "/profile", label: "Profile", icon: UserRound },
-    { href: "/signin", label: "Signin", icon: LogIn },
-    { href: "/signup", label: "Signup", icon: LogOut },
-];
-
-type SidebarProps = {
-    onClose?: () => void;
-};
-
-export default function Check({ onClose }: SidebarProps) {
-    const pathname = usePathname();
-    const [open, setOpen] = useState(true);
-
-    useEffect(() => {
-        const saved = localStorage.getItem("sidebar-open");
-        if (saved) setOpen(saved === "1");
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem("sidebar-open", open ? "1" : "0");
-    }, [open]);
-
+        setSteps([...steps, newStep]);
+    };
     return (
-        <aside
-            className={`bg-sidebar-gradient text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full ${
-                open ? "w-52" : "w-20"
-            }`}
-            aria-label="Primary navigation"
-        >
-            <div className="flex items-center justify-between gap-2 px-4 py-5">
-                <div className="flex items-center gap-2">
-                    <div className="size-9 rounded-xl bg-white/20 grid place-items-center font-bold">
-                        SH
-                    </div>
+        <div>
+            {/* Steps Section */}
+            <div className="col-span-8">
+                <h2 className="text-4xl font-bold mb-8 text-amber-950">
+                    Steps
+                </h2>
 
-                    <span
-                        className={`${open ? "block" : "hidden"} text-sm font-semibold`}
-                    >
-                        Smart Home
-                    </span>
+                {/* Cooking Time */}
+                <div className="mb-6">
+                    <label className="block text-gray-500 mb-2">
+                        Cooking Time
+                    </label>
+
+                    <input
+                        type="text"
+                        placeholder="1 hour 30 minutes"
+                        className="bg-[#f7f5f2] rounded-xl px-4 py-3 outline-none"
+                    />
                 </div>
 
-                <button
-                    aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-                    onClick={() => setOpen((v) => !v)}
-                    className="rounded-lg bg-white/20 p-1.5 hover:bg-white/30"
-                >
-                    {open ? (
-                        <ChevronFirst className="size-5" />
-                    ) : (
-                        <ChevronLast className="size-5" />
-                    )}
-                </button>
-            </div>
+                {steps.map((step, index) => (
+                    <div key={step.id} className="mb-10">
+                        <div className="flex items-start gap-4">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-amber-950 text-white flex items-center justify-center font-bold">
+                                    {index + 1}
+                                </div>
 
-            <nav className="mt-2 flex-1">
-                <ul className="flex flex-col gap-1 px-3">
-                    {items.map(({ href, label, icon: Icon }) => {
-                        const active =
-                            pathname === href ||
-                            (href !== "/" && pathname?.startsWith(href));
+                                <span className="text-gray-400 text-xl">
+                                    ☰
+                                </span>
+                            </div>
 
-                        return (
-                            <li key={href}>
-                                <Link
-                                    href={href}
-                                    aria-current={active ? "page" : undefined}
-                                    onClick={() => onClose?.()}
-                                    className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
-                                        active
-                                            ? "bg-white text-brand"
-                                            : "text-amber-950 hover:bg-white/10"
-                                    }`}
-                                >
-                                    <Icon
-                                        className={`size-5 ${
-                                            active ? "text-brand" : "text-amber-950"
-                                        }`}
+                            <div className="flex-1">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="text"
+                                        value={step.text}
+                                        onChange={(e) =>
+                                            setSteps(
+                                                steps.map((s) =>
+                                                    s.id === step.id
+                                                        ? {
+                                                              ...s,
+                                                              text: e.target
+                                                                  .value,
+                                                          }
+                                                        : s,
+                                                ),
+                                            )
+                                        }
+                                        placeholder="Write your cooking step..."
+                                        className="flex-1 bg-[#f7f5f2] rounded-xl px-4 py-3 outline-none"
                                     />
 
-                                    <span
-                                        className={`${
-                                            open ? "block" : "hidden"
-                                        } text-sm`}
-                                    >
-                                        {label}
-                                    </span>
-                                </Link>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </nav>
+                                    <button className="text-gray-400 text-2xl">
+                                        ⋯
+                                    </button>
+                                </div>
 
-            <div className="px-3 pb-5 pt-2">
-                <div className="rounded-2xl bg-white/10 p-3">
-                    <p className="text-xs leading-5">
-                        {open ? "Control your home with ease." : "Tip"}
-                    </p>
-                </div>
+                                {/* Upload Image */}
+                                <label
+                                    htmlFor={`step-image-${step.id}`}
+                                    className="mt-4 w-40 h-40 bg-[#f7f5f2] rounded-2xl flex items-center justify-center cursor-pointer hover:bg-[#f1efec] transition overflow-hidden"
+                                >
+                                    {step.image ? (
+                                        <img
+                                            src={step.image}
+                                            alt="Preview"
+                                            className="w-full h-full object-cover rounded-2xl"
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/images/camera.png"
+                                            alt="Upload Image"
+                                            className="w-20 h-20"
+                                        />
+                                    )}
+
+                                    <input
+                                        id={`step-image-${step.id}`}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            handleStepImageChange(e, index)
+                                        }
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+
+                {/* Add Step */}
+                <button
+                    onClick={handleAddStep}
+                    className="font-semibold text-amber-950 hover:text-orange-500 transition mb-8"
+                >
+                    + Add Step
+                </button>
+
+                {/* Secret Tip */}
+                <textarea
+                    placeholder="What is your secret tip to make this dish delicious?"
+                    className="w-full min-h-30 bg-[#f7f5f2] rounded-2xl px-5 py-4 outline-none resize-none"
+                />
             </div>
-        </aside>
+        </div>
     );
 }
