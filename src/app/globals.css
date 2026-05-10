@@ -5,3 +5,17 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
 }
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: none;
+}

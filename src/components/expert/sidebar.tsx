@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import {
     Home,
     MessageCircle,
-    BarChart3,
-    Shield,
+    BookImage,
+    ChefHat,
     TabletSmartphone,
     UserRound,
     LogIn,
@@ -25,13 +25,13 @@ type Item = {
 };
 
 const items: Item[] = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/messages", label: "Messages", icon: MessageCircle },
-    { href: "/statistics", label: "Statistics", icon: BarChart3 },
-    { href: "/security", label: "Security", icon: Shield },
-    { href: "/devices", label: "Devices", icon: TabletSmartphone },
-    { href: "/profile", label: "Profile", icon: UserRound },
-    { href: "/signin", label: "Signin", icon: LogIn },
+    { href: "/expert/dashboard", label: "Home", icon: Home },
+    { href: "/expert/createRecipe", label: "Create Recipe", icon: ChefHat },
+    { href: "/expert/createArticle", label: "Create Article", icon: BookImage },
+    { href: "/expert/chat", label: "Chat", icon: MessageCircle },
+    { href: "/expert/devices", label: "Devices", icon: TabletSmartphone },
+    { href: "/expert/profile", label: "Profile", icon: UserRound },
+    { href: "/expert/signin", label: "Signin", icon: LogIn },
     { href: "/signup", label: "Signup", icon: LogOut },
 ];
 
@@ -60,13 +60,13 @@ export function Sidebar({ onClose }: SidebarProps) {
         >
             <div className="flex items-center justify-between gap-2 px-4 py-5">
                 <div className="flex items-center gap-2">
-                    <div className="size-9 rounded-xl bg-white/20 grid place-items-center font-bold">
-                        SH
+                    <div className="size-9 rounded-xl -rotate-18 grid place-items-center font-bold">
+                        <img src="/images/logo.png" alt="BabyNutri Logo" />
                     </div>
                     <span
                         className={`${open ? "block" : "hidden"} text-sm font-semibold`}
                     >
-                        Smart Home
+                        BabyNutri
                     </span>
                 </div>
                 <button
@@ -97,11 +97,11 @@ export function Sidebar({ onClose }: SidebarProps) {
                                     className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                                         active
                                             ? "bg-white text-brand"
-                                            : "text-amber-400 hover:bg-white/10"
+                                            : "text-amber-900 hover:bg-[#FDECE4]"
                                     }`}
                                 >
                                     <Icon
-                                        className={`size-5 ${active ? "text-brand" : "text-amber-400"}`}
+                                        className={`size-5 ${active ? "text-brand" : "text-amber-900"}`}
                                     />
                                     <span
                                         className={`${open ? "block" : "hidden"} text-sm`}
