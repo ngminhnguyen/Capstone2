@@ -26,10 +26,10 @@ export default function DashboardChart({ data }: DashboardChartProps) {
                 Monthly Content Activity
             </h2>
 
-            <div className="w-full h-[350px]">
+            <div className="w-full h-87.5">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                        <CartesianGrid strokeDasharray="2 2" vertical={false} />
 
                         <XAxis dataKey="month" />
 

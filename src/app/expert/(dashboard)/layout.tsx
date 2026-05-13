@@ -13,7 +13,7 @@ export default function DashboardLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="bg-background">
+        <div className="bg-[#FDECE4]">
             <div className="mx-auto  px-2 py-3 sm:px-4 sm:py-6">
                 <div className="rounded-3xl bg-card shadow-sm ring-1 ring-border overflow-hidden">
                     {sidebarOpen && (

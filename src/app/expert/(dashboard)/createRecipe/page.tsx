@@ -7,6 +7,7 @@ import { initialRecipeSteps } from "@/data/recipeSteps";
 import { RecipeStep } from "@/typeData/recipe";
 import { initialIngredients } from "@/data/ingredients";
 import { Ingredient } from "@/typeData/ingredient";
+import CustomDropdown from "@/components/expert/custom-dropdown";
 
 export default function CreateRecipePage() {
     const [preview, setPreview] = useState<string | null>(null);
@@ -99,6 +100,19 @@ export default function CreateRecipePage() {
             ingredientSteps.filter((ingredient) => ingredient.id !== id),
         );
     };
+
+    // dropDownMenu
+    const [openAge, setOpenAge] = useState(false);
+    const [selectedAge, setSelectedAge] = useState("Select baby age");
+
+    const ages = [
+        "6 - 8 Months",
+        "8 - 10 Months",
+        "10 - 12 Months",
+        "1 - 2 Years",
+        "2 - 3 Years",
+        "3+ Years",
+    ];
     return (
         <div className="p-8 ">
             {/* Top Buttons */}
@@ -194,6 +208,61 @@ export default function CreateRecipePage() {
                     </div>
                 </div>
             </div>
+            {/* Filter */}
+            <div className="flex gap-4 mb-6 mt-6">
+                <CustomDropdown
+                    label="Baby Age"
+                    placeholder="Select baby age"
+                    options={[
+                        "5 - 6 Months",
+                        "7 - 8 Months",
+                        "9 - 11 Months",
+                        "12 - 18 Months",
+                    ]}
+                />
+                <CustomDropdown
+                    label="Weaning method"
+                    placeholder="Select weaning method"
+                    options={[
+                        "Baby-led Weaning",
+                        "Traditional Weaning",
+                        "Japanese Weaning",
+                    ]}
+                />
+                <CustomDropdown
+                    label="Dietary needs"
+                    placeholder="Select dietary needs"
+                    options={[
+                        "Vegetarian",
+                        "Soy-Free",
+                        "Nut-Free",
+                        "Gluten-Free",
+                        "Dairy-Free",
+                        "Egg-Free",
+                    ]}
+                />
+                <CustomDropdown
+                    label="Recipe Type"
+                    placeholder="Select recipe type"
+                    options={[
+                        "First taste",
+                        "Veg purees",
+                        "Finger foods",
+                        "Dips",
+                    ]}
+                />
+                <CustomDropdown
+                    label="Occasion"
+                    placeholder="Select occasion"
+                    options={[
+                        "Breakfast",
+                        "Lunch",
+                        "Dinner",
+                        "Snack",
+                        "Pudding",
+                    ]}
+                />
+            </div>
             <div className="grid grid-cols-12 gap-10 mt-10">
                 {/* Ingredients Section */}
                 <div className="col-span-4">
@@ -201,8 +270,8 @@ export default function CreateRecipePage() {
                         Ingredients
                     </h2>
 
-                    <div className="flex gap-4 mb-6">
-                        <div className="flex-1">
+                    <div className="flex flex-col gap-4 mb-6">
+                        <div className="flex items-center gap-6">
                             <label className="block text-gray-500 mb-2">
                                 Servings
                             </label>
@@ -214,7 +283,7 @@ export default function CreateRecipePage() {
                             />
                         </div>
 
-                        <div className="flex-1">
+                        {/* <div className="flex">
                             <label className="block text-gray-500 mb-2">
                                 Cooking Time
                             </label>
@@ -224,7 +293,7 @@ export default function CreateRecipePage() {
                                 placeholder="1 hour 30 minutes"
                                 className="w-full bg-[#f7f5f2] rounded-xl px-4 py-3 outline-none"
                             />
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Ingredient Items */}
@@ -326,7 +395,7 @@ export default function CreateRecipePage() {
                     </h2>
 
                     {/* Cooking Time */}
-                    <div className="mb-6">
+                    <div className="flex items-center mb-6 gap-6">
                         <label className="block text-gray-500 mb-2">
                             Cooking Time
                         </label>

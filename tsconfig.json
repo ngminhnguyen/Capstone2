@@ -29,7 +29,8 @@
         ".next/types/**/*.ts",
         ".next/dev/types/**/*.ts",
         "**/*.mts",
-        "global.d.ts"
-, "src/components/layout/CustomDropdown.jsx"    ],
+        "global.d.ts",
+        "src/components/layout/CustomDropdown.jsx"
+    ],
     "exclude": ["node_modules"]
 }

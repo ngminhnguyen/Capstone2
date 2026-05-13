@@ -513,7 +513,6 @@ export default function Articles() {
                         </button>
                     </div>
                 </section>
-               
             </main>
             <Footer />
         </div>
