@@ -10,6 +10,11 @@ export const recipes = [
         mealTime: "Luch",
         color: "bg-purple-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
@@ -34,9 +39,6 @@ export const recipes = [
         ],
         heroColor: "from-purple-700 to-fuchsia-500",
 
-        prepTime: "5",
-        cookTime: "0",
-
         ingredients: [
             "1 banana",
             "1 cup strawberries",
@@ -60,12 +62,14 @@ export const recipes = [
         mealTime: "Snack",
         color: "bg-yellow-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
-
-        prepTime: "10",
-        cookTime: "0 ",
 
         ingredients: ["1 cup yogurt", "Blueberries", "Banana slices", "Honey"],
 
@@ -85,12 +89,14 @@ export const recipes = [
         mealTime: "Breakfast",
         color: "bg-pink-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
-
-        prepTime: "5",
-        cookTime: "5",
 
         ingredients: ["2 eggs", "Butter", "Milk", "Cheese"],
 
@@ -110,12 +116,14 @@ export const recipes = [
         mealTime: "Dinner",
         color: "bg-pink-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
-
-        prepTime: "10",
-        cookTime: "15",
 
         ingredients: ["Pasta", "Broccoli", "Cheese", "Fresh chives"],
 
@@ -135,12 +143,14 @@ export const recipes = [
         mealTime: "Snack",
         color: "bg-pink-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
-
-        prepTime: "15",
-        cookTime: "20",
 
         ingredients: [
             "Chicken breast",
@@ -164,12 +174,14 @@ export const recipes = [
         mealTime: "Luch",
         color: "bg-orange-500",
         colorMonth: "bg-green-500",
+        age: "7",
+        serves: "1",
+        prepTime: "5",
+        cookTime: "0",
+        author: "Nguyen Minh Nguyen",
 
         stickerImg1: "/images/stickerBananaMeal1.png",
         stickerImg2: "/images/stickerBananaMeal2.png",
-
-        prepTime: "15",
-        cookTime: "20",
 
         ingredients: [
             "Chicken breast",

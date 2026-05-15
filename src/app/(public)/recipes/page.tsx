@@ -378,6 +378,7 @@ export default function Recipes() {
                                         {/* INFO ROW */}
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center justify-start gap-3">
+                                                {/* Pre Time */}
                                                 <div className="flex flex-col items-center gap-1">
                                                     <span className="text-xs opacity-80">
                                                         Prep
@@ -390,7 +391,7 @@ export default function Recipes() {
                                                         />
                                                         <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
                                                             <span className="text-[16px] font-bold">
-                                                                6
+                                                                {item.prepTime}
                                                             </span>
                                                             <span className="text-[8px]">
                                                                 min
@@ -412,7 +413,7 @@ export default function Recipes() {
                                                         />
                                                         <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
                                                             <span className="text-[16px] font-bold">
-                                                                6
+                                                                {item.cookTime}
                                                             </span>
                                                             <span className="text-[8px]">
                                                                 min
@@ -430,7 +431,7 @@ export default function Recipes() {
                                                         className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
                                                     >
                                                         <div className="text-center leading-none">
-                                                            <div>12+</div>
+                                                            <div>{item.age}</div>
                                                             <div>months</div>
                                                         </div>
                                                     </div>

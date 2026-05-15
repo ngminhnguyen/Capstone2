@@ -145,7 +145,7 @@ export default function RecipeDetail() {
                                     ${recipe.colorMonth}
                                 `}
                         >
-                            <span className="text-3xl">7+</span>
+                            <span className="text-3xl">{recipe.age}</span>
                             <span className="text-sm">months</span>
                         </div>
                     </div>
