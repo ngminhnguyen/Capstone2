@@ -7,16 +7,19 @@ type CustomDropdownProps = {
     label: string;
     options: string[];
     placeholder: string;
+
+    selectedValues: string;
+    setSelectedValues: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function CustomDropdown({
     label,
     options,
     placeholder,
+    selectedValues,
+    setSelectedValues,
 }: CustomDropdownProps) {
     const [open, setOpen] = useState(false);
-
-    const [selected, setSelected] = useState(placeholder);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +51,7 @@ export default function CustomDropdown({
                 onClick={() => setOpen(!open)}
                 className="w-full bg-[#f7f5f2] rounded-xl px-4 py-3 flex items-center justify-between"
             >
-                <span>{selected}</span>
+                <span>{selectedValues || placeholder}</span>
 
                 <ChevronDown
                     className={`w-5 h-5 transition-transform ${
@@ -59,13 +62,13 @@ export default function CustomDropdown({
 
             {/* Dropdown */}
             {open && (
-                <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50">
+                <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 max-h-52 overflow-y-scroll dropdown-scroll z-50">
                     {options.map((option) => (
                         <button
                             key={option}
                             type="button"
                             onClick={() => {
-                                setSelected(option);
+                                setSelectedValues(option);
                                 setOpen(false);
                             }}
                             className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"

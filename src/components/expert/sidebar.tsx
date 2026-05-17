@@ -27,8 +27,13 @@ type Item = {
 const items: Item[] = [
     { href: "/expert/dashboard", label: "Home", icon: Home },
     { href: "/expert/createRecipe", label: "Create Recipe", icon: ChefHat },
-    { href: "/expert/recipeManagement", label: "Recipe Management", icon: ChefHat },
+    {
+        href: "/expert/recipeManagement",
+        label: "Recipe Management",
+        icon: ChefHat,
+    },
     { href: "/expert/createArticle", label: "Create Article", icon: BookImage },
+    { href: "/expert/articleManagement", label: "Article Management", icon: TabletSmartphone },
     { href: "/expert/chat", label: "Chat", icon: MessageCircle },
     { href: "/expert/devices", label: "Devices", icon: TabletSmartphone },
     { href: "/expert/profile", label: "Profile", icon: UserRound },
@@ -48,21 +53,25 @@ export function Sidebar({ onClose }: SidebarProps) {
         const saved = localStorage.getItem("sidebar-open");
         if (saved) setOpen(saved === "1");
     }, []);
-    
+
     useEffect(() => {
         localStorage.setItem("sidebar-open", open ? "1" : "0");
     }, [open]);
 
     const sidebarBg = pathname.startsWith("/expert/createRecipe")
-        ? "bg-gradient-to-b from-amber-300 to-amber-800"
+        ? "bg-gradient-to-b from-amber-300"
         : pathname.startsWith("/expert/dashboard")
           ? "bg-gradient-to-b from-pink-300 to-pink-700"
-          : pathname.startsWith("/expert/chat")
-            ? "bg-gradient-to-b from-sky-300 to-blue-700"
-            : "bg-gradient-to-b from-purple-300 to-purple-700";
+          : pathname.startsWith("/expert/recipeManagement")
+            ? "bg-gradient-to-b from-amber-300 to-amber-800"
+            : pathname.startsWith("/expert/createArticle")
+              ? "bg-gradient-to-b from-sky-300"
+              : pathname.startsWith("/expert/chat")
+                ? "bg-gradient-to-b from-sky-300 to-blue-700"
+                : "bg-gradient-to-b from-purple-300 to-purple-700";
     return (
         <aside
-            className={`${sidebarBg} text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
+            className={`${sidebarBg}  text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
                 open ? "w-52" : "w-20"
             }`}
             aria-label="Primary navigation"

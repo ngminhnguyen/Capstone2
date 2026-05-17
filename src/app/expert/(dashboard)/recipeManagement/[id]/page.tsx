@@ -41,7 +41,7 @@ export default async function RecipeDetailPage({ params }: PageProps) {
                             alt={recipe.title}
                             width={320}
                             height={420}
-                            className="w-full h-[420px] object-cover rounded-3xl"
+                            className="w-full h-105 object-cover rounded-3xl"
                         />
                     </div>
 

@@ -13,7 +13,7 @@ export default function ExpertDashboardPage() {
                         Welcome back, Nutrition Expert
                     </h1>
 
-                    <p className="text-sm text-violet-100 leading-2">
+                    <p className="text-sm text-violet-100 leading-5">
                         Help parents build healthy eating habits for their
                         babies with personalized nutrition guidance, balanced
                         meal plans, and expert feeding support for every stage

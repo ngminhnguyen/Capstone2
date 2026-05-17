@@ -115,14 +115,6 @@ export default function CreateRecipePage() {
     const [openAge, setOpenAge] = useState(false);
     const [selectedAge, setSelectedAge] = useState("Select baby age");
 
-    const ages = [
-        "6 - 8 Months",
-        "8 - 10 Months",
-        "10 - 12 Months",
-        "1 - 2 Years",
-        "2 - 3 Years",
-        "3+ Years",
-    ];
     return (
         <div className="p-8 ">
             {/* Top Buttons */}
@@ -224,11 +216,22 @@ export default function CreateRecipePage() {
                     label="Baby Age"
                     placeholder="Select baby age"
                     options={[
-                        "5 - 6 Months",
-                        "7 - 8 Months",
-                        "9 - 11 Months",
-                        "12 - 18 Months",
+                        "5 month",
+                        "6 month",
+                        "7 month",
+                        "8 month",
+                        "9 month",
+                        "10 month",
+                        "11 month",
+                        "12 month",
+                        "13 month",
+                        "14 month",
+                        "15 month",
+                        "16 month",
+                        "17 month",
+                        "18 month",
                     ]}
+                    
                 />
                 <CustomDropdown
                     label="Weaning method"

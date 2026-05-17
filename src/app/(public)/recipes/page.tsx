@@ -431,7 +431,9 @@ export default function Recipes() {
                                                         className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
                                                     >
                                                         <div className="text-center leading-none">
-                                                            <div>{item.age}</div>
+                                                            <div>
+                                                                {item.age}
+                                                            </div>
                                                             <div>months</div>
                                                         </div>
                                                     </div>
