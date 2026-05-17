@@ -1,9 +1,10 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/expert/sidebar";
 import { Topbar } from "@/components/expert/topbar";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({
     children,
@@ -11,6 +12,15 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const pathname = usePathname();
+    const mainRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        mainRef.current?.scrollTo({
+            top: 0,
+            behavior: "instant",
+        });
+    }, [pathname]);
 
     return (
         <div className="bg-[#FDECE4]">
@@ -34,7 +44,10 @@ export default function DashboardLayout({
                             <Sidebar onClose={() => setSidebarOpen(false)} />
                         </div>
 
-                        <main className="flex-1 w-full lg:w-auto rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none bg-muted p-3 sm:p-5 md:px-7 md:py-7 xl:pb-7 xl:pt-0 overflow-auto scrollbar-hide">
+                        <main
+                            ref={mainRef}
+                            className="flex-1 w-full lg:w-auto rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none bg-muted p-3 sm:p-5 md:px-7 md:py-7 xl:pb-7 xl:pt-0 overflow-auto scrollbar-hide"
+                        >
                             <Topbar onMenuClick={() => setSidebarOpen(true)} />
 
                             <div className="overflow-y-auto scrollbar-hide">

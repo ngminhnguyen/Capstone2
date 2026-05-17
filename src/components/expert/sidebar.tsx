@@ -33,9 +33,12 @@ const items: Item[] = [
         icon: ChefHat,
     },
     { href: "/expert/createArticle", label: "Create Article", icon: BookImage },
-    { href: "/expert/articleManagement", label: "Article Management", icon: TabletSmartphone },
+    {
+        href: "/expert/articleManagement",
+        label: "Article Management",
+        icon: TabletSmartphone,
+    },
     { href: "/expert/chat", label: "Chat", icon: MessageCircle },
-    { href: "/expert/devices", label: "Devices", icon: TabletSmartphone },
     { href: "/expert/profile", label: "Profile", icon: UserRound },
     { href: "/expert/signin", label: "Signin", icon: LogIn },
     { href: "/signup", label: "Signup", icon: LogOut },
@@ -66,9 +69,11 @@ export function Sidebar({ onClose }: SidebarProps) {
             ? "bg-gradient-to-b from-amber-300 to-amber-800"
             : pathname.startsWith("/expert/createArticle")
               ? "bg-gradient-to-b from-sky-300"
-              : pathname.startsWith("/expert/chat")
+              : pathname.startsWith("/expert/articleManagement")
                 ? "bg-gradient-to-b from-sky-300 to-blue-700"
-                : "bg-gradient-to-b from-purple-300 to-purple-700";
+                : pathname.startsWith("/expert/chat")
+                  ? "bg-gradient-to-b from-sky-300 to-blue-700"
+                  : "bg-gradient-to-b from-purple-300 to-purple-700";
     return (
         <aside
             className={`${sidebarBg}  text-amber-950 transition-[width] duration-300 rounded-l-3xl flex flex-col h-full  ${
