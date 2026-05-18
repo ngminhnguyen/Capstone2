@@ -22,6 +22,8 @@ export default function CreateArticles() {
         }
     };
     const [tags, setTags] = useState("");
+    const [heading, setHeading] = useState("");
+    const [paragraph, setParagraph] = useState("");
     const [content, setContent] = useState("");
     return (
         <div className="p-8 ">
@@ -184,12 +186,23 @@ export default function CreateArticles() {
                 <label className="block text-2xl font-bold text-amber-950 mb-4">
                     Article Content
                 </label>
-
+                <textarea
+                    placeholder="Write heading of your article here..."
+                    value={heading}
+                    onChange={(e) => setHeading(e.target.value)}
+                    className="w-full min-h-80 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
+                />
+                <textarea
+                    placeholder="Write a little note for your article here..."
+                    value={paragraph}
+                    onChange={(e) => setParagraph(e.target.value)}
+                    className="w-full min-h-120 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
+                />
                 <textarea
                     placeholder="Write your article content here..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full min-h-120 bg-[#f7f5f2] rounded-[35px] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D]"
+                    className="w-full min-h-120  bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl"
                 />
             </div>
         </div>

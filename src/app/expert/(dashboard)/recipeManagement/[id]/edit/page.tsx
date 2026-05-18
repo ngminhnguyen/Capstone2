@@ -111,6 +111,16 @@ export default function CreateRecipePage() {
         );
     };
 
+    const [babyAge, setBabyAge] = useState("");
+
+    const [weaningMethod, setWeaningMethod] = useState("");
+
+    const [dietaryNeeds, setDietaryNeeds] = useState("");
+
+    const [recipeType, setRecipeType] = useState("");
+
+    const [occasion, setOccasion] = useState("");
+
     // dropDownMenu
     const [openAge, setOpenAge] = useState(false);
     const [selectedAge, setSelectedAge] = useState("Select baby age");
@@ -231,7 +241,6 @@ export default function CreateRecipePage() {
                         "17 month",
                         "18 month",
                     ]}
-                    
                 />
                 <CustomDropdown
                     label="Weaning method"

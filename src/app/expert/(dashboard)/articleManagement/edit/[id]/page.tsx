@@ -1,11 +1,11 @@
 "use client";
 
-import { use } from "react";
-import { useState } from "react";
-import { articles } from "@/data/articles";
-import { notFound } from "next/navigation";
-import { Camera, UserRound } from "lucide-react";
+import { use, useState } from "react";
+import Image from "next/image";
+import { Camera, Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import CustomDropdown from "@/components/expert/custom-dropdown";
+import { articles, ContentBlock } from "@/data/articles";
 
 type Props = {
     params: Promise<{
@@ -14,24 +14,22 @@ type Props = {
 };
 
 export default function EditArticlePage({ params }: Props) {
+    const router = useRouter();
+
     const { id } = use(params);
 
     const article = articles.find((item) => item.id === id);
 
     if (!article) {
-        notFound();
+        return <div className="p-8 text-amber-950">Article not found</div>;
     }
 
-    // Load existing data
-    const [coverImage, setCoverImage] = useState(article.coverImage);
-
+    // Basic Info
     const [title, setTitle] = useState(article.title);
 
-    const [description, setDescription] = useState(article.shortDescription);
-
-    const [content, setContent] = useState(article.content);
-
-    const [tags, setTags] = useState(article.tags.join(", "));
+    const [shortDescription, setShortDescription] = useState(
+        article.shortDescription,
+    );
 
     const [category, setCategory] = useState(article.category);
 
@@ -39,118 +37,200 @@ export default function EditArticlePage({ params }: Props) {
 
     const [readingTime, setReadingTime] = useState(article.readingTime);
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const [tags, setTags] = useState(article.tags.join(", "));
+
+    const [views, setViews] = useState(article.views);
+
+    const [status, setStatus] = useState(article.status);
+
+    const [preview, setPreview] = useState(article.coverImage);
+
+    // ContentBlock[]
+    const [content, setContent] = useState<ContentBlock[]>(article.content);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
 
         if (file) {
             const imageUrl = URL.createObjectURL(file);
 
-            setCoverImage(imageUrl);
+            setPreview(imageUrl);
         }
     };
 
+    const updateBlock = (index: number, updated: ContentBlock) => {
+        const updatedContent = [...content];
+
+        updatedContent[index] = updated;
+
+        setContent(updatedContent);
+    };
+
     const handleSave = () => {
-        console.log({
+        const updatedArticle = {
+            ...article,
             title,
-            description,
-            content,
+            shortDescription,
             category,
-            babyAge,
+            ageGroup: babyAge,
             readingTime,
-            tags,
-            coverImage,
-        });
+            views,
+            status,
+            coverImage: preview,
+            tags: tags.split(",").map((tag) => tag.trim()),
+            content,
+        };
+
+        console.log(updatedArticle);
 
         alert("Article updated!");
+
+        router.push(`/expert/articleManagement/${id}`);
+    };
+
+    const handleDeleteImage = () => {
+        setPreview("");
     };
 
     return (
-        <div className="min-h-screen bg-[#FDF1EC] p-6">
+        <div className="p-8">
             {/* Top Buttons */}
-            <div className="flex justify-end gap-4 mb-8">
-                <button className="border border-red-400 text-red-500 px-6 py-3 rounded-2xl hover:bg-red-50 transition">
-                    Delete
+            <div className="flex justify-end gap-4 mb-6">
+                <button
+                    onClick={() => router.back()}
+                    className="border border-red-500 text-red-500 px-6 py-3 rounded-xl font-semibold hover:bg-red-50 transition"
+                >
+                    Cancel
                 </button>
 
                 <button
                     onClick={handleSave}
-                    className="border border-gray-300 px-6 py-3 rounded-2xl hover:bg-gray-100 transition"
+                    className="border border-gray-300 text-amber-950 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition"
                 >
                     Save & Close
                 </button>
+
+                <button className="bg-orange-400 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-500 transition">
+                    {status === "Published" ? "Published" : "Publish"}
+                </button>
             </div>
 
-            {/* Top Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Cover */}
-                <div className="lg:col-span-4">
-                    <label
-                        htmlFor="upload-cover"
-                        className="bg-[#f7f5f2] rounded-[40px] h-137.5 flex items-center justify-center cursor-pointer overflow-hidden"
-                    >
-                        {coverImage ? (
-                            <img
-                                src={coverImage}
-                                alt="Cover"
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="text-center">
-                                <Camera className="w-20 h-20 mx-auto text-amber-950 mb-4" />
-                                <p className="text-2xl font-bold text-amber-950">
-                                    Upload cover
-                                </p>
+            <div className="grid grid-cols-12 gap-6">
+                {/* Upload */}
+                <div className="col-span-4">
+                    <div className="bg-[#f7f5f2] rounded-2xl p-6 min-h-125 overflow-hidden relative">
+                        {preview ? (
+                            <div className="relative w-full h-125">
+                                <Image
+                                    src={preview}
+                                    alt="Preview"
+                                    fill
+                                    className="object-cover rounded-2xl"
+                                />
+
+                                {/* Action Buttons */}
+                                <div className="absolute bottom-4 right-4 flex items-center bg-black/40 backdrop-blur-md rounded-full px-3 py-2 gap-3">
+                                    {/* Edit Image */}
+                                    <label
+                                        htmlFor="upload-image"
+                                        className="cursor-pointer"
+                                    >
+                                        <Pencil
+                                            size={20}
+                                            className="text-white hover:scale-110 transition"
+                                        />
+                                    </label>
+
+                                    <div className="w-px h-5 bg-white/40" />
+
+                                    {/* Delete Image */}
+                                    <button
+                                        type="button"
+                                        onClick={handleDeleteImage}
+                                    >
+                                        <Trash2
+                                            size={20}
+                                            className="text-white hover:text-red-400 transition"
+                                        />
+                                    </button>
+                                </div>
                             </div>
+                        ) : (
+                            <label
+                                htmlFor="upload-image"
+                                className="flex flex-col items-center justify-center h-125 cursor-pointer"
+                            >
+                                <Camera className="mb-6 w-18 h-18 text-amber-950" />
+
+                                <h2 className="text-2xl font-bold text-amber-950 text-center mb-4">
+                                    Upload article cover
+                                </h2>
+
+                                <p className="text-gray-500 text-center">
+                                    Click to upload image
+                                </p>
+                            </label>
                         )}
 
                         <input
-                            id="upload-cover"
+                            id="upload-image"
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={handleImageUpload}
+                            onChange={handleImageChange}
                         />
-                    </label>
+                    </div>
                 </div>
 
                 {/* Right */}
-                <div className="lg:col-span-8 space-y-6">
+                <div className="col-span-8 flex flex-col gap-6">
                     {/* Title */}
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full bg-[#f7f5f2] rounded-[30px] px-8 py-7 text-4xl font-bold outline-none text-amber-950"
-                    />
+                    <div className="bg-[#f7f5f2] rounded-xl px-5 py-4">
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Enter article title"
+                            className="w-full bg-transparent outline-none text-2xl font-bold text-amber-950"
+                        />
+                    </div>
 
-                    {/* Author */}
-                    <div className="flex items-center gap-5">
-                        <UserRound className="w-16 h-16 text-amber-950" />
+                    {/* User */}
+                    <div className="flex items-center gap-4">
+                        <img
+                            src="/images/avatar.png"
+                            alt="avatar"
+                            className="w-14 h-14 rounded-full"
+                        />
 
                         <div>
-                            <h3 className="text-3xl font-bold text-amber-950">
+                            <h3 className="font-bold text-2xl text-amber-950">
                                 {article.author}
                             </h3>
 
-                            <p className="text-xl text-amber-900/70">
-                                Nutrition Expert
+                            <p className="text-amber-950">
+                                {article.createdAt}
                             </p>
                         </div>
                     </div>
 
                     {/* Description */}
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="w-full h-45 bg-[#f7f5f2] rounded-[30px] p-8 resize-none outline-none text-xl text-amber-950"
-                    />
+                    <div className="bg-[#f7f5f2] rounded-xl p-5">
+                        <textarea
+                            value={shortDescription}
+                            onChange={(e) =>
+                                setShortDescription(e.target.value)
+                            }
+                            className="w-full min-h-37.5 bg-transparent outline-none resize-none text-lg text-amber-950"
+                        />
+                    </div>
                 </div>
             </div>
 
-            {/* Dropdowns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+            {/* Dropdown */}
+            <div className="grid grid-cols-3 gap-6 mt-10">
                 <CustomDropdown
-                    label="Category"
+                    label="Article Category"
                     placeholder="Select category"
                     options={[
                         "Baby Nutrition",
@@ -158,7 +238,6 @@ export default function EditArticlePage({ params }: Props) {
                         "Feeding Tips",
                         "Growth & Development",
                         "Food Allergies",
-                        "Meal Planning",
                     ]}
                     selectedValues={category}
                     setSelectedValues={setCategory}
@@ -166,42 +245,18 @@ export default function EditArticlePage({ params }: Props) {
 
                 <CustomDropdown
                     label="Baby Age"
-                    placeholder="Select age"
-                    options={[
-                        "5-6 months",
-                        "7-8 months",
-                        "9-11 months",
-                        "12-18 months",
-                    ]}
+                    placeholder="Age"
+                    options={["5 - 6 Months", "7 - 8 Months", "9 - 11 Months"]}
                     selectedValues={babyAge}
                     setSelectedValues={setBabyAge}
                 />
 
                 <CustomDropdown
                     label="Reading Time"
-                    placeholder="Select reading time"
-                    options={[
-                        "3 min read",
-                        "5 min read",
-                        "8 min read",
-                        "10 min read",
-                    ]}
+                    placeholder="Reading"
+                    options={["3 min", "5 min", "8 min", "10 min"]}
                     selectedValues={readingTime}
                     setSelectedValues={setReadingTime}
-                />
-            </div>
-
-            {/* Tags */}
-            <div className="mt-10">
-                <label className="block text-lg text-amber-950 mb-3">
-                    Tags
-                </label>
-
-                <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    className="w-full bg-[#f7f5f2] rounded-[25px] px-6 py-5 outline-none"
                 />
             </div>
 
@@ -211,10 +266,67 @@ export default function EditArticlePage({ params }: Props) {
                     Article Content
                 </label>
 
-                <textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className="w-full min-h-125 bg-[#f7f5f2] rounded-[35px] p-8 resize-none outline-none text-lg text-amber-950"
+                <div className="space-y-5">
+                    {content.map((block, index) => (
+                        <div
+                            key={index}
+                            className="bg-[#f7f5f2] rounded-[20px] p-6"
+                        >
+                            {block.type === "heading" && (
+                                <input
+                                    value={block.text}
+                                    onChange={(e) =>
+                                        updateBlock(index, {
+                                            ...block,
+                                            text: e.target.value,
+                                        })
+                                    }
+                                    className="w-full bg-transparent text-2xl font-bold outline-none text-amber-950"
+                                />
+                            )}
+
+                            {block.type === "paragraph" && (
+                                <textarea
+                                    value={block.text}
+                                    onChange={(e) =>
+                                        updateBlock(index, {
+                                            ...block,
+                                            text: e.target.value,
+                                        })
+                                    }
+                                    rows={5}
+                                    className="w-full bg-transparent resize-none outline-none"
+                                />
+                            )}
+
+                            {block.type === "bullet-list" && (
+                                <textarea
+                                    rows={8}
+                                    value={block.items.join("\n")}
+                                    onChange={(e) =>
+                                        updateBlock(index, {
+                                            ...block,
+                                            items: e.target.value.split("\n"),
+                                        })
+                                    }
+                                    className="w-full bg-transparent resize-none outline-none"
+                                />
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* Tags */}
+            <div className="mt-10">
+                <label className="block text-lg text-amber-950 mb-3 font-medium">
+                    Tags
+                </label>
+
+                <input
+                    type="text"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    className="w-full bg-[#f7f5f2] rounded-[25px] px-6 py-5 outline-none"
                 />
             </div>
         </div>
