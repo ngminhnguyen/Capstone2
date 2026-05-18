@@ -19,7 +19,12 @@ export default function ExpertLayout({
             disableTransitionOnChange
         >
             <Suspense fallback={null}>
-                {children}
+                <div className="h-screen overflow-hidden">
+                    <div className="h-full overflow-y-auto scrollbar-hide">
+                        {children}
+                    </div>
+                </div>
+
                 <ButtonDownload />
                 <Analytics />
             </Suspense>
