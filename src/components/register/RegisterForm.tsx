@@ -6,6 +6,7 @@ import { faCircleExclamation, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { CircleAlert } from "lucide-react";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -60,10 +61,7 @@ export default function RegisterPage({ setStep }: Props) {
                                         >
                                             First Name
                                         </label>
-                                        <FontAwesomeIcon
-                                            icon={faCircleExclamation}
-                                            className="text-yellow-400 mt-1"
-                                        />
+                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
                                     <input
                                         type="text"
@@ -80,10 +78,7 @@ export default function RegisterPage({ setStep }: Props) {
                                         >
                                             Last Name
                                         </label>
-                                        <FontAwesomeIcon
-                                            icon={faCircleExclamation}
-                                            className="text-yellow-400 mt-1"
-                                        />
+                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
                                     <input
                                         type="text"
@@ -101,10 +96,7 @@ export default function RegisterPage({ setStep }: Props) {
                                     >
                                         Email
                                     </label>
-                                    <FontAwesomeIcon
-                                        icon={faCircleExclamation}
-                                        className="text-yellow-400 mt-1"
-                                    />
+                                    <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                 </div>
                                 <input
                                     type="email"
@@ -124,10 +116,7 @@ export default function RegisterPage({ setStep }: Props) {
                                         >
                                             Create password
                                         </label>
-                                        <FontAwesomeIcon
-                                            icon={faCircleExclamation}
-                                            className="text-yellow-400 mt-1"
-                                        />
+                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
                                     <input
                                         type="password"
@@ -144,10 +133,7 @@ export default function RegisterPage({ setStep }: Props) {
                                         >
                                             Confirm password
                                         </label>
-                                        <FontAwesomeIcon
-                                            icon={faCircleExclamation}
-                                            className="text-yellow-400 mt-1"
-                                        />
+                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
                                     <input
                                         type="password"

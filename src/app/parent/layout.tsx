@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/expert/theme-provider";
 import { Suspense } from "react";
 
-export default function ExpertLayout({
+export default function ParentLayout({
     children,
 }: {
     children: React.ReactNode;

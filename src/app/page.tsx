@@ -50,6 +50,12 @@ export default function HomePage() {
             >
                 Go to Expert
             </a>
+            <a
+                href="/parent/profile"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            >
+                Go to Parent
+            </a>
         </div>
     );
 }

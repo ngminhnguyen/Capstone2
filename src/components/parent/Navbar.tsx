@@ -13,9 +13,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Handlee, Nunito } from "next/font/google";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -27,6 +28,7 @@ const nunito = Nunito({
 });
 
 const navigation = [
+    { name: "Child's Profile", href: "/parent/profile" },
     { name: "Home", href: "/home" },
     { name: "Recipes", href: "/recipes" },
     { name: "Expert's Articles", href: "/articles" },
@@ -151,30 +153,64 @@ export default function Navbar() {
                     </div>
 
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        {/* <button
-                            type="button"
-                            className="relative rounded-full p-1 focus:outline-2 focus:outline-offset-2 focus:outline-orange-800"
+                        <Link
+                            href="/parent/favorites"
+                            className="flex h-8 w-8 items-center justify-center rounded-full transition  hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
                         >
-                            <div className="size-5 rounded-full flex items-center justify-center">
-                                <FontAwesomeIcon
-                                    icon={faHeart}
-                                    className="text-orange-800 size-6 rounded-full"
-                                />
-                            </div>
-                        </button> */}
+                            <Heart className="text-orange-800 text-xl fill-orange-800" />
+                        </Link>
 
                         {/* Profile dropdown */}
-                        <a
-                            href="/login"
-                            className={`block px-4 py-2 text-lg font-medium rounded-xl ${
-                                pathname === "/login"
-                                    ? "text-[#4E0706] font-bold border-b border-orange-900 "
-                                    : " hover:bg-[#D9BBA0] hover:text-amber-950 transition hover:rounded-xl "
-                            }`}
-                        >
-                            Sign in
-                        </a>
-                        
+                        <Menu as="div" className="relative ml-3">
+                            <MenuButton className="relative flex rounded-full hover:outline-2 hover:outline-offset-2 hover:outline-orange-800">
+                                <span className="absolute -inset-1.5" />
+                                <span className="sr-only">Open user menu</span>
+                                <div className="size-8 rounded-full bg-orange-800 flex items-center justify-center">
+                                    <FontAwesomeIcon
+                                        icon={faUser}
+                                        className="text-white size-5 rounded-full"
+                                    />
+                                </div>
+                            </MenuButton>
+
+                            <MenuItems
+                                transition
+                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                            >
+                                {/* <MenuItem>
+                                            <a
+                                                href="#"
+                                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                                            >
+                                                Your profile
+                                            </a>
+                                        </MenuItem> */}
+                                <MenuItem>
+                                    <a
+                                        href="/login"
+                                        className={`block px-4 py-2 text-sm ${
+                                            pathname === "/login"
+                                                ? "text-[#4E0706] font-bold bg-[#E8D5C4]"
+                                                : "text-gray-700 hover:bg-[#D9BBA0]"
+                                        }`}
+                                    >
+                                        Sign out
+                                    </a>
+                                </MenuItem>
+                                <MenuItem>
+                                    <a
+                                        href="/profile"
+                                        className={`block px-4 py-2 text-sm ${
+                                            pathname === "/register"
+                                                ? "text-[#4E0706] font-bold bg-[#E8D5C4]"
+                                                : "text-gray-700 hover:bg-[#D9BBA0]"
+                                        }`}
+                                    >
+                                        My profile
+                                    </a>
+                                </MenuItem>
+                            </MenuItems>
+                        </Menu>
                     </div>
                 </div>
             </div>

@@ -36,10 +36,10 @@ export default function DashboardLayout({
                     <div className="flex h-[95vh]">
                         <div
                             className={`
-              fixed inset-y-0 left-0 z-50 lg:relative lg:z-auto
-              transform transition-transform duration-300 ease-in-out
-              ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-            `}
+                                        fixed inset-y-0 left-0 z-50 lg:relative lg:z-auto
+                                        transform transition-transform duration-300 ease-in-out
+                                        ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+                                    `}
                         >
                             <Sidebar onClose={() => setSidebarOpen(false)} />
                         </div>
