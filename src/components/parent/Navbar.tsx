@@ -11,7 +11,6 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Handlee, Nunito } from "next/font/google";
 import { ChevronDown, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -28,7 +27,7 @@ const nunito = Nunito({
 });
 
 const navigation = [
-    { name: "Child's Profile", href: "/parent/profile" },
+    { name: "Dashboard", href: "/parent/dashboard" },
     { name: "Home", href: "/home" },
     { name: "Recipes", href: "/recipes" },
     { name: "Expert's Articles", href: "/articles" },
@@ -44,8 +43,11 @@ const shopMenu = [
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
+type NavbarProps = {
+    bannerColor?: string;
+};
 
-export default function Navbar() {
+export default function Navbar({ bannerColor }: NavbarProps) {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
 
@@ -54,28 +56,30 @@ export default function Navbar() {
             setScrolled(window.scrollY > 30);
         };
 
+        handleScroll();
+
         window.addEventListener("scroll", handleScroll);
+
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [pathname]);
+
+    const defaultNavbar = "bg-[#FDECE4] text-[#4E0706]";
 
     const bgClass = scrolled
-        ? "bg-[#FDECE4] text-[#4E0706]"
-        : pathname === "/"
-          ? "bg-[#b63b5d] text-white"
-          : pathname === "/home"
-            ? "bg-[#b63b5d] text-white"
-            : pathname === "/recipes"
-              ? "bg-linear-to-r from-purple-700 to-fuchsia-600 text-white"
-              : pathname === "/articles"
-                ? "bg-[#EE9B06] text-white"
-                : pathname === "/register"
-                  ? "bg-[#FDECE4] text-[#4E0706]"
-                  : "bg-[#FDECE4] text-[#4E0706]";
-
+        ? defaultNavbar
+        : bannerColor
+          ? `${bannerColor} text-white`
+          : defaultNavbar;
     return (
         <Disclosure
             as="nav"
-            className={`sticky top-0 z-50 border-b border-orange-900/20 ${bgClass} ${nunito.className}`}
+            className={`
+                sticky top-0 z-50
+                border-b border-orange-900/20
+                transition-all duration-300 ease-in-out
+                ${bgClass}
+                ${nunito.className}
+            `}
         >
             <div className="w-full mx-auto  px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
@@ -141,7 +145,7 @@ export default function Navbar() {
                                             pathname === item.href
                                                 ? "border-b-2 border-orange-900"
                                                 : "border-b-2 border-transparent hover:border-orange-900",
-                                            "inline-flex items-center px-3 pt-2 text-sm font-medium",
+                                            "inline-flex items-center px-3 pt-2 text-xl font-medium",
                                         )}
                                     >
                                         {item.name}
@@ -155,20 +159,45 @@ export default function Navbar() {
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <Link
                             href="/parent/favorites"
-                            className="flex h-8 w-8 items-center justify-center rounded-full transition  hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                            className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2${
+                                scrolled
+                                    ? " hover:outline-offset-2 hover:outline-orange-800"
+                                    : " hover:outline-offset-2 hover:outline-[#FDECE4]"
+                            }`}
                         >
-                            <Heart className="text-orange-800 text-xl fill-orange-800" />
+                            <Heart
+                                className={`text-xl ${
+                                    scrolled
+                                        ? "text-orange-800 text-xl fill-orange-800"
+                                        : "text-[#FDECE4] fill-[#FDECE4] group-hover:text-[#FDECE4] group-hover:fill-[#FDECE4]"
+                                } `}
+                            />
                         </Link>
-
                         {/* Profile dropdown */}
                         <Menu as="div" className="relative ml-3">
-                            <MenuButton className="relative flex rounded-full hover:outline-2 hover:outline-offset-2 hover:outline-orange-800">
+                            <MenuButton
+                                className={`group relative flex rounded-full
+                                    ${
+                                        scrolled
+                                            ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                                            : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                    }`}
+                            >
                                 <span className="absolute -inset-1.5" />
                                 <span className="sr-only">Open user menu</span>
-                                <div className="size-8 rounded-full bg-orange-800 flex items-center justify-center">
+
+                                <div
+                                    className={`size-8 rounded-full flex items-center justify-center ${
+                                        scrolled ? "bg-orange-800" : "bg-white"
+                                    } `}
+                                >
                                     <FontAwesomeIcon
                                         icon={faUser}
-                                        className="text-white size-5 rounded-full"
+                                        className={`size-5 ${
+                                            scrolled
+                                                ? "text-white"
+                                                : "text-orange-800"
+                                        } `}
                                     />
                                 </div>
                             </MenuButton>

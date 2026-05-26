@@ -18,10 +18,10 @@ export default function ParentLayout({
             disableTransitionOnChange
         >
             <Suspense fallback={null}>
-                <div className="h-screen overflow-hidden">
-                    <div className="h-full overflow-y-auto scrollbar-hide">
-                        {children}
-                    </div>
+                <div className="min-h-screen">
+                    {children}
+
+                    <Analytics />
                 </div>
 
                 <Analytics />
