@@ -16,7 +16,7 @@ import { Button } from "@/components/expert/ui/button";
 import { Input } from "@/components/expert/ui/input";
 import { Label } from "@/components/expert/ui/label";
 
-const UserProfile = () => {
+export default function UserProfile() {
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState<"personal" | "address" | null>(
         null,
@@ -84,13 +84,11 @@ const UserProfile = () => {
         <>
             <BreadcrumbComp title="User Profile" items={BCrumb} />
             <div className="flex flex-col gap-6">
-                <CardBox className="p-6 bg-background overflow-hidden border-none rounded-xl shadow-xs">
+                <CardBox className="p-6 bg-white border border-fuchsia-200 rounded-2xl shadow-sm overflow-hidden">
                     <div className="flex flex-col sm:flex-row items-center gap-6 rounded-xl relative w-full words-break">
                         <div>
                             <Image
-                                src={
-                                    "/matdash-nextjs/images/profile/user-1.jpg"
-                                }
+                                src={"/images/user.png"}
                                 alt="image"
                                 width={80}
                                 height={80}
@@ -99,15 +97,15 @@ const UserProfile = () => {
                         </div>
                         <div className="flex flex-wrap gap-4 justify-center sm:justify-between items-center w-full">
                             <div className="flex flex-col sm:text-left text-center gap-1.5">
-                                <h5 className="card-title">
+                                <h5 className="text-2xl font-bold text-fuchsia-950">
                                     {personal.firstName} {personal.lastName}
                                 </h5>
                                 <div className="flex flex-wrap items-center gap-1 md:gap-3">
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-fuchsia-500">
                                         {personal.position}
                                     </p>
-                                    <div className="hidden h-4 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="hidden xl:block h-4 w-px bg-fuchsia-200"></div>
+                                    <p className="text-sm text-fuchsia-500">
                                         {address.location}
                                     </p>
                                 </div>
@@ -118,7 +116,7 @@ const UserProfile = () => {
                                         key={index}
                                         href={item.href}
                                         target="_blank"
-                                        className="flex h-11 w-11 items-center justify-center gap-2 rounded-full shadow-md hover:bg-gray-50 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+                                        className="flex h-11 w-11 items-center justify-center rounded-full border border-fuchsia-200 bg-white shadow-sm hover:bg-fuchsia-50 hover:text-fuchsia-700 transition-all"
                                     >
                                         <Icon
                                             icon={item.icon}
@@ -133,34 +131,46 @@ const UserProfile = () => {
                 </CardBox>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    <div className="space-y-6 rounded-xl shadow-xs bg-background md:p-6 p-4 relative w-full words-break">
-                        <h5 className="card-title">Personal Information</h5>
+                    <div className="w-full rounded-2xl border border-fuchsia-200 bg-white p-5 md:p-6 shadow-sm space-y-6">
+                        <h5 className="text-xl font-semibold text-fuchsia-950">
+                            Personal Information
+                        </h5>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32">
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     First Name
                                 </p>
-                                <p>{personal.firstName}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {personal.firstName}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     Last Name
                                 </p>
-                                <p>{personal.lastName}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {personal.lastName}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">Email</p>
-                                <p>{personal.email}</p>
+                                <p className="text-xs text-fuchsia-500">Email</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {personal.email}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">Phone</p>
-                                <p>{personal.phone}</p>
+                                <p className="text-xs text-fuchsia-500">Phone</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {personal.phone}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     Position
                                 </p>
-                                <p>{personal.position}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {personal.position}
+                                </p>
                             </div>
                         </div>
                         <div className="flex justify-end">
@@ -169,8 +179,7 @@ const UserProfile = () => {
                                     setModalType("personal");
                                     setOpenModal(true);
                                 }}
-                                color={"primary"}
-                                className="flex items-center gap-1.5 rounded-md"
+                                className="flex items-center gap-2 rounded-xl bg-fuchsia-900 px-4 py-2 text-white hover:bg-fuchsia-800 transition"
                             >
                                 <Icon
                                     icon="ic:outline-edit"
@@ -182,36 +191,48 @@ const UserProfile = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-6 rounded-xl shadow-xs bg-background md:p-6 p-4 relative w-full words-break">
-                        <h5 className="card-title">Address Details</h5>
+                    <div className="w-full rounded-2xl border border-fuchsia-200 bg-white p-5 md:p-6 shadow-sm space-y-6">
+                        <h5 className="text-xl font-semibold text-fuchsia-950">
+                            Address Details
+                        </h5>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32">
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-sm font-medium text-fuchsia-500">
                                     Location
                                 </p>
-                                <p>{address.location}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {address.location}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     Province / State
                                 </p>
-                                <p>{address.state}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {address.state}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     PIN Code
                                 </p>
-                                <p>{address.pin}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {address.pin}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">ZIP</p>
-                                <p>{address.zip}</p>
+                                <p className="text-xs text-fuchsia-500">ZIP</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {address.zip}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-fuchsia-500">
                                     Federal Tax No.
                                 </p>
-                                <p>{address.taxNo}</p>
+                                <p className="text-fuchsia-900 font-medium">
+                                    {address.taxNo}
+                                </p>
                             </div>
                         </div>
                         <div className="flex justify-end">
@@ -469,6 +490,4 @@ const UserProfile = () => {
             </Dialog>
         </>
     );
-};
-
-export default UserProfile;
+}

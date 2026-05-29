@@ -11,52 +11,51 @@ interface BreadCrumbType {
     children?: JSX.Element;
 }
 
-const BreadcrumbComp = ({ items, title }: BreadCrumbType) => {
+const BreadcrumbComp = ({ title }: BreadCrumbType) => {
     return (
-        <>
-            <CardBox
-                className={`mb-6 py-4 bg-lightprimary dark:bg-darkinfo overflow-hidden rounded-xl border-none !shadow-none dark:!shadow-none`}
-            >
-                <div className=" items-center grid grid-cols-12 gap-6">
-                    <div className="col-span-10">
-                        <h4 className="font-semibold text-xl text-customdark mb-3">
-                            {title}
-                        </h4>
-                        <ol
-                            className="flex items-center whitespace-nowrap"
-                            aria-label="Breadcrumb"
-                        >
-                            <li className="flex items-center">
-                                <a
-                                    className="opacity-80 text-sm text-charcoal leading-none"
-                                    href="@@webRoot/main/index.html"
-                                >
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <div className="p-0.5 rounded-full bg-dark dark:bg-darklink mx-2.5 flex items-center"></div>
-                            </li>
-                            <li
-                                className="flex items-center text-sm text-charcoal leading-none"
-                                aria-current="page"
+        <CardBox className="mb-6 py-5 px-6 bg-fuchsia-100 rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
+            <div className="grid grid-cols-12 items-center gap-6">
+                {/* Left content */}
+                <div className="col-span-12 md:col-span-10">
+                    <h4 className="font-bold text-2xl text-fuchsia-950 mb-3">
+                        {title}
+                    </h4>
+
+                    <ol
+                        className="flex items-center whitespace-nowrap text-sm"
+                        aria-label="Breadcrumb"
+                    >
+                        <li className="flex items-center">
+                            <a
+                                href="/"
+                                className="text-fuchsia-700 hover:text-fuchsia-900 transition-colors"
                             >
-                                {title}
-                            </li>
-                        </ol>
-                    </div>
-                    <div className="col-span-2 flex justify-center -mb-10">
-                        <Image
-                            src={"/matdash-nextjs/images/breadcrumb/ChatBc.png"}
-                            alt=""
-                            className="md:-mb-[31px] -mb-4"
-                            width={140}
-                            height={150}
-                        />
-                    </div>
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-600 mx-3"></div>
+                        </li>
+
+                        <li className="text-gray-600" aria-current="page">
+                            {title}
+                        </li>
+                    </ol>
                 </div>
-            </CardBox>
-        </>
+
+                {/* Right image */}
+                <div className="hidden md:flex col-span-2 justify-center">
+                    <Image
+                        src="/images/parent/stars.png"
+                        alt="breadcrumb image"
+                        className="translate-y-5"
+                        width={120}
+                        height={120}
+                    />
+                </div>
+            </div>
+        </CardBox>
     );
 };
 
