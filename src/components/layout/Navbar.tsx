@@ -31,14 +31,22 @@ const navigation = [
     { name: "Recipes", href: "/recipes" },
     { name: "Expert's Articles", href: "/articles" },
 ];
-const shopMenu = [
-    { name: "Coffee", href: "/collections/coffee" },
-    { name: "Subscriptions", href: "/collections/subscriptions" },
-    { name: "Amps Gear", href: "/collections/amps-gear" },
-    { name: "Brewing Equipment", href: "/collections/brewing-equipment" },
-    { name: "Shop All", href: "/collections/all" },
-];
+// const shopMenu = [
+//     { name: "Coffee", href: "/collections/coffee" },
+//     { name: "Subscriptions", href: "/collections/subscriptions" },
+//     { name: "Amps Gear", href: "/collections/amps-gear" },
+//     { name: "Brewing Equipment", href: "/collections/brewing-equipment" },
+//     { name: "Shop All", href: "/collections/all" },
+// ];
 
+//chưa làm xong nên để #, khi bấm vào không bị lỗi
+const shopMenu = [
+    { name: "Coffee", href: "#" },
+    { name: "Subscriptions", href: "#" },
+    { name: "Amps Gear", href: "#" },
+    { name: "Brewing Equipment", href: "#" },
+    { name: "Shop All", href: "#" },
+];
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }

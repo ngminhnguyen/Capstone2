@@ -338,7 +338,7 @@ export default function Recipes() {
                                     key={item.id}
                                     className={`relative bg-linear-to-b ${item.color}
                                         text-white rounded-2xl p-4
-                                        h-180
+                                        h-120
                                         transition-all duration-300
                                         hover:-translate-y-2
                                         hover:rotate-2
