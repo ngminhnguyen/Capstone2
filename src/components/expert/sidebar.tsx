@@ -87,7 +87,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                         <img src="/images/logo.png" alt="BabyNutri Logo" />
                     </div>
                     <span
-                        className={`${open ? "block" : "hidden"} text-sm font-semibold`}
+                        className={`${open ? "block" : "hidden"} text-xl font-semibold`}
                     >
                         BabyNutri
                     </span>
@@ -127,7 +127,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                                         className={`size-5 ${active ? "text-brand" : "text-amber-900"}`}
                                     />
                                     <span
-                                        className={`${open ? "block" : "hidden"} text-sm`}
+                                        className={`${open ? "block" : "hidden"} text-xl`}
                                     >
                                         {label}
                                     </span>

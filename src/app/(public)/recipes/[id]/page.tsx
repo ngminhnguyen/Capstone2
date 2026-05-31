@@ -1,6 +1,6 @@
 "use client";
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/PublicFooter";
+import Navbar from "@/components/layout/PublicNavbar";
 import { Baloo_2 } from "next/font/google";
 import { motion } from "framer-motion";
 import { recipes } from "@/data/recipes";
@@ -36,7 +36,6 @@ export default function RecipeDetail() {
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
-            <Navbar />
             <main>
                 {/*Header*/}
                 <section
@@ -49,7 +48,7 @@ export default function RecipeDetail() {
     `}
                 >
                     {/* TOP CONTENT */}
-                    <div className="absolute top-8 left-6 text-sm font-semibold z-20">
+                    <div className="absolute top-8 left-6 text-xl font-semibold z-20">
                         {/* Home / Weaning Recipes / {recipe.title} */}
                     </div>
 
@@ -146,7 +145,7 @@ export default function RecipeDetail() {
                                 `}
                         >
                             <span className="text-3xl">{recipe.age}</span>
-                            <span className="text-sm">months</span>
+                            <span className="text-xl">months</span>
                         </div>
                     </div>
                 </section>
@@ -179,7 +178,7 @@ export default function RecipeDetail() {
                             <div className="flex items-center gap-4 mb-4">
                                 {/* SERVES */}
                                 {/* <div className="flex flex-col items-center">
-                                    <span className="text-sm text-[#5A0A0A] mb-2">
+                                    <span className="text-xl text-[#5A0A0A] mb-2">
                                         Serves
                                     </span>
 
@@ -198,7 +197,7 @@ export default function RecipeDetail() {
 
                                 {/* PREP */}
                                 <div className="flex flex-col items-center">
-                                    <span className="text-sm text-[#5A0A0A] mb-2">
+                                    <span className="text-xl text-[#5A0A0A] mb-2">
                                         Prep
                                     </span>
 
@@ -230,7 +229,7 @@ export default function RecipeDetail() {
 
                                 {/* COOK */}
                                 <div className="flex flex-col items-center">
-                                    <span className="text-sm text-[#5A0A0A] mb-2">
+                                    <span className="text-xl text-[#5A0A0A] mb-2">
                                         Cook
                                     </span>
 
@@ -458,7 +457,7 @@ export default function RecipeDetail() {
                                                         bg-pink-500
                                                         text-white
                                                         flex items-center justify-center
-                                                        text-sm
+                                                        text-xl
                                                         font-bold
                                                         shrink-0
                                                         mt-1
@@ -670,7 +669,7 @@ export default function RecipeDetail() {
                                     px-4 py-2
                                     rounded-md
                                     text-gray-500
-                                    text-sm
+                                    text-xl
                                     flex items-center gap-2
                                 "
                             >
@@ -710,7 +709,7 @@ export default function RecipeDetail() {
                                                     {comment.user.name}
                                                 </h4>
 
-                                                <span className="text-gray-400 text-sm">
+                                                <span className="text-gray-400 text-xl">
                                                     {comment.time}
                                                 </span>
                                             </div>
@@ -777,7 +776,7 @@ export default function RecipeDetail() {
                                                                             </span>
                                                                         )}
 
-                                                                        <span className="text-gray-400 text-sm">
+                                                                        <span className="text-gray-400 text-xl">
                                                                             {
                                                                                 reply.time
                                                                             }
@@ -803,7 +802,6 @@ export default function RecipeDetail() {
                     </div>
                 </section>
             </main>
-            <Footer />
         </div>
     );
 }

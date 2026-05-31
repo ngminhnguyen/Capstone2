@@ -4,8 +4,8 @@ import type React from "react";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-import Navbar from "@/components/parent/Navbar";
-import Footer from "@/components/parent/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/parent/ParentFooter";
 import PageBanner from "@/components/parent/PageBanner";
 
 import { Baloo_2, Handlee, Nunito } from "next/font/google";

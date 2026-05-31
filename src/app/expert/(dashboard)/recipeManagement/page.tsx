@@ -74,7 +74,7 @@ export default function RecipeList() {
                                         (ingredient: string, index: number) => (
                                             <p
                                                 key={index}
-                                                className="text-sm text-[#A57C7C]"
+                                                className="text-xl text-[#A57C7C]"
                                             >
                                                 {ingredient}
                                             </p>

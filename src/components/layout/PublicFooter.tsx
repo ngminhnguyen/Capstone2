@@ -83,7 +83,7 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom */}
-                <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-white/50">
+                <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xl text-white/50">
                     <p>© Sessions 2026</p>
 
                     <div className="flex gap-4">

@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/PublicNavbar";
+import Footer from "@/components/layout/PublicFooter";
 import RegisterForm from "@/components/register/RegisterForm";
 import Step1 from "@/components/register/Step1";
 import Step2 from "@/components/register/Step2";
@@ -34,8 +34,6 @@ export default function RegisterPage() {
 
     return (
         <div className="min-h-screen bg-[#fdece4] text-[#4e0706]">
-            <Navbar />
-
             {step === 1 && <RegisterForm setStep={goToStep} />}
 
             {step === 2 && (
@@ -53,8 +51,6 @@ export default function RegisterPage() {
             )}
 
             {step === 4 && <Result prevStep={() => goToStep(3)} />}
-
-            <Footer />
         </div>
     );
 }

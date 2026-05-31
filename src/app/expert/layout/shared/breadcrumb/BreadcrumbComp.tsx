@@ -22,7 +22,7 @@ const BreadcrumbComp = ({ title }: BreadCrumbType) => {
                     </h4>
 
                     <ol
-                        className="flex items-center whitespace-nowrap text-sm"
+                        className="flex items-center whitespace-nowrap text-xl"
                         aria-label="Breadcrumb"
                     >
                         <li className="flex items-center">

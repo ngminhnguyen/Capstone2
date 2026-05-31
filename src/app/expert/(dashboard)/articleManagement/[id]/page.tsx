@@ -72,11 +72,11 @@ export default async function ArticleDetailPage({ params }: Props) {
 
                     {/* Category */}
                     <div className="flex gap-3 mt-6 flex-wrap border-y border-amber-900/20 py-1">
-                        <span className="bg-[#F4E8E2] text-amber-950 px-4 py-2 rounded-full text-sm">
+                        <span className="bg-[#F4E8E2] text-amber-950 px-4 py-2 rounded-full text-xl">
                             {article.status}
                         </span>
 
-                        <span className="bg-[#F4E8E2] text-amber-950 px-4 py-2 rounded-full text-sm">
+                        <span className="bg-[#F4E8E2] text-amber-950 px-4 py-2 rounded-full text-xl">
                             {article.createdAt}
                         </span>
                     </div>

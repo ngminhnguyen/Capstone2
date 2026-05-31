@@ -107,7 +107,7 @@ export default function Step2({ nextStep, prevStep }: Props) {
                                     }`}
                                 >
                                     <p>Symptoms:</p>
-                                    <ul className="list-disc ml-5 mt-1 text-sm space-y-1">
+                                    <ul className="list-disc ml-5 mt-1 text-xl space-y-1">
                                         {item.symptoms.map((symptom, index) => (
                                             <li key={index}>{symptom}</li>
                                         ))}

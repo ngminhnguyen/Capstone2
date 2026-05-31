@@ -1,6 +1,6 @@
 "use client";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/PublicNavbar";
+import Footer from "@/components/layout/PublicFooter";
 import { motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
 import React, { useState } from "react";
@@ -142,7 +142,6 @@ export default function Recipes() {
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
-            <Navbar />
             <main className="mb-8">
                 {/*Header*/}
                 <section className="relative overflow-hidden bg-linear-to-r from-purple-700 to-fuchsia-600 text-white">
@@ -155,7 +154,7 @@ export default function Recipes() {
                             transition={{ duration: 0.7 }}
                             className="flex-1 text-center md:text-left"
                         >
-                            {/* <p className="text-sm mb-4 opacity-80">
+                            {/* <p className="text-xl mb-4 opacity-80">
                                 Home / Weaning Recipes
                             </p> */}
 
@@ -346,7 +345,7 @@ export default function Recipes() {
                                         "`}
                                 >
                                     {/* Meal Time */}
-                                    <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-sm px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
+                                    <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-xl px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
                                         {item.mealTime}
                                     </div>
 
@@ -359,7 +358,7 @@ export default function Recipes() {
                                     </div>
 
                                     {/* TITLE */}
-                                    <h3 className="font-bold text-sm mb-2">
+                                    <h3 className="font-bold text-xl mb-2">
                                         {item.title}
                                     </h3>
 
@@ -534,7 +533,6 @@ export default function Recipes() {
                     </div>
                 </section>
             </main>
-            <Footer />
         </div>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/PublicFooter";
+import Navbar from "@/components/layout/PublicNavbar";
 import { color, motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
 import { useCallback, useState } from "react";
@@ -279,7 +279,6 @@ export default function Articles() {
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
-            <Navbar />
             <main>
                 {/*Header*/}
                 <section className="relative overflow-hidden bg-[#EE9B06] text-[#4E0706] ">
@@ -297,7 +296,7 @@ export default function Articles() {
                                     helpful stuff
                                 </h1>
 
-                                <p className="mt-6 text-sm leading-8 text-white/90">
+                                <p className="mt-6 text-xl leading-8 text-white/90">
                                     Our experts have created lots of helpful
                                     stuff to support you with your little one's
                                     weaning adventure! From weaning guides +
@@ -305,7 +304,7 @@ export default function Articles() {
                                     there's so much to explore!
                                 </p>
 
-                                <p className="mt-4 text-sm leading-8 text-white/90">
+                                <p className="mt-4 text-xl leading-8 text-white/90">
                                     Pssst! Visit our weaning hub for advice on
                                     every stage of the journey!
                                 </p>
@@ -514,7 +513,6 @@ export default function Articles() {
                     </div>
                 </section>
             </main>
-            <Footer />
         </div>
     );
 }

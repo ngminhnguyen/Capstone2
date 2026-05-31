@@ -223,7 +223,7 @@ export default function Step1({ nextStep, prevStep }: Props) {
                                     onClick={() => removeChildForm(index)}
                                     className="flex items-center gap-2 text-[#7a0000] hover:text-red-600"
                                 >
-                                    <span className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-sm font-bold">
+                                    <span className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xl font-bold">
                                         ×
                                     </span>
                                     Remove little one

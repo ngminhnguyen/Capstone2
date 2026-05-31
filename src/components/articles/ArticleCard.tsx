@@ -83,13 +83,13 @@ export default function ArticleCard({ item }: ArticleCardProps) {
                             rounded-full
                             border-2 border-amber-900
                             flex items-center justify-center
-                            text-white text-sm font-bold
+                            text-white text-xl font-bold
                             text-center leading-5
                             shadow-md
                             ${item.colorMonths}
                         `}
                     >
-                        <p className="text-sm -rotate-20">{item.months}</p>
+                        <p className="text-xl -rotate-20">{item.months}</p>
                     </div>
                 </div>
             </div>

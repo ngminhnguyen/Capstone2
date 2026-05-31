@@ -72,7 +72,7 @@ export default async function RecipeDetailPage({ params }: PageProps) {
                                         {recipe.author}
                                     </h3>
 
-                                    <p className="text-sm text-amber-950/60">
+                                    <p className="text-xl text-amber-950/60">
                                         Recipe Creator
                                     </p>
                                 </div>

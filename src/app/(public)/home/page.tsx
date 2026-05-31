@@ -1,6 +1,6 @@
 "use client";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/PublicNavbar";
+import Footer from "@/components/layout/PublicFooter";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
@@ -148,7 +148,6 @@ export default function Home() {
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
-            <Navbar />
             <main>
                 {/*Header*/}
                 <section className="relative overflow-hidden bg-[#b63b5d] text-[#4E0706] ">
@@ -166,7 +165,7 @@ export default function Home() {
                                     Peas-ed to meet you, we&apos;re BabyNutri!
                                 </h1>
 
-                                <p className="mt-6 text-sm leading-8 text-white/90">
+                                <p className="mt-6 text-xl leading-8 text-white/90">
                                     BabyNutri is a smart web-based platform that
                                     helps parents build healthy eating habits
                                     for their children through personalized meal
@@ -177,7 +176,7 @@ export default function Home() {
                                     development.
                                 </p>
 
-                                <p className="mt-4 text-sm leading-8 text-white/90">
+                                <p className="mt-4 text-xl leading-8 text-white/90">
                                     Every child has unique needs, so BabyNutri
                                     provides meal recommendations based on age,
                                     growth data, allergies, and feeding
@@ -330,7 +329,7 @@ export default function Home() {
                                             </h3>
 
                                             {/* desc */}
-                                            <p className="mt-3 text-sm max-w-55">
+                                            <p className="mt-3 text-xl max-w-55">
                                                 {item.desc}
                                             </p>
 
@@ -476,13 +475,13 @@ export default function Home() {
                                                     <p className="text-24 font-bold">
                                                         {card.title}
                                                     </p>
-                                                    <p className="text-sm">
+                                                    <p className="text-xl">
                                                         {card.description}
                                                     </p>
 
                                                     <Link
                                                         href={card.href}
-                                                        className="bg-[#FFCB2B] hover:bg-[#FFCB2B]/80 py-2 px-5 rounded-lg text-sm  transition duration-300"
+                                                        className="bg-[#FFCB2B] hover:bg-[#FFCB2B]/80 py-2 px-5 rounded-lg text-xl  transition duration-300"
                                                     >
                                                         {card.button}
                                                     </Link>
@@ -567,8 +566,8 @@ export default function Home() {
                                                 Read more &gt;
                                             </button>
 
-                                            <div className="w-17 h-17 rounded-full bg-[#B1007D] border-2 border-amber-900 flex items-center justify-center text-white text-sm font-bold text-center leading-5 shadow-md">
-                                                <p className="text-sm -rotate-20">
+                                            <div className="w-17 h-17 rounded-full bg-[#B1007D] border-2 border-amber-900 flex items-center justify-center text-white text-xl font-bold text-center leading-5 shadow-md">
+                                                <p className="text-xl -rotate-20">
                                                     {item.months}
                                                 </p>
                                             </div>
@@ -580,7 +579,6 @@ export default function Home() {
                     </div>
                 </section>
             </main>
-            <Footer />
         </div>
     );
 }

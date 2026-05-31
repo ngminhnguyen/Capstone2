@@ -1,4 +1,5 @@
 "use client";
+
 import {
     Disclosure,
     DisclosureButton,
@@ -9,37 +10,25 @@ import {
     MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Handlee, Nunito } from "next/font/google";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { publicNavigation, parentNavigation } from "@/data/navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import Link from "next/link";
 
 const handlee = Handlee({
     subsets: ["latin"],
     weight: ["400"],
 });
+
 const nunito = Nunito({
     subsets: ["latin"],
     weight: ["400", "700"],
 });
 
-const navigation = [
-    { name: "Home", href: "/home" },
-    { name: "Recipes", href: "/recipes" },
-    { name: "Expert's Articles", href: "/articles" },
-];
-// const shopMenu = [
-//     { name: "Coffee", href: "/collections/coffee" },
-//     { name: "Subscriptions", href: "/collections/subscriptions" },
-//     { name: "Amps Gear", href: "/collections/amps-gear" },
-//     { name: "Brewing Equipment", href: "/collections/brewing-equipment" },
-//     { name: "Shop All", href: "/collections/all" },
-// ];
-
-//chưa làm xong nên để #, khi bấm vào không bị lỗi
 const shopMenu = [
     { name: "Coffee", href: "#" },
     { name: "Subscriptions", href: "#" },
@@ -47,81 +36,133 @@ const shopMenu = [
     { name: "Brewing Equipment", href: "#" },
     { name: "Shop All", href: "#" },
 ];
+
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
-    const pathname = usePathname();
-    const [scrolled, setScrolled] = useState(false);
+type NavbarItem = {
+    name: string;
+    href: string;
+};
 
+type PublicNavbarProps = {
+    navigation?: NavbarItem[];
+    bannerColor?: string;
+};
+
+export default function PublicNavbar({
+    navigation,
+    bannerColor,
+}: PublicNavbarProps) {
+    const pathname = usePathname();
+
+    const [scrolled, setScrolled] = useState(false);
+    const [user, setUser] = useState<any>(null);
+
+    // ===== ROUTE CHECK =====
+    const isAuthPage = pathname === "/login" || pathname === "/register";
+
+    const isParentRoute = pathname.startsWith("/parent");
+
+    const isParentUser = user?.role === "parent";
+
+    // ===== NAVIGATION LOGIC =====
+    const shouldShowParentNavigation =
+        !isAuthPage && (isParentUser || isParentRoute);
+
+    const defaultNavigation = shouldShowParentNavigation
+        ? [...parentNavigation, ...publicNavigation]
+        : publicNavigation;
+
+    // ===== EFFECT =====
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 30);
         };
 
+        handleScroll();
+
         window.addEventListener("scroll", handleScroll);
+
+        const savedUser = localStorage.getItem("user");
+
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        } else {
+            setUser(null);
+        }
+
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [pathname]);
+
+    // ===== NAVBAR COLOR =====
+    const defaultNavbar = "bg-[#FDECE4] text-[#4E0706]";
+
+    const routeColors: Record<string, string> = {
+        "/": "bg-[#b63b5d]",
+        "/home": "bg-[#b63b5d]",
+        "/recipes": "bg-linear-to-r from-purple-700 to-fuchsia-600",
+        "/articles": "bg-[#EE9B06]",
+    };
+
+    const currentRouteColor = routeColors[pathname] || defaultNavbar;
 
     const bgClass = scrolled
-        ? "bg-[#FDECE4] text-[#4E0706]"
-        : pathname === "/"
-          ? "bg-[#b63b5d] text-white"
-          : pathname === "/home"
-            ? "bg-[#b63b5d] text-white"
-            : pathname === "/recipes"
-              ? "bg-linear-to-r from-purple-700 to-fuchsia-600 text-white"
-              : pathname === "/articles"
-                ? "bg-[#EE9B06] text-white"
-                : pathname === "/register"
-                  ? "bg-[#FDECE4] text-[#4E0706]"
-                  : "bg-[#FDECE4] text-[#4E0706]";
+        ? defaultNavbar
+        : bannerColor
+          ? `${bannerColor} text-white`
+          : currentRouteColor.includes("text-")
+            ? currentRouteColor
+            : `${currentRouteColor} text-white`;
+
+    // ===== LOGOUT =====
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        window.location.href = "/login";
+    };
 
     return (
         <Disclosure
             as="nav"
             className={`sticky top-0 z-50 border-b border-orange-900/20 ${bgClass} ${nunito.className}`}
         >
-            <div className="w-full mx-auto  px-2 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
+                    {/* Mobile button */}
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                        {/* Mobile menu button*/}
-                        <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-                            <span className="absolute -inset-0.5" />
-                            <span className="sr-only">Open main menu</span>
-                            <Bars3Icon
-                                aria-hidden="true"
-                                className="block size-6 group-data-open:hidden"
-                            />
-                            <XMarkIcon
-                                aria-hidden="true"
-                                className="hidden size-6 group-data-open:block"
-                            />
+                        <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white">
+                            <Bars3Icon className="block size-6 group-data-open:hidden" />
+                            <XMarkIcon className="hidden size-6 group-data-open:block" />
                         </DisclosureButton>
                     </div>
+
+                    {/* LEFT */}
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                        {/* Logo Text  */}
+                        {/* Logo */}
                         <div className="flex shrink-0 items-center">
                             <img
-                                alt="Your Company"
+                                alt="logo"
                                 src="/images/logo.png"
                                 className="h-8 w-auto -rotate-20"
                             />
+
                             <span
-                                className={`ml-2 text-3xl font-bold ${handlee.className} `}
+                                className={`ml-2 text-3xl font-bold ${handlee.className}`}
                             >
                                 BabyNutri
                             </span>
                         </div>
-                        {/* Các mục điều hướng */}
+
+                        {/* NAVIGATION */}
                         <div className="hidden sm:ml-6 sm:block">
-                            <div className={`flex space-x-4`}>
-                                {/* showdown xuống */}
-                                <li className="relative group inline-flex items-center px-3 pt-2 text-sm font-medium">
-                                    <button className="flex items-center gap-1 text-sm font-medium border-b-2 border-transparent hover:border-orange-900">
+                            <div className="flex space-x-4">
+                                {/* Shop */}
+                                <li className="relative group inline-flex items-center px-3 pt-2 text-xl font-medium">
+                                    <button className="flex items-center gap-1 text-xl font-medium border-b-2 border-transparent hover:border-orange-900">
                                         Shop
-                                        <ChevronDown size={16} />
+                                        <ChevronDown size={20} />
                                     </button>
 
                                     <ul className="absolute left-0 top-full mt-3 w-60 rounded-xl border bg-white shadow-lg opacity-0 invisible translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
@@ -129,7 +170,7 @@ export default function Navbar() {
                                             <li key={item.name}>
                                                 <a
                                                     href={item.href}
-                                                    className="block px-4 py-3 text-sm rounded-xl hover:bg-gray-100 transition"
+                                                    className="block px-4 py-3 text-xl rounded-xl hover:bg-gray-100 transition"
                                                 >
                                                     {item.name}
                                                 </a>
@@ -138,58 +179,118 @@ export default function Navbar() {
                                     </ul>
                                 </li>
 
-                                {/* Các mục chính */}
-                                {navigation.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        className={classNames(
-                                            pathname === item.href
-                                                ? "border-b-2 border-orange-900"
-                                                : "border-b-2 border-transparent hover:border-orange-900",
-                                            "inline-flex items-center px-3 pt-2 text-sm font-medium",
-                                        )}
-                                    >
-                                        {item.name}
-                                    </a>
-                                ))}
-                                {/* Các mục phụ */}
+                                {/* Navigation */}
+                                {(navigation || defaultNavigation).map(
+                                    (item) => (
+                                        <a
+                                            key={item.name}
+                                            href={item.href}
+                                            className={classNames(
+                                                pathname === item.href
+                                                    ? "border-b-2 border-orange-900"
+                                                    : "border-b-2 border-transparent hover:border-orange-900",
+                                                "inline-flex items-center px-3 pt-2 text-xl font-medium",
+                                            )}
+                                        >
+                                            {item.name}
+                                        </a>
+                                    ),
+                                )}
                             </div>
                         </div>
                     </div>
 
+                    {/* RIGHT */}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        {/* <button
-                            type="button"
-                            className="relative rounded-full p-1 focus:outline-2 focus:outline-offset-2 focus:outline-orange-800"
-                        >
-                            <div className="size-5 rounded-full flex items-center justify-center">
-                                <FontAwesomeIcon
-                                    icon={faHeart}
-                                    className="text-orange-800 size-6 rounded-full"
-                                />
-                            </div>
-                        </button> */}
+                        {/* Logged in */}
+                        {user && !isAuthPage ? (
+                            <div className="flex items-center gap-2">
+                                {/* Favorites */}
+                                <Link
+                                    href="/parent/favorites"
+                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${
+                                        scrolled
+                                            ? "hover:outline-offset-2 hover:outline-orange-800"
+                                            : "hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                    }`}
+                                >
+                                    <Heart
+                                        className={`text-xl ${
+                                            scrolled
+                                                ? "text-orange-800 fill-orange-800"
+                                                : "text-[#FDECE4] fill-[#FDECE4]"
+                                        }`}
+                                    />
+                                </Link>
 
-                        {/* Profile dropdown */}
-                        <a
-                            href="/login"
-                            className={`block px-4 py-2 text-lg font-medium rounded-xl ${
-                                pathname === "/login"
-                                    ? "text-[#4E0706] font-bold border-b border-orange-900 "
-                                    : " hover:bg-[#D9BBA0] hover:text-amber-950 transition hover:rounded-xl "
-                            }`}
-                        >
-                            Sign in
-                        </a>
-                        
+                                {/* Profile */}
+                                <Menu as="div" className="relative ml-3">
+                                    <MenuButton
+                                        className={`group relative flex rounded-full ${
+                                            scrolled
+                                                ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                                                : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                        }`}
+                                    >
+                                        <div
+                                            className={`size-8 rounded-full flex items-center justify-center ${
+                                                scrolled
+                                                    ? "bg-orange-800"
+                                                    : "bg-white"
+                                            }`}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faUser}
+                                                className={`size-5 ${
+                                                    scrolled
+                                                        ? "text-white"
+                                                        : "text-orange-800"
+                                                }`}
+                                            />
+                                        </div>
+                                    </MenuButton>
+
+                                    <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5">
+                                        <MenuItem>
+                                            <a
+                                                href="/profile"
+                                                className="block px-4 py-2 text-xl text-gray-700 hover:bg-[#D9BBA0]"
+                                            >
+                                                My profile
+                                            </a>
+                                        </MenuItem>
+
+                                        <MenuItem>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-4 py-2 text-xl text-gray-700 hover:bg-[#D9BBA0]"
+                                            >
+                                                Sign out
+                                            </button>
+                                        </MenuItem>
+                                    </MenuItems>
+                                </Menu>
+                            </div>
+                        ) : (
+                            <a
+                                href="/login"
+                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${
+                                    pathname === "/login"
+                                        ? "text-[#4E0706] font-bold border-b border-orange-900"
+                                        : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
+                                }`}
+                            >
+                                Sign in
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>
 
+            {/* MOBILE MENU */}
             <DisclosurePanel className="sm:hidden">
                 <div className="space-y-1 px-2 pt-2 pb-3">
-                    {navigation.map((item) => (
+                    {(navigation || defaultNavigation).map((item) => (
                         <DisclosureButton
                             key={item.name}
                             as="a"

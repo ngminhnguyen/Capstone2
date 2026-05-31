@@ -4,8 +4,8 @@ import { Risque } from "next/font/google";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faCircleExclamation, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/PublicNavbar";
+import Footer from "@/components/layout/PublicFooter";
 import { CircleAlert } from "lucide-react";
 
 const handlee = Handlee({
@@ -148,7 +148,7 @@ export default function RegisterPage({ setStep }: Props) {
                             {/* <div className="mb-4">
                                             <label
                                                 htmlFor="CustomerPassword"
-                                                className="mb-2 block text-sm font-medium text-gray-700"
+                                                className="mb-2 block text-xl font-medium text-gray-700"
                                             >
                                                 Password{" "}
                                                 <span className="text-red-500">*</span>
@@ -165,7 +165,7 @@ export default function RegisterPage({ setStep }: Props) {
                                                     autoComplete="current-password"
                                                     required
                                                     placeholder="Your Password"
-                                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-sm outline-none transition focus:border-black"
+                                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-xl outline-none transition focus:border-black"
                                                 />
             
                                                 <button
@@ -236,7 +236,7 @@ export default function RegisterPage({ setStep }: Props) {
                                         Terms of Use
                                     </a>
                                 </label>
-                                <div className="justify-between items-center text-sm"></div>
+                                <div className="justify-between items-center text-xl"></div>
                             </div>
 
                             {/* Button */}

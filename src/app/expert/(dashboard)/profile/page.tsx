@@ -101,11 +101,11 @@ export default function UserProfile() {
                                     {personal.firstName} {personal.lastName}
                                 </h5>
                                 <div className="flex flex-wrap items-center gap-1 md:gap-3">
-                                    <p className="text-sm text-fuchsia-500">
+                                    <p className="text-xl text-fuchsia-500">
                                         {personal.position}
                                     </p>
                                     <div className="hidden xl:block h-4 w-px bg-fuchsia-200"></div>
-                                    <p className="text-sm text-fuchsia-500">
+                                    <p className="text-xl text-fuchsia-500">
                                         {address.location}
                                     </p>
                                 </div>
@@ -153,13 +153,17 @@ export default function UserProfile() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs text-fuchsia-500">Email</p>
+                                <p className="text-xs text-fuchsia-500">
+                                    Email
+                                </p>
                                 <p className="text-fuchsia-900 font-medium">
                                     {personal.email}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs text-fuchsia-500">Phone</p>
+                                <p className="text-xs text-fuchsia-500">
+                                    Phone
+                                </p>
                                 <p className="text-fuchsia-900 font-medium">
                                     {personal.phone}
                                 </p>
@@ -197,7 +201,7 @@ export default function UserProfile() {
                         </h5>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32">
                             <div>
-                                <p className="text-sm font-medium text-fuchsia-500">
+                                <p className="text-xl font-medium text-fuchsia-500">
                                     Location
                                 </p>
                                 <p className="text-fuchsia-900 font-medium">

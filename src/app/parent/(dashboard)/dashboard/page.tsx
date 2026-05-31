@@ -150,7 +150,7 @@ export default function Dashboard() {
                             {userProfile.fullName}
                         </h2>
 
-                        <p className="text-sm md:text-base text-[#7A5A50] mt-1">
+                        <p className="text-xl md:text-base text-[#7A5A50] mt-1">
                             Parent Account
                         </p>
                     </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
                         <div className="space-y-8">
                             {/* Email */}
                             <div>
-                                <p className="text-sm md:text-base font-medium text-[#7A5A50] mb-2">
+                                <p className="text-xl md:text-base font-medium text-[#7A5A50] mb-2">
                                     Email
                                 </p>
 
@@ -200,7 +200,7 @@ export default function Dashboard() {
                             Customer care
                         </h3>
 
-                        <p className="text-[#4A0000] text-sm md:text-lg leading-relaxed max-w-105">
+                        <p className="text-[#4A0000] text-xl md:text-lg leading-relaxed max-w-105">
                             Our lovely customer care team are here to help. Get
                             in touch via our contact form or call us on:
                         </p>

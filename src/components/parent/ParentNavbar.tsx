@@ -43,11 +43,11 @@ const shopMenu = [
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
-type NavbarProps = {
+type ParentNavbarProps = {
     bannerColor?: string;
 };
 
-export default function Navbar({ bannerColor }: NavbarProps) {
+export default function ParentNavbar({ bannerColor }: ParentNavbarProps) {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
 
@@ -116,8 +116,8 @@ export default function Navbar({ bannerColor }: NavbarProps) {
                         <div className="hidden sm:ml-6 sm:block">
                             <div className={`flex space-x-4`}>
                                 {/* showdown xuống */}
-                                <li className="relative group inline-flex items-center px-3 pt-2 text-sm font-medium">
-                                    <button className="flex items-center gap-1 text-sm font-medium border-b-2 border-transparent hover:border-orange-900">
+                                <li className="relative group inline-flex items-center px-3 pt-2 text-xl font-medium">
+                                    <button className="flex items-center gap-1 text-xl font-medium border-b-2 border-transparent hover:border-orange-900">
                                         Shop
                                         <ChevronDown size={16} />
                                     </button>
@@ -127,7 +127,7 @@ export default function Navbar({ bannerColor }: NavbarProps) {
                                             <li key={item.name}>
                                                 <a
                                                     href={item.href}
-                                                    className="block px-4 py-3 text-sm rounded-xl hover:bg-gray-100 transition"
+                                                    className="block px-4 py-3 text-xl rounded-xl hover:bg-gray-100 transition"
                                                 >
                                                     {item.name}
                                                 </a>
@@ -209,7 +209,7 @@ export default function Navbar({ bannerColor }: NavbarProps) {
                                 {/* <MenuItem>
                                             <a
                                                 href="#"
-                                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                                                className="block px-4 py-2 text-xl text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                                             >
                                                 Your profile
                                             </a>
@@ -217,7 +217,7 @@ export default function Navbar({ bannerColor }: NavbarProps) {
                                 <MenuItem>
                                     <a
                                         href="/login"
-                                        className={`block px-4 py-2 text-sm ${
+                                        className={`block px-4 py-2 text-xl ${
                                             pathname === "/login"
                                                 ? "text-[#4E0706] font-bold bg-[#E8D5C4]"
                                                 : "text-gray-700 hover:bg-[#D9BBA0]"
@@ -229,7 +229,7 @@ export default function Navbar({ bannerColor }: NavbarProps) {
                                 <MenuItem>
                                     <a
                                         href="/profile"
-                                        className={`block px-4 py-2 text-sm ${
+                                        className={`block px-4 py-2 text-xl ${
                                             pathname === "/register"
                                                 ? "text-[#4E0706] font-bold bg-[#E8D5C4]"
                                                 : "text-gray-700 hover:bg-[#D9BBA0]"

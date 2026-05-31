@@ -62,7 +62,7 @@ export default function ArticleManagementPage() {
                                         </div>
 
                                         <span
-                                            className={`px-4 py-2 rounded-full h-fit text-sm font-medium ${
+                                            className={`px-4 py-2 rounded-full h-fit text-xl font-medium ${
                                                 article.status === "Published"
                                                     ? "bg-green-100 text-green-700"
                                                     : "bg-yellow-100 text-yellow-700"

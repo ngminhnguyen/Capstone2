@@ -7,8 +7,8 @@ import styles from "./page.module.css";
 import { Nunito, Handlee } from "next/font/google";
 import { Risque } from "next/font/google";
 
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/PublicNavbar";
+import Footer from "@/components/layout/PublicFooter";
 
 const nunito = Nunito({
     subsets: ["latin"],
@@ -47,37 +47,32 @@ const fakeUsers = [
 export default function LoginPage() {
     const router = useRouter();
 
-    const [email, setEmail] =
-        useState("");
-    const [password, setPassword] =
-        useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleLogin = () => {
         const user = fakeUsers.find(
-            (u) =>
-                u.email === email &&
-                u.password === password
+            (u) => u.email === email && u.password === password,
         );
 
         if (!user) {
-            alert(
-                "Sai email hoặc mật khẩu!"
-            );
+            alert("Sai email hoặc mật khẩu!");
             return;
         }
 
-        // lưu cookie
-        document.cookie =
-            "token=fake-token; path=/";
+        // lưu user để navbar đọc
+        localStorage.setItem("user", JSON.stringify(user));
 
+        // lưu token
+        document.cookie = "token=fake-token; path=/";
+
+        // lưu role
         document.cookie = `role=${user.role}; path=/`;
 
         // chuyển trang theo role
         switch (user.role) {
             case "admin":
-                router.push(
-                    "/admin/dashboard"
-                );
+                router.push("/admin/dashboard");
                 break;
 
             case "expert":
@@ -85,9 +80,7 @@ export default function LoginPage() {
                 break;
 
             case "parent":
-                router.push(
-                    "/parent/dashboard"
-                );
+                router.push("/parent/dashboard");
                 break;
 
             default:
@@ -96,11 +89,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div
-            className={`min-h-full ${styles.pageBg} ${nunito.className}`}
-        >
-            <Navbar />
-
+        <div className={`min-h-full ${styles.pageBg} ${nunito.className}`}>
             <main>
                 <div className="mx-auto max-w-400 px-5 py-8">
                     <div className="grid grid-cols-[1.2fr_0.8fr] gap-12 items-center bg-[url('/images/loginBgR.png')] bg-cover bg-center">
@@ -135,14 +124,8 @@ export default function LoginPage() {
                                         type="email"
                                         id="email"
                                         value={email}
-                                        onChange={(
-                                            e
-                                        ) =>
-                                            setEmail(
-                                                e
-                                                    .target
-                                                    .value
-                                            )
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
                                         }
                                         className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
                                         placeholder="you@example.com"
@@ -162,14 +145,8 @@ export default function LoginPage() {
                                         type="password"
                                         id="password"
                                         value={password}
-                                        onChange={(
-                                            e
-                                        ) =>
-                                            setPassword(
-                                                e
-                                                    .target
-                                                    .value
-                                            )
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
                                         }
                                         className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
                                         placeholder="••••••••"
@@ -177,7 +154,7 @@ export default function LoginPage() {
                                 </div>
 
                                 {/* Remember */}
-                                <div className="flex justify-between items-center text-sm">
+                                <div className="flex justify-between items-center text-xl">
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
@@ -191,16 +168,13 @@ export default function LoginPage() {
                                     </div>
 
                                     <p className="underline hover:text-orange-900 cursor-pointer">
-                                        Forgot your
-                                        password?
+                                        Forgot your password?
                                     </p>
                                 </div>
 
                                 {/* Login button */}
                                 <button
-                                    onClick={
-                                        handleLogin
-                                    }
+                                    onClick={handleLogin}
                                     className="flex w-full justify-center rounded-xl bg-[#80C700] px-3 py-3 text-lg font-semibold shadow-sm hover:bg-[#6faa00] transition-colors duration-200"
                                 >
                                     Log in
@@ -208,11 +182,7 @@ export default function LoginPage() {
 
                                 {/* Register */}
                                 <div className="flex justify-center items-center gap-2 text-base">
-                                    <span>
-                                        Don't have
-                                        an
-                                        account?
-                                    </span>
+                                    <span>Don't have an account?</span>
 
                                     <a
                                         href="/register"
@@ -226,8 +196,6 @@ export default function LoginPage() {
                     </div>
                 </div>
             </main>
-
-            <Footer />
         </div>
     );
 }
