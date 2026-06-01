@@ -24,10 +24,6 @@ export const parentNavigation: NavbarItem[] = [
         href: "/parent/dashboard",
     },
     {
-        name: "Favorites",
-        href: "/parent/favorites",
-    },
-    {
         name: "Growth Tracking",
         href: "/parent/growth-tracking",
     },

@@ -1,5 +1,6 @@
-import PublicNavbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
+import { BannerColorProvider } from "@/components/layout/ui/BannerColorContext";
 
 export default function PublicLayout({
     children,
@@ -7,10 +8,10 @@ export default function PublicLayout({
     children: React.ReactNode;
 }) {
     return (
-        <>
-            <PublicNavbar />
+        <BannerColorProvider>
+            <Navbar />
             {children}
             <Footer />
-        </>
+        </BannerColorProvider>
     );
 }

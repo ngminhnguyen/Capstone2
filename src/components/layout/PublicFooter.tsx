@@ -22,7 +22,7 @@ export default function Footer() {
 
     return (
         <footer
-            className={`${nunito.className} w-full mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8`}
+            className={`${nunito.className} w-full mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 bg-[#FDECE4]`}
         >
             <div className="bg-pink-500 text-white rounded-2xl px-8 lg:px-14 py-8 lg:py-14 flex flex-col gap-10">
                 {/* Top */}

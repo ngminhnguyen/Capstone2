@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { Handlee } from "next/font/google";
+import { useEffect } from "react";
+import { useBannerColor } from "@/components/layout/ui/BannerColorContext";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -76,6 +78,16 @@ const stickers = [
 ];
 
 export default function PageBanner({ title, bgColor }: Props) {
+    const { setBannerColor } = useBannerColor();
+
+    useEffect(() => {
+        setBannerColor(bgColor);
+
+        return () => {
+            setBannerColor("");
+        };
+    }, [bgColor, setBannerColor]);
+
     return (
         <section className={`relative overflow-hidden h-55 ${bgColor}`}>
             {/* Stickers */}

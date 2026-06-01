@@ -14,10 +14,12 @@ import { Handlee, Nunito } from "next/font/google";
 import { ChevronDown, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { publicNavigation, parentNavigation } from "@/data/navbar";
+import { parentNavigation, publicNavigation } from "@/data/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import Link from "next/link";
+import { useBannerColor } from "@/components/layout/ui/BannerColorContext";
+import { pageConfig } from "@/config/page-config";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -57,6 +59,10 @@ export default function PublicNavbar({
 }: PublicNavbarProps) {
     const pathname = usePathname();
 
+    const currentConfig = pageConfig[pathname];
+
+    const { bannerColor: contextBannerColor } = useBannerColor();
+
     const [scrolled, setScrolled] = useState(false);
     const [user, setUser] = useState<any>(null);
 
@@ -72,7 +78,7 @@ export default function PublicNavbar({
         !isAuthPage && (isParentUser || isParentRoute);
 
     const defaultNavigation = shouldShowParentNavigation
-        ? [...parentNavigation, ...publicNavigation]
+        ? [...publicNavigation, ...parentNavigation]
         : publicNavigation;
 
     // ===== EFFECT =====
@@ -108,13 +114,28 @@ export default function PublicNavbar({
 
     const currentRouteColor = routeColors[pathname] || defaultNavbar;
 
-    const bgClass = scrolled
-        ? defaultNavbar
-        : bannerColor
-          ? `${bannerColor} text-white`
-          : currentRouteColor.includes("text-")
+    const isGradient =
+        contextBannerColor.includes("from-") ||
+        contextBannerColor.includes("to-");
+
+    const pageNavbarColor = currentConfig?.navbarColor;
+
+    const recipeNavbarColor = contextBannerColor
+        ? `${
+              isGradient
+                  ? `bg-linear-to-r ${contextBannerColor}`
+                  : contextBannerColor
+          } text-white`
+        : null;
+
+    const activeNavbarColor =
+        pageNavbarColor ||
+        recipeNavbarColor ||
+        (currentRouteColor.includes("text-")
             ? currentRouteColor
-            : `${currentRouteColor} text-white`;
+            : `${currentRouteColor} text-white`);
+
+    const bgClass = scrolled ? defaultNavbar : activeNavbarColor;
 
     // ===== LOGOUT =====
     const handleLogout = () => {

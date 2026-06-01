@@ -40,10 +40,8 @@ const items: Item[] = [
     },
     { href: "/expert/chat", label: "Chat", icon: MessageCircle },
     { href: "/expert/profile", label: "Profile", icon: UserRound },
-    { href: "/expert/signin", label: "Signin", icon: LogIn },
-    { href: "/signup", label: "Signup", icon: LogOut },
+    { href: "/login", label: "Signout", icon: LogOut },
 ];
-
 type SidebarProps = {
     onClose?: () => void;
 };
@@ -127,7 +125,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                                         className={`size-5 ${active ? "text-brand" : "text-amber-900"}`}
                                     />
                                     <span
-                                        className={`${open ? "block" : "hidden"} text-xl`}
+                                        className={`${open ? "block" : "hidden"} text-sm font-medium`}
                                     >
                                         {label}
                                     </span>

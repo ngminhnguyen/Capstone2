@@ -23,7 +23,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
     return (
         <header className="lg:-mx-7 sticky top-0 z-30 bg-background/80 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border mb-6 rounded-xl lg:rounded-none">
-            <div className="h-16 px-4 md:px-7  flex items-center justify-between gap-3">
+            <div className="h-16 px-4 md:px-7  flex items-center justify-end gap-3">
                 <button
                     onClick={onMenuClick}
                     className="lg:hidden rounded-full p-2 hover:bg-muted focus:outline-none focus:ring-2"
@@ -33,7 +33,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                 </button>
 
                 {/* Search */}
-                <div className="flex-1 max-w-xl">
+                {/* <div className="flex-1 max-w-xl">
                     <label className="relative block">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                             <Search className="size-4" />
@@ -41,12 +41,12 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                         <input
                             value={q}
                             onChange={(e) => setQ(e.target.value)}
-                            placeholder="Search rooms, devices, or users..."
+                            placeholder="Search..."
                             className="w-full rounded-full border bg-background pl-9 pr-3 py-2 text-xl"
                             aria-label="Search"
                         />
                     </label>
-                </div>
+                </div> */}
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">
