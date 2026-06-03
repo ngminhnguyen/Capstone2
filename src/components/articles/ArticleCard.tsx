@@ -89,7 +89,7 @@ export default function ArticleCard({ item }: ArticleCardProps) {
                             ${item.colorMonths}
                         `}
                     >
-                        <p className="text-xl -rotate-20">{item.months}</p>
+                        <p className="text-sm -rotate-20">{item.months}</p>
                     </div>
                 </div>
             </div>

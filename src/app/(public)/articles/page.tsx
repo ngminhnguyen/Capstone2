@@ -8,6 +8,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import CustomDropdown from "@/components/layout/CustomDropdown";
 import ArticleCard from "@/components/articles/ArticleCard";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 // import Image from "next/image";
 
 const baloo = Baloo_2({
@@ -114,7 +115,7 @@ const weaningJourney = [
 const articles = [
     {
         id: 1,
-        title: "planner",
+        title: "planner 1",
         mainTitle: "week 1 weaning planner",
         desc: "Follow our easy peasy weaning planner to help you through the first week of weaning.",
         months: "6+ months",
@@ -123,7 +124,7 @@ const articles = [
     },
     {
         id: 2,
-        title: "planner",
+        title: "planner 2",
         mainTitle: "week 2 weaning planner",
         desc: "Follow our handy weaning planner packed full of daily ideas of what to give your little one during week 2.",
         months: "6+ months",
@@ -132,7 +133,7 @@ const articles = [
     },
     {
         id: 3,
-        title: "planner",
+        title: "planner 3",
         mainTitle: "week 3 weaning planner",
         desc: "Week 3 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -141,7 +142,7 @@ const articles = [
     },
     {
         id: 4,
-        title: "planner",
+        title: "planner 4",
         mainTitle: "week 4 weaning planner",
         desc: "Week 4 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -150,7 +151,7 @@ const articles = [
     },
     {
         id: 5,
-        title: "planner",
+        title: "planner 5",
         mainTitle: "week 5 weaning planner",
         desc: "Week 5 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -159,7 +160,7 @@ const articles = [
     },
     {
         id: 6,
-        title: "planner",
+        title: "planner 6",
         mainTitle: "week 6 weaning planner",
         desc: "Week 6 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -168,7 +169,7 @@ const articles = [
     },
     {
         id: 7,
-        title: "planner",
+        title: "planner 7",
         mainTitle: "week 1 weaning planner",
         desc: "Follow our easy peasy weaning planner to help you through the first week of weaning.",
         months: "6+ months",
@@ -177,7 +178,7 @@ const articles = [
     },
     {
         id: 8,
-        title: "planner",
+        title: "planner 8",
         mainTitle: "week 2 weaning planner",
         desc: "Follow our handy weaning planner packed full of daily ideas of what to give your little one during week 2.",
         months: "6+ months",
@@ -186,7 +187,7 @@ const articles = [
     },
     {
         id: 9,
-        title: "planner",
+        title: "planner 9",
         mainTitle: "week 3 weaning planner",
         desc: "Week 3 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -195,7 +196,7 @@ const articles = [
     },
     {
         id: 10,
-        title: "planner",
+        title: "planner 10",
         mainTitle: "week 4 weaning planner",
         desc: "Week 4 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -204,7 +205,7 @@ const articles = [
     },
     {
         id: 11,
-        title: "planner",
+        title: "planner 11",
         mainTitle: "week 5 weaning planner",
         desc: "Week 5 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -213,7 +214,7 @@ const articles = [
     },
     {
         id: 12,
-        title: "planner",
+        title: "planner 12",
         mainTitle: "week 6 weaning planner",
         desc: "Week 6 of weaning is all about trying thicker purees + exciting new finger foods!",
         months: "6+ months",
@@ -268,7 +269,7 @@ export default function Articles() {
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    const itemsPerPage = 12;
+    const itemsPerPage = 6;
 
     // 🔥 chia data theo page
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -292,6 +293,7 @@ export default function Articles() {
                                 transition={{ duration: 0.7 }}
                                 className="w-full md:w-1/2"
                             >
+                                <Breadcrumb />
                                 <h1 className="text-base text-white/90 font-bold leading-tight md:text-5xl">
                                     helpful stuff
                                 </h1>
@@ -429,7 +431,7 @@ export default function Articles() {
                 <section className="max-w-7xl mx-auto px-4 py-16 md:px-12">
                     {/* FIRST 6 ARTICLES */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {currentData.slice(0, 6).map((item) => (
+                        {currentData.slice(0, 3).map((item) => (
                             <ArticleCard key={item.id} item={item} />
                         ))}
                     </div>
@@ -471,7 +473,7 @@ export default function Articles() {
 
                     {/* REMAINING ARTICLES */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {currentData.slice(6).map((item) => (
+                        {currentData.slice(3).map((item) => (
                             <ArticleCard key={item.id} item={item} />
                         ))}
                     </div>

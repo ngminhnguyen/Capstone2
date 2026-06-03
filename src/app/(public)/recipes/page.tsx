@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import CustomDropdown from "@/components/layout/CustomDropdown";
 import Link from "next/link";
 import { recipes } from "@/data/recipes";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 
 const baloo = Baloo_2({
     subsets: ["latin"],
@@ -142,7 +143,7 @@ export default function Recipes() {
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
         >
-            <main className="mb-8">
+            <main className="pb-8">
                 {/*Header*/}
                 <section className="relative overflow-hidden bg-linear-to-r from-purple-700 to-fuchsia-600 text-white">
                     <div className="mx-auto max-w-7xl px-6 py-20 flex flex-col md:flex-row items-center gap-10">
@@ -154,6 +155,7 @@ export default function Recipes() {
                             transition={{ duration: 0.7 }}
                             className="flex-1 text-center md:text-left"
                         >
+                            <Breadcrumb />
                             {/* <p className="text-xl mb-4 opacity-80">
                                 Home / Weaning Recipes
                             </p> */}
@@ -429,7 +431,7 @@ export default function Recipes() {
                                                     <div
                                                         className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
                                                     >
-                                                        <div className="text-center leading-none">
+                                                        <div className="text-cente leading-none">
                                                             <div>
                                                                 {item.age}
                                                             </div>

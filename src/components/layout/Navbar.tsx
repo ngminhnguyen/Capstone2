@@ -91,10 +91,15 @@ export default function PublicNavbar({
 
         window.addEventListener("scroll", handleScroll);
 
-        const savedUser = localStorage.getItem("user");
+        const roleCookie = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("role="))
+            ?.split("=")[1];
 
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
+        if (roleCookie) {
+            setUser({
+                role: roleCookie,
+            });
         } else {
             setUser(null);
         }
@@ -139,8 +144,14 @@ export default function PublicNavbar({
 
     // ===== LOGOUT =====
     const handleLogout = () => {
-        localStorage.removeItem("user");
+        document.cookie =
+            "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        document.cookie =
+            "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
         setUser(null);
+
         window.location.href = "/login";
     };
 
@@ -257,7 +268,7 @@ export default function PublicNavbar({
                                             className={`size-8 rounded-full flex items-center justify-center ${
                                                 scrolled
                                                     ? "bg-orange-800"
-                                                    : "bg-white"
+                                                    : "bg-[#FDECE4]"
                                             }`}
                                         >
                                             <FontAwesomeIcon

@@ -1,13 +1,10 @@
 "use client";
-import Navbar from "@/components/layout/PublicNavbar";
-import Footer from "@/components/layout/PublicFooter";
 import { motion } from "framer-motion";
-import { useRef } from "react";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-type Direction = "next" | "prev";
 import { Baloo_2 } from "next/font/google";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 
 const baloo = Baloo_2({
     subsets: ["latin"],
@@ -26,28 +23,28 @@ const cards = [
         title: "weaning support",
         description: "get help + advice for every step of your weaning journey",
         image: "/images/homeWeaning.webp",
-        href: "/weaning",
+        href: "",
         button: "weaning",
     },
     {
         title: "toddler guide",
         description: "explore our handy guide to feeding toddler tums",
         image: "/images/homeToddler.webp",
-        href: "/toddler",
+        href: "",
         button: "learn more",
     },
     {
         title: "tasty recipes",
         description: "over 200 quick and easy recipes to try at home",
         image: "/images/homeTastyRecipes.webp",
-        href: "/recipes",
+        href: "",
         button: "explore recipes",
     },
     {
         title: "helpful stuff",
         description: "helpful guides, planners + tips from our experts",
         image: "/images/homeHelpfulStuff.webp",
-        href: "/helpful",
+        href: "",
         button: "read more",
     },
 ];
@@ -161,6 +158,7 @@ export default function Home() {
                                 transition={{ duration: 0.7 }}
                                 className="w-full md:w-1/2"
                             >
+                                <Breadcrumb />
                                 <h1 className="text-base font-bold leading-tight md:text-5xl">
                                     Peas-ed to meet you, we&apos;re BabyNutri!
                                 </h1>
@@ -567,7 +565,7 @@ export default function Home() {
                                             </button>
 
                                             <div className="w-17 h-17 rounded-full bg-[#B1007D] border-2 border-amber-900 flex items-center justify-center text-white text-xl font-bold text-center leading-5 shadow-md">
-                                                <p className="text-xl -rotate-20">
+                                                <p className="text-sm -rotate-20">
                                                     {item.months}
                                                 </p>
                                             </div>

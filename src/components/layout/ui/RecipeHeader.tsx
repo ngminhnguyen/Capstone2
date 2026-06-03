@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useBannerColor } from "@/components/layout/ui/BannerColorContext";
+import Breadcrumb from "../Breadcrumb";
 
 type RecipeHeaderProps = {
     recipe: {
@@ -11,71 +12,92 @@ type RecipeHeaderProps = {
     };
 };
 
-export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
-    const { setBannerColor } = useBannerColor();
+export default function RecipeHeader({
+    recipe,
+}: RecipeHeaderProps) {
+    const { setBannerColor } =
+        useBannerColor();
 
     useEffect(() => {
-        setBannerColor(recipe.colorMonth);
+        setBannerColor(
+            recipe.colorMonth
+        );
 
         return () => {
             setBannerColor("");
         };
-    }, [recipe.colorMonth, setBannerColor]);
+    }, [
+        recipe.colorMonth,
+        setBannerColor,
+    ]);
+
     return (
         <section
             className={`
-                relative 
+                relative
                 bg-linear-to-r ${recipe.colorMonth}
                 text-white
-                min-h-90
-                flex items-center justify-center
+                min-h-[420px]
+                
             `}
         >
-            {/* TOP CONTENT */}
-            <div className="absolute top-8 left-6 text-xl font-semibold z-20">
-                {/* Home / Weaning Recipes / {recipe.title} */}
-            </div>
+            {/* CONTENT WRAPPER */}
+            <div className="relative w-full max-w-5xl mx-auto px-6 py-24">
+                {/* BREADCRUMB */}
+                <div className="absolute top-8 left-6 z-20">
+                    <Breadcrumb
+                        recipeTitle={
+                            recipe.title
+                        }
+                    />
+                </div>
 
-            {/* DECOR LEFT */}
-            <img
-                src={recipe.stickerImg1}
-                alt="decor"
-                className="
-                    absolute
-                    left-10
-                    top-1/2
-                    -translate-y-1/2
-                    w-16
-                    z-10
-                "
-            />
-
-            {/* DECOR RIGHT */}
-            <img
-                src={recipe.stickerImg2}
-                alt="decor"
-                className="
-                    absolute
-                    right-16
-                    top-24
-                    w-16
-                    rotate-20
-                    z-10
-                "
-            />
-
-            {/* TITLE */}
-            <div className="relative z-20 text-center px-6">
-                <h1
+                {/* DECOR LEFT */}
+                <img
+                    src={
+                        recipe.stickerImg1
+                    }
+                    alt="decor"
                     className="
-                        text-3xl
-                        md:text-5xl
-                        font-bold
-                        leading-tight
+                        absolute
+                        left-0
+                        top-1/2
+                        -translate-y-1/2
+                        w-16
+                        z-10
                     "
-                >
-                    {recipe.title}
-                </h1>
+                />
+
+                {/* DECOR RIGHT */}
+                <img
+                    src={
+                        recipe.stickerImg2
+                    }
+                    alt="decor"
+                    className="
+                        absolute
+                        right-0
+                        top-14
+                        w-16
+                        rotate-20
+                        z-10
+                    "
+                />
+
+                {/* TITLE */}
+                <div className="relative z-20 flex items-center justify-center min-h-[220px] text-center px-6">
+                    <h1
+                        className="
+                            text-3xl
+                            md:text-5xl
+                            font-bold
+                            leading-tight
+                            max-w-4xl
+                        "
+                    >
+                        {recipe.title}
+                    </h1>
+                </div>
             </div>
 
             {/* WAVE */}
@@ -126,8 +148,13 @@ export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
                         ${recipe.colorMonth}
                     `}
                 >
-                    <span className="text-3xl">{recipe.age}</span>
-                    <span className="text-xl">months</span>
+                    <span className="text-3xl">
+                        {recipe.age}
+                    </span>
+
+                    <span className="text-xl">
+                        months
+                    </span>
                 </div>
             </div>
         </section>

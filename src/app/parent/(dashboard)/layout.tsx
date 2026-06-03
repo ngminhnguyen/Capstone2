@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/parent/ParentFooter";
+import Footer from "@/components/layout/PublicFooter";
 import PageBanner from "@/components/parent/PageBanner";
 
 import { Baloo_2, Handlee, Nunito } from "next/font/google";

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Handlee } from "next/font/google";
 import { useEffect } from "react";
 import { useBannerColor } from "@/components/layout/ui/BannerColorContext";
+import Breadcrumb from "../layout/Breadcrumb";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -108,13 +109,21 @@ export default function PageBanner({ title, bgColor }: Props) {
                 ))}
             </div>
 
-            {/* Title */}
-            <div className="relative z-10 flex items-center h-full px-8 md:px-20">
-                <h1
-                    className={`text-white text-3xl md:text-5xl ${handlee.className}`}
-                >
-                    {title}
-                </h1>
+            {/* Content */}
+            <div className="relative z-10 h-full px-8 md:px-20 pt-14">
+                {/* Breadcrumb */}
+                <div className="py-4">
+                    <Breadcrumb />
+                </div>
+
+                {/* Title */}
+                <div className="flex items-center h-[70%]">
+                    <h1
+                        className={`text-white text-3xl md:text-5xl ${handlee.className}`}
+                    >
+                        {title}
+                    </h1>
+                </div>
             </div>
         </section>
     );
