@@ -15,7 +15,7 @@ const baloo = Baloo_2({
 });
 
 export default function RecipeDetail() {
-
+    const token = localStorage.getItem("token");
     const params = useParams();
 
     const [recipe, setRecipe] = useState<any>(null);
@@ -174,8 +174,9 @@ export default function RecipeDetail() {
                             <div className="border-t-4 border-dotted border-[#5A0A0A] mb-8"></div>
 
                             {/* ICONS */}
-                            <div className="flex items-center gap-4">
-                                {(recipe.allergies ?? []).map((item: any, index: number) => (
+
+                            {(recipe.allergies ?? []).map((item: any, index: number) => (
+                                <div className="flex items-center gap-4">
                                     <img
                                         key={index}
                                         src={item.img}
@@ -183,8 +184,9 @@ export default function RecipeDetail() {
                                         title={item.name}
                                         className="w-14 h-14"
                                     />
-                                ))}
-                            </div>
+                                </div>
+                            ))}
+
                         </div>
 
                         {/* RIGHT IMAGE */}
@@ -451,17 +453,18 @@ export default function RecipeDetail() {
                     </div>
                 </div>
                 {/* RATING TAB */}
-                <RecipeRating recipeId={recipe.id} />
-                {/* COMMENT SECTION */}
-                <CommentSection
-                    recipeId={recipe.id}
-                    recipeComments={comments}
-                    onCommentAdded={(newComment) =>
-                        setComments((prev) => [newComment, ...prev])
-                    }
-                />
+                {token && <RecipeRating recipeId={recipe.id} />}
 
-                
+                {/* COMMENT SECTION */}
+                {token && (
+                    <CommentSection
+                        recipeId={recipe.id}
+                        recipeComments={comments}
+                        onCommentAdded={(newComment) =>
+                            setComments((prev) => [newComment, ...prev])
+                        }
+                    />
+                )}
             </main>
         </div>
     );
