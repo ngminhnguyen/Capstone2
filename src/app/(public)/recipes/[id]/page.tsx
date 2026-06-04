@@ -1,13 +1,13 @@
 "use client";
 import { Baloo_2 } from "next/font/google";
 import { useParams } from "next/navigation";
-import { comments } from "@/data/comments";
-import { getRecipeById } from "@/data/recipeHelpers";
+import api from "@/lib/api";
 import CommentSection from "@/components/parent/ui/CommentSection";
 
 import RatingReviews from "@/components/parent/ui/RatingReviews";
 import RecipeRating from "@/components/parent/ui/RecipeRating";
 import RecipeHeader from "@/components/layout/ui/RecipeHeader";
+import { useEffect, useState } from "react";
 
 const baloo = Baloo_2({
     subsets: ["latin"],
@@ -15,16 +15,61 @@ const baloo = Baloo_2({
 });
 
 export default function RecipeDetail() {
+
     const params = useParams();
 
-    const recipe = getRecipeById(params.id as string);
+    const [recipe, setRecipe] = useState<any>(null);
+    const [comments, setComments] = useState<any[]>([]);
+
+    const [ratingSummary, setRatingSummary] = useState({
+        averageRating: 0,
+        totalRatings: 0,
+    });
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const res = await api.get(`/recipes/${params?.id}/comments`);
+                setComments(res.data);
+            } catch (err) {
+                console.error("Failed to fetch comments:", err);
+            }
+        };
+
+        if (params?.id) fetchComments();
+    }, [params?.id]);
+    useEffect(() => {
+        const fetchRating = async () => {
+            try {
+                const res = await api.get(`/recipes/${params?.id}/rating-summary`);
+                setRatingSummary(res.data);
+            } catch (err) {
+                console.error("Failed to fetch rating:", err);
+            }
+        };
+
+        if (params?.id) fetchRating();
+    }, [params?.id]);
+    useEffect(() => {
+        const fetchRecipe = async () => {
+            try {
+                const res = await api.get(`/recipes/${params?.id}`);
+                setRecipe(res.data);
+            } catch (err) {
+                console.error("Failed to fetch recipe:", err);
+            }
+        };
+
+        if (params?.id) fetchRecipe();
+    }, [params?.id]);
 
     if (!recipe) {
-        return <div>Recipe not found</div>;
+        return (
+            <div className="min-h-screen flex items-center justify-center text-red-500">
+                Loading recipe...
+            </div>
+        );
     }
-    const recipeComments = comments.filter(
-        (comment) => comment.recipeId === params.id,
-    );
+
     return (
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
@@ -41,18 +86,18 @@ export default function RecipeDetail() {
                             {/* LABEL */}
                             <div className="inline-block rotate-2 bg-[#B9A7FF] border-2 border-[#5A0A0A] px-10 py-1 rounded-lg mb-10">
                                 <span className="text-[#5A0A0A] text-xl">
-                                    {recipe.mealTime}
+                                    {recipe.mealType}
                                 </span>
                             </div>
 
                             {/* TITLE */}
                             <h2 className=" font-bold text-[#5A0A0A] mb-8 leading-tight">
-                                {recipe.titleInside}
+                                {recipe.name}
                             </h2>
 
                             {/* DESC */}
                             <p className=" text-[#5A0A0A] leading-relaxed mb-8">
-                                {recipe.desc}
+                                {recipe.description}
                             </p>
 
                             {/* LINE */}
@@ -60,25 +105,6 @@ export default function RecipeDetail() {
 
                             {/* INFO */}
                             <div className="flex items-center gap-4 mb-4">
-                                {/* SERVES */}
-                                {/* <div className="flex flex-col items-center">
-                                    <span className="text-xl text-[#5A0A0A] mb-2">
-                                        Serves
-                                    </span>
-
-                                    <div className="relative">
-                                        <img
-                                            src="/images/recipeCircle2.png"
-                                            alt=""
-                                            className="w-18 h-18"
-                                        />
-
-                                        <span className="absolute inset-0 flex items-center justify-center text-[#5A0A0A] text-3xl font-bold">
-                                            2
-                                        </span>
-                                    </div>
-                                </div> */}
-
                                 {/* PREP */}
                                 <div className="flex flex-col items-center">
                                     <span className="text-xl text-[#5A0A0A] mb-2">
@@ -101,7 +127,7 @@ export default function RecipeDetail() {
                                                         "
                                         >
                                             <span className="text-3xl font-bold leading-none">
-                                                {recipe.prepTime}
+                                                {recipe.prep_time ?? 0}
                                             </span>
 
                                             <span className="text-xs leading-none -mt-1">
@@ -133,7 +159,7 @@ export default function RecipeDetail() {
                                                         "
                                         >
                                             <span className="text-3xl font-bold leading-none">
-                                                {recipe.cookTime}
+                                                {recipe.cooking_time ?? 0}
                                             </span>
 
                                             <span className="text-xs leading-none -mt-1">
@@ -148,19 +174,16 @@ export default function RecipeDetail() {
                             <div className="border-t-4 border-dotted border-[#5A0A0A] mb-8"></div>
 
                             {/* ICONS */}
-                            {/* ICONS */}
                             <div className="flex items-center gap-4">
-                                {recipe.allergyIngredients?.map(
-                                    (item, index) => (
-                                        <img
-                                            key={index}
-                                            src={item.img}
-                                            alt={item.name}
-                                            title={item.name}
-                                            className="w-14 h-14"
-                                        />
-                                    ),
-                                )}
+                                {(recipe.allergies ?? []).map((item: any, index: number) => (
+                                    <img
+                                        key={index}
+                                        src={item.img}
+                                        alt={item.name}
+                                        title={item.name}
+                                        className="w-14 h-14"
+                                    />
+                                ))}
                             </div>
                         </div>
 
@@ -168,7 +191,7 @@ export default function RecipeDetail() {
                         <div className="relative">
                             <div className="-rotate-2 border-[6px] border-[#470707] rounded-[30px] overflow-hidden shadow-xl">
                                 <img
-                                    src={recipe.img}
+                                    src={recipe.image_url}
                                     alt="Recipe"
                                     className="w-full object-cover"
                                 />
@@ -244,20 +267,12 @@ export default function RecipeDetail() {
 
                                     {/* LIST */}
                                     <ul className="space-y-5">
-                                        {recipe.ingredients.map(
-                                            (item, index) => (
-                                                <li
-                                                    key={index}
-                                                    className="flex items-start gap-3 text-[#5A0A0A]"
-                                                >
-                                                    <span className="mt-2 w-3 h-3 rounded-full bg-pink-500 shrink-0"></span>
-
-                                                    <span className="text-lg leading-relaxed">
-                                                        {item}
-                                                    </span>
-                                                </li>
-                                            ),
-                                        )}
+                                        {(recipe.ingredients ?? []).map((item: string, index: number) => (
+                                            <li key={index} className="flex items-start gap-3 text-[#5A0A0A]">
+                                                <span className="mt-2 w-3 h-3 rounded-full bg-pink-500"></span>
+                                                <span className="text-lg">{item}</span>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
@@ -328,30 +343,12 @@ export default function RecipeDetail() {
 
                                     {/* STEPS */}
                                     <ol className="space-y-6">
-                                        {recipe.steps.map((step, index) => (
-                                            <li
-                                                key={index}
-                                                className="flex gap-4"
-                                            >
-                                                {/* NUMBER */}
-                                                <div
-                                                    className="
-                                                        w-8 h-8
-                                                        rounded-full
-                                                        bg-pink-500
-                                                        text-white
-                                                        flex items-center justify-center
-                                                        text-xl
-                                                        font-bold
-                                                        shrink-0
-                                                        mt-1
-                                                    "
-                                                >
+                                        {(recipe.steps ?? []).map((step: string, index: number) => (
+                                            <li key={index} className="flex gap-4">
+                                                <div className="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center text-xl font-bold">
                                                     {index + 1}
                                                 </div>
-
-                                                {/* TEXT */}
-                                                <p className="text-[#5A0A0A] text-lg leading-relaxed">
+                                                <p className="text-[#5A0A0A] text-lg">
                                                     {step}
                                                 </p>
                                             </li>
@@ -448,13 +445,19 @@ export default function RecipeDetail() {
                 <div className="max-w-7xl mx-auto px-4 mt-8">
                     <div className="flex justify-center">
                         <RatingReviews
-                            averageRating={recipe.rating}
-                            totalRatings={recipe.totalRatings}
+                            averageRating={ratingSummary.averageRating}
+                            totalRatings={ratingSummary.totalRatings}
                         />
                     </div>
                 </div>
                 {/* COMMENT SECTION */}
-                <CommentSection recipeComments={recipeComments} />
+                <CommentSection
+                    recipeId={recipe.id}
+                    recipeComments={comments}
+                    onCommentAdded={(newComment) =>
+                        setComments((prev) => [newComment, ...prev])
+                    }
+                />
 
                 {/* RATING TAB */}
                 <RecipeRating recipeId={recipe.id} />
