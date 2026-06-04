@@ -51,7 +51,7 @@ export default function RatingReviews({
                     </h2>
 
                     <h1 className="mt-4 text-3xl font-bold leading-none text-[#4b0007]">
-                        {averageRating.toFixed(1)}
+                        {Number(averageRating).toFixed(1)}
                     </h1>
 
                     <p className="mt-4 text-lg font-semibold text-[#4b000710]">
