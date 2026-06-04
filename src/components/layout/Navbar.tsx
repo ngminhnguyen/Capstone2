@@ -87,24 +87,21 @@ export default function PublicNavbar({
             setScrolled(window.scrollY > 30);
         };
 
+        const syncUser = () => {
+            const storedUser = localStorage.getItem("user");
+            setUser(storedUser ? JSON.parse(storedUser) : null);
+        };
+
         handleScroll();
+        syncUser();
 
         window.addEventListener("scroll", handleScroll);
+        window.addEventListener("storage", syncUser);
 
-        const roleCookie = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("role="))
-            ?.split("=")[1];
-
-        if (roleCookie) {
-            setUser({
-                role: roleCookie,
-            });
-        } else {
-            setUser(null);
-        }
-
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("storage", syncUser);
+        };
     }, [pathname]);
 
     // ===== NAVBAR COLOR =====
@@ -126,11 +123,10 @@ export default function PublicNavbar({
     const pageNavbarColor = currentConfig?.navbarColor;
 
     const recipeNavbarColor = contextBannerColor
-        ? `${
-              isGradient
-                  ? `bg-linear-to-r ${contextBannerColor}`
-                  : contextBannerColor
-          } text-white`
+        ? `${isGradient
+            ? `bg-linear-to-r ${contextBannerColor}`
+            : contextBannerColor
+        } text-white`
         : null;
 
     const activeNavbarColor =
@@ -144,14 +140,16 @@ export default function PublicNavbar({
 
     // ===== LOGOUT =====
     const handleLogout = () => {
-        document.cookie =
-            "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // clear auth
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
 
-        document.cookie =
-            "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // update navbar immediately
+        window.dispatchEvent(new Event("storage"));
 
         setUser(null);
 
+        // redirect
         window.location.href = "/login";
     };
 
@@ -240,44 +238,39 @@ export default function PublicNavbar({
                                 {/* Favorites */}
                                 <Link
                                     href="/parent/favorites"
-                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${
-                                        scrolled
-                                            ? "hover:outline-offset-2 hover:outline-orange-800"
-                                            : "hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                    }`}
+                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${scrolled
+                                        ? "hover:outline-offset-2 hover:outline-orange-800"
+                                        : "hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                        }`}
                                 >
                                     <Heart
-                                        className={`text-xl ${
-                                            scrolled
-                                                ? "text-orange-800 fill-orange-800"
-                                                : "text-[#FDECE4] fill-[#FDECE4]"
-                                        }`}
+                                        className={`text-xl ${scrolled
+                                            ? "text-orange-800 fill-orange-800"
+                                            : "text-[#FDECE4] fill-[#FDECE4]"
+                                            }`}
                                     />
                                 </Link>
 
                                 {/* Profile */}
                                 <Menu as="div" className="relative ml-3">
                                     <MenuButton
-                                        className={`group relative flex rounded-full ${
-                                            scrolled
-                                                ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
-                                                : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                        }`}
+                                        className={`group relative flex rounded-full ${scrolled
+                                            ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                                            : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                            }`}
                                     >
                                         <div
-                                            className={`size-8 rounded-full flex items-center justify-center ${
-                                                scrolled
-                                                    ? "bg-orange-800"
-                                                    : "bg-[#FDECE4]"
-                                            }`}
+                                            className={`size-8 rounded-full flex items-center justify-center ${scrolled
+                                                ? "bg-orange-800"
+                                                : "bg-[#FDECE4]"
+                                                }`}
                                         >
                                             <FontAwesomeIcon
                                                 icon={faUser}
-                                                className={`size-5 ${
-                                                    scrolled
-                                                        ? "text-white"
-                                                        : "text-orange-800"
-                                                }`}
+                                                className={`size-5 ${scrolled
+                                                    ? "text-white"
+                                                    : "text-orange-800"
+                                                    }`}
                                             />
                                         </div>
                                     </MenuButton>
@@ -306,11 +299,10 @@ export default function PublicNavbar({
                         ) : (
                             <a
                                 href="/login"
-                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${
-                                    pathname === "/login"
-                                        ? "text-[#4E0706] font-bold border-b border-orange-900"
-                                        : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
-                                }`}
+                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${pathname === "/login"
+                                    ? "text-[#4E0706] font-bold border-b border-orange-900"
+                                    : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
+                                    }`}
                             >
                                 Sign in
                             </a>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import api from "@/lib/api";
 import styles from "./page.module.css";
 import { Nunito, Handlee } from "next/font/google";
 import { Risque } from "next/font/google";
@@ -26,23 +26,23 @@ const risque = Risque({
 });
 
 // fake data
-const fakeUsers = [
-    {
-        email: "admin@gmail.com",
-        password: "123456",
-        role: "admin",
-    },
-    {
-        email: "expert@gmail.com",
-        password: "123456",
-        role: "expert",
-    },
-    {
-        email: "parent@gmail.com",
-        password: "123456",
-        role: "parent",
-    },
-];
+// const fakeUsers = [
+//     {
+//         email: "admin@gmail.com",
+//         password: "123456",
+//         role: "admin",
+//     },
+//     {
+//         email: "expert@gmail.com",
+//         password: "123456",
+//         role: "expert",
+//     },
+//     {
+//         email: "parent@gmail.com",
+//         password: "123456",
+//         role: "parent",
+//     },
+// ];
 
 export default function LoginPage() {
     const router = useRouter();
@@ -50,44 +50,97 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = () => {
-        const user = fakeUsers.find(
-            (u) => u.email === email && u.password === password,
-        );
+    // const handleLogin = () => {
+    //     const user = fakeUsers.find(
+    //         (u) => u.email === email && u.password === password,
+    //     );
 
-        if (!user) {
-            alert("Sai email hoặc mật khẩu!");
-            return;
-        }
+    //     if (!user) {
+    //         alert("Sai email hoặc mật khẩu!");
+    //         return;
+    //     }
 
-        // lưu user để navbar đọc
-        localStorage.setItem("user", JSON.stringify(user));
+    //     // lưu user để navbar đọc
+    //     localStorage.setItem("user", JSON.stringify(user));
 
-        // lưu token
-        document.cookie = "token=fake-token; path=/";
+    //     // lưu token
+    //     document.cookie = "token=fake-token; path=/";
 
-        // lưu role
-        document.cookie = `role=${user.role}; path=/`;
+    //     // lưu role
+    //     document.cookie = `role=${user.role}; path=/`;
 
-        // chuyển trang theo role
-        switch (user.role) {
-            case "admin":
-                router.push("/admin/dashboard");
-                break;
+    //     // chuyển trang theo role
+    //     switch (user.role) {
+    //         case "admin":
+    //             router.push("/admin/dashboard");
+    //             break;
 
-            case "expert":
-                router.push("/expert");
-                break;
+    //         case "expert":
+    //             router.push("/expert");
+    //             break;
 
-            case "parent":
+    //         case "parent":
+    //             router.push("/parent/dashboard");
+    //             break;
+
+    //         default:
+    //             router.push("/home");
+    //     }
+    // };
+    const handleLogin = async () => {
+        try {
+            const res = await api.post("/auth/login", {
+                email,
+                password,
+            });
+
+            console.log("LOGIN RESPONSE:", res.data);
+            console.log("LOGIN RESPONSE:", res.data);
+            const { token, user } = res.data;
+
+            console.log("USER:", user);
+            console.log("ROLE:", user.role);
+
+            localStorage.setItem("token", token);
+
+            localStorage.setItem(
+                "user",
+                JSON.stringify(user)
+            );
+            window.dispatchEvent(new Event("storage"));
+            const role = (user?.role || "").toLowerCase();
+
+            if (role === "parent") {
                 router.push("/parent/dashboard");
-                break;
+                return;
+            }
 
-            default:
-                router.push("/home");
+            if (role === "admin") {
+                router.push("/admin/dashboard");
+                return;
+            }
+
+            if (role === "expert") {
+                router.push("/expert");
+                return;
+            }
+
+            router.push("/home");
+
+        } catch (error: any) {
+            console.error("LOGIN ERROR:", error);
+
+            console.error(
+                "RESPONSE:",
+                error?.response?.data
+            );
+
+            alert(
+                error?.response?.data?.message ||
+                "Login failed"
+            );
         }
     };
-
     return (
         <div className={`min-h-full ${styles.pageBg} ${nunito.className}`}>
             <main>

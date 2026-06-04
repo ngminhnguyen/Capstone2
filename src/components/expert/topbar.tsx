@@ -1,7 +1,6 @@
 "use client";
 
 import { Bell, Search, Settings, User, Menu } from "lucide-react";
-import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,13 +13,34 @@ import { ThemeToggle } from "@/components/expert/theme-toggle";
 import { Avatar, AvatarFallback } from "@/components/expert/ui/avatar";
 import { ColorThemePicker } from "@/components/expert/ui/color-theme";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 interface TopbarProps {
     onMenuClick?: () => void;
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
     const [q, setQ] = useState("");
+    const router = useRouter();
+    const [user, setUser] = useState<any>(null);
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
 
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        } else {
+            setUser(null);
+        }
+    }, []);
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        setUser(null);
+
+        router.push("/login");
+    };
     return (
         <header className="lg:-mx-7 sticky top-0 z-30 bg-background/80 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border mb-6 rounded-xl lg:rounded-none">
             <div className="h-16 px-4 md:px-7  flex items-center justify-end gap-3">
@@ -112,14 +132,22 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                     <DropdownMenu>
                         <DropdownMenuTrigger className="rounded-full p-1.5 hover:bg-muted focus:outline-none focus:ring-2">
                             <Avatar className="size-8">
-                                <AvatarFallback>JR</AvatarFallback>
+                                <AvatarFallback>
+                                    {user?.name
+                                        ? user.name
+                                            .split(" ")
+                                            .map((n: string) => n[0])
+                                            .join("")
+                                            .toUpperCase()
+                                        : "U"}
+                                </AvatarFallback>
                             </Avatar>
                             <span className="sr-only">Open user menu</span>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel className="flex items-center gap-2">
                                 <User className="size-4" />
-                                Signed in as Jennifer
+                                Signed in as {user?.full_name || "User"}
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
@@ -129,7 +157,10 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                                 <a href="/devices">My devices</a>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={handleLogout}
+                            >
                                 Sign out
                             </DropdownMenuItem>
                         </DropdownMenuContent>

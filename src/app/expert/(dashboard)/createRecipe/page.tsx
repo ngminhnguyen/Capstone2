@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Image from "next/image";
 import { Camera } from "lucide-react";
 import { initialRecipeSteps } from "@/data/recipeSteps";
@@ -220,8 +220,9 @@ export default function CreateRecipePage() {
                         "16 month",
                         "17 month",
                         "18 month",
-                    ]}
-                />
+                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
                 <CustomDropdown
                     label="Weaning method"
                     placeholder="Select weaning method"
@@ -229,8 +230,9 @@ export default function CreateRecipePage() {
                         "Baby-led Weaning",
                         "Traditional Weaning",
                         "Japanese Weaning",
-                    ]}
-                />
+                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
                 <CustomDropdown
                     label="Dietary needs"
                     placeholder="Select dietary needs"
@@ -241,8 +243,9 @@ export default function CreateRecipePage() {
                         "Gluten-Free",
                         "Dairy-Free",
                         "Egg-Free",
-                    ]}
-                />
+                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
                 <CustomDropdown
                     label="Recipe Type"
                     placeholder="Select recipe type"
@@ -251,8 +254,9 @@ export default function CreateRecipePage() {
                         "Veg purees",
                         "Finger foods",
                         "Dips",
-                    ]}
-                />
+                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
                 <CustomDropdown
                     label="Occasion"
                     placeholder="Select occasion"
@@ -262,8 +266,9 @@ export default function CreateRecipePage() {
                         "Dinner",
                         "Snack",
                         "Pudding",
-                    ]}
-                />
+                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
             </div>
             <div className="grid grid-cols-12 gap-10 mt-10">
                 {/* Ingredients Section */}
