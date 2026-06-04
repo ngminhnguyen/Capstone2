@@ -3,11 +3,36 @@ const router = express.Router();
 
 const {
     getRecipes,
-    getRecipeById
+    getRecipeById,
+    getRecipeComments,
+    getRecipeRatings,
+    getRecipeRatingSummary,
+    createComment,
+    createOrUpdateRating
 } = require("../controllers/recipeController");
 
-router.get("/", getRecipes);
+const auth = require("../middleware/auth");
 
+// ==========================================
+// ROUTES
+// ==========================================
+
+router.get("/", getRecipes);
 router.get("/:id", getRecipeById);
+
+// COMMENTS
+router.get("/:id/comments", getRecipeComments);
+
+router.post("/:id/comments", auth, createComment);
+
+// RATINGS
+router.get("/:id/ratings", getRecipeRatings);
+
+router.post("/:id/rating", auth, createOrUpdateRating);
+
+// RATING SUMMARY
+router.get("/:id/rating-summary", getRecipeRatingSummary);
+
+
 
 module.exports = router;
