@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
+import api from "@/lib/api";
 
 interface RecipeRatingProps {
     recipeId: string;
@@ -9,38 +10,29 @@ interface RecipeRatingProps {
 
 export default function RecipeRating({ recipeId }: RecipeRatingProps) {
     const [selectedRating, setSelectedRating] = useState<number>(0);
-
     const [hoverRating, setHoverRating] = useState<number>(0);
-
     const [submitted, setSubmitted] = useState(false);
-
     const [loading, setLoading] = useState(false);
 
     const handleRate = async (rating: number) => {
-        setSelectedRating(rating);
+        if (loading) return;
 
-        // show submit ngay
+        setSelectedRating(rating);
+        setHoverRating(0);
         setSubmitted(true);
 
         try {
             setLoading(true);
 
-            await fetch("/api/recipe-rating", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    recipeId,
-                    rating,
-                }),
+            await api.post(`/recipes/${recipeId}/rating`, {
+                rating,
             });
+
         } catch (error) {
             console.error("Submit rating error:", error);
         } finally {
             setLoading(false);
 
-            // auto close popup
             setTimeout(() => {
                 setSubmitted(false);
             }, 2500);
@@ -57,16 +49,18 @@ export default function RecipeRating({ recipeId }: RecipeRatingProps) {
 
                 <div className="flex items-center justify-center gap-4">
                     {[1, 2, 3, 4, 5].map((star) => {
-                        const active = star <= (hoverRating || selectedRating);
+                        const active =
+                            star <= (hoverRating || selectedRating);
 
                         return (
                             <button
                                 key={star}
+                                type="button"
                                 disabled={loading}
                                 onClick={() => handleRate(star)}
                                 onMouseEnter={() => setHoverRating(star)}
                                 onMouseLeave={() => setHoverRating(0)}
-                                className="transition hover:scale-110"
+                                className="transition hover:scale-110 disabled:opacity-50"
                             >
                                 <Star
                                     className={`h-10 w-10 ${
