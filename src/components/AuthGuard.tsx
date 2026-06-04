@@ -3,35 +3,34 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AuthGuard({
-    children,
-}: {
+type Props = {
     children: React.ReactNode;
-}) {
+    role?: "expert" | "parent" | "admin";
+};
+
+export default function AuthGuard({ children, role }: Props) {
     const router = useRouter();
     const [checked, setChecked] = useState(false);
-    const [allowed, setAllowed] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem("user");
+        const userStr = localStorage.getItem("user");
 
-        if (!user) {
+        if (!userStr) {
             router.replace("/login");
             return;
         }
 
-        setAllowed(true);
+        const user = JSON.parse(userStr);
+
+        if (role && user.role !== role) {
+            router.replace("/login");
+            return;
+        }
+
         setChecked(true);
     }, []);
 
-    // ⛔ NOTHING renders until check is done
-    if (!checked) {
-        return null; // or loading screen
-    }
-
-    if (!allowed) {
-        return null;
-    }
+    if (!checked) return null; // prevents flicker
 
     return <>{children}</>;
 }

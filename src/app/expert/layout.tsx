@@ -4,6 +4,7 @@ import type React from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/expert/theme-provider";
 import { Suspense } from "react";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function ExpertLayout({
     children,
@@ -11,21 +12,23 @@ export default function ExpertLayout({
     children: React.ReactNode;
 }) {
     return (
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-        >
-            <Suspense fallback={null}>
-                <div className="h-screen overflow-hidden">
-                    <div className="h-full overflow-y-auto scrollbar-hide">
-                        {children}
+        <AuthGuard role="expert">
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+            >
+                <Suspense fallback={null}>
+                    <div className="h-screen overflow-hidden">
+                        <div className="h-full overflow-y-auto scrollbar-hide">
+                            {children}
+                        </div>
                     </div>
-                </div>
 
-                <Analytics />
-            </Suspense>
-        </ThemeProvider>
+                    <Analytics />
+                </Suspense>
+            </ThemeProvider>
+        </AuthGuard>
     );
 }
