@@ -43,8 +43,8 @@ exports.login = async (req, res) => {
         }
 
         //for debug
-        console.log("INPUT:", password);
-        console.log("DB:", user.password);
+        // console.log("INPUT:", password);
+        // console.log("DB:", user.password);
 
         if (!isMatch) {
             return res.status(401).json({
