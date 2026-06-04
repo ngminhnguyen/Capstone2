@@ -450,6 +450,8 @@ export default function RecipeDetail() {
                         />
                     </div>
                 </div>
+                {/* RATING TAB */}
+                <RecipeRating recipeId={recipe.id} />
                 {/* COMMENT SECTION */}
                 <CommentSection
                     recipeId={recipe.id}
@@ -459,8 +461,7 @@ export default function RecipeDetail() {
                     }
                 />
 
-                {/* RATING TAB */}
-                <RecipeRating recipeId={recipe.id} />
+                
             </main>
         </div>
     );
