@@ -1,101 +1,93 @@
+"use client";
+
 import { useEffect } from "react";
 import { useBannerColor } from "@/components/layout/ui/BannerColorContext";
 import Breadcrumb from "../Breadcrumb";
 
 type RecipeHeaderProps = {
-    recipe: {
-        title: string;
-        age: number | string;
-        colorMonth: string;
-        stickerImg1: string;
-        stickerImg2: string;
-    };
+    recipe: any; // intentionally flexible for now (old + new data)
 };
 
-export default function RecipeHeader({
-    recipe,
-}: RecipeHeaderProps) {
-    const { setBannerColor } =
-        useBannerColor();
+export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
+    const { setBannerColor } = useBannerColor();
 
+    // =========================
+    // SAFE FALLBACK MAPPING
+    // =========================
+    const title = recipe?.name || "Untitled Recipe";
+    const age = recipe?.month_age;
+    const monthColorMap: Record<number, string> = {
+        1: "bg-red-500",
+        2: "bg-pink-500",
+        3: "bg-purple-500",
+        4: "bg-indigo-500",
+        5: "bg-blue-500",
+        6: "bg-cyan-500",
+        7: "bg-green-500",
+        8: "bg-yellow-500",
+        9: "bg-orange-500",
+        10: "bg-amber-500",
+        11: "bg-rose-500",
+        12: "bg-fuchsia-500",
+    };
+    const colorMonth =
+        monthColorMap[Number(recipe?.month_age)];
+
+    const sticker1 =
+        recipe?.stickerImg1 ||
+        recipe?.assets?.stickers?.[0] ||
+        "/images/stickerBananaMeal1.png";
+
+    const sticker2 =
+        recipe?.stickerImg2 ||
+        recipe?.assets?.stickers?.[1] ||
+        "/images/stickerBananaMeal2.png";
+
+    // =========================
+    // BANNER COLOR EFFECT
+    // =========================
     useEffect(() => {
-        setBannerColor(
-            recipe.colorMonth
-        );
+        setBannerColor(colorMonth);
 
         return () => {
             setBannerColor("");
         };
-    }, [
-        recipe.colorMonth,
-        setBannerColor,
-    ]);
+    }, [colorMonth, setBannerColor]);
 
     return (
         <section
             className={`
                 relative
-                bg-linear-to-r ${recipe.colorMonth}
+                bg-linear-to-r ${colorMonth}
                 text-white
                 min-h-[420px]
-                
             `}
         >
             {/* CONTENT WRAPPER */}
             <div className="relative w-full max-w-5xl mx-auto px-6 py-24">
                 {/* BREADCRUMB */}
                 <div className="absolute top-8 left-6 z-20">
-                    <Breadcrumb
-                        recipeTitle={
-                            recipe.title
-                        }
-                    />
+                    <Breadcrumb recipeTitle={title} />
                 </div>
 
-                {/* DECOR LEFT */}
+                {/* LEFT DECOR */}
                 <img
-                    src={
-                        recipe.stickerImg1
-                    }
+                    src={sticker1}
                     alt="decor"
-                    className="
-                        absolute
-                        left-0
-                        top-1/2
-                        -translate-y-1/2
-                        w-16
-                        z-10
-                    "
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-16 z-10"
                 />
 
-                {/* DECOR RIGHT */}
+                {/* RIGHT DECOR */}
                 <img
-                    src={
-                        recipe.stickerImg2
-                    }
+                    src={sticker2}
                     alt="decor"
-                    className="
-                        absolute
-                        right-0
-                        top-14
-                        w-16
-                        rotate-20
-                        z-10
-                    "
+                    className="absolute right-0 top-14 w-16 rotate-20 z-10"
                 />
 
                 {/* TITLE */}
                 <div className="relative z-20 flex items-center justify-center min-h-[220px] text-center px-6">
-                    <h1
-                        className="
-                            text-3xl
-                            md:text-5xl
-                            font-bold
-                            leading-tight
-                            max-w-4xl
-                        "
-                    >
-                        {recipe.title}
+                    <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
+                        {title}
                     </h1>
                 </div>
             </div>
@@ -122,15 +114,7 @@ export default function RecipeHeader({
             </div>
 
             {/* MONTH BADGE */}
-            <div
-                className="
-                    absolute
-                    -bottom-5
-                    left-1/2
-                    -translate-x-1/2
-                    z-30
-                "
-            >
+            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-30">
                 <div
                     className={`
                         w-24 h-24
@@ -138,23 +122,19 @@ export default function RecipeHeader({
                         border-4 border-[#5A0A0A]
                         shadow-lg
                         flex flex-col
-                        items-center
-                        justify-center
+                        items-center justify-center
                         text-center
                         text-white
                         font-bold
                         leading-none
                         -rotate-12
-                        ${recipe.colorMonth}
+                        ${colorMonth}
                     `}
                 >
                     <span className="text-3xl">
-                        {recipe.age}
+                        {age || "--"}
                     </span>
-
-                    <span className="text-xl">
-                        months
-                    </span>
+                    <span className="text-xl">months</span>
                 </div>
             </div>
         </section>
