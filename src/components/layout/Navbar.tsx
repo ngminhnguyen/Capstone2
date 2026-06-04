@@ -117,8 +117,8 @@ export default function PublicNavbar({
     const currentRouteColor = routeColors[pathname] || defaultNavbar;
 
     const isGradient =
-        contextBannerColor.includes("from-") ||
-        contextBannerColor.includes("to-");
+        contextBannerColor?.includes("from-") ||
+        contextBannerColor?.includes("to-");
 
     const pageNavbarColor = currentConfig?.navbarColor;
 
