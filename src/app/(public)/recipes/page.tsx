@@ -3,12 +3,12 @@ import Navbar from "@/components/layout/PublicNavbar";
 import Footer from "@/components/layout/PublicFooter";
 import { motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
-import React, { useState } from "react";
 import CustomDropdown from "@/components/layout/CustomDropdown";
 import Link from "next/link";
-import { recipes } from "@/data/recipes";
+// import { recipes } from "@/data/recipes";
 import Breadcrumb from "@/components/layout/Breadcrumb";
-
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
 const baloo = Baloo_2({
     subsets: ["latin"],
     weight: ["400", "600", "700"],
@@ -22,6 +22,9 @@ export default function Recipes() {
     const [recipeTypeFilter, setRecipeTypeFilter] = useState<string[]>([]);
     const [occasionFilter, setOccasionFilter] = useState<string[]>([]);
     const [open, setOpen] = useState(false);
+    const [recipes, setRecipes] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     // FILTER DATA
     const filterData = [
         {
@@ -134,11 +137,59 @@ export default function Recipes() {
     const itemsPerPage = 9;
     // 🔥 chia data theo page
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentData = recipes.slice(startIndex, startIndex + itemsPerPage);
+    // const currentData = recipes.slice(startIndex, startIndex + itemsPerPage);
 
-    const totalPages = Math.ceil(recipes.length / itemsPerPage);
+
     //Love button
     const [liked, setLiked] = useState<Record<string, boolean>>({});
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            try {
+                setLoading(true);
+
+                const res = await api.get("/recipes");
+
+                setRecipes(res.data); // backend array
+                console.log("recipes", res.data);
+            } catch (err: any) {
+                console.error(err);
+                setError("Failed to load recipes");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRecipes();
+    }, []);
+    const totalPages = Math.ceil(recipes.length / itemsPerPage);
+    const normalizedRecipes = recipes.map((r: any) => ({
+        id: r.id,
+        title: r.name,
+        desc: r.description,
+        img: r.image_url,
+        mealTime: r.mealType,
+        prepTime: r.prep_time,
+        cookTime: r.cooking_time,
+        serves: r.serves,
+        calories: r.calories,
+        age: r.month_age,
+        color: "from-purple-500 to-pink-500",
+        colorMonth: "bg-green-500",
+    }));
+    const currentData = normalizedRecipes.slice(startIndex, startIndex + itemsPerPage); if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                Loading recipes...
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div className="text-center text-red-500 mt-10">
+                Somethings wrong
+            </div>
+        );
+    }
     return (
         <div
             className={`min-h-full bg-[#FDECE4] text-[#4E0706] ${baloo.className}`}
@@ -314,11 +365,10 @@ export default function Recipes() {
                             {[0, 1, 2, 3, 4].map((dot) => (
                                 <div
                                     key={dot}
-                                    className={`w-5 h-5 rounded-full border-2 border-white ${
-                                        dot === 2
-                                            ? "bg-orange-400"
-                                            : "bg-[#E6C06A]"
-                                    }`}
+                                    className={`w-5 h-5 rounded-full border-2 border-white ${dot === 2
+                                        ? "bg-orange-400"
+                                        : "bg-[#E6C06A]"
+                                        }`}
                                 />
                             ))}
                         </div>
@@ -510,11 +560,10 @@ export default function Recipes() {
                                                 w-10 h-10 rounded-full border-2 flex items-center justify-center
                                                 transition-all duration-200
                 
-                                                ${
-                                                    currentPage === page
-                                                        ? "bg-orange-400 border-[#5A0A0A]"
-                                                        : "border-[#5A0A0A] text-[#5A0A0A] hover:bg-[#f3d9c9]"
-                                                }
+                                                ${currentPage === page
+                                        ? "bg-orange-400 border-[#5A0A0A]"
+                                        : "border-[#5A0A0A] text-[#5A0A0A] hover:bg-[#f3d9c9]"
+                                    }
                                             `}
                             >
                                 {page}
