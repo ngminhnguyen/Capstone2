@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 import { Nunito, Handlee } from "next/font/google";
 import { Risque } from "next/font/google";
 
-import Navbar from "@/components/layout/PublicNavbar";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
 
 const nunito = Nunito({

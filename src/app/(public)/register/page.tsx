@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/layout/PublicNavbar";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
 import RegisterForm from "@/components/register/RegisterForm";
 import Step1 from "@/components/register/Step1";

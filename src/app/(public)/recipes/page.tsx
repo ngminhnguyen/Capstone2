@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/layout/PublicNavbar";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
 import { motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";

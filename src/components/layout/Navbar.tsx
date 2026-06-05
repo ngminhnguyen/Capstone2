@@ -53,7 +53,7 @@ type PublicNavbarProps = {
     bannerColor?: string;
 };
 
-export default function PublicNavbar({
+export default function Navbar({
     navigation,
     bannerColor,
 }: PublicNavbarProps) {

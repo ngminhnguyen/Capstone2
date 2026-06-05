@@ -12,7 +12,7 @@ export default function ExpertLayout({
     children: React.ReactNode;
 }) {
     return (
-        <AuthGuard role="expert">
+        <AuthGuard role="Expert">
             <ThemeProvider
                 attribute="class"
                 defaultTheme="light"

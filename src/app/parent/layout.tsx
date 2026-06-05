@@ -12,7 +12,7 @@ export default function ParentLayout({
     children: React.ReactNode;
 }) {
     return (
-        <AuthGuard>
+        <AuthGuard role="Parent">
             <ThemeProvider
                 attribute="class"
                 defaultTheme="light"

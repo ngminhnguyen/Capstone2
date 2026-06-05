@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
     children: React.ReactNode;
-    role?: "expert" | "parent" | "admin";
+    role?: "Expert" | "Parent" | "Admin";
 };
 
 export default function AuthGuard({ children, role }: Props) {

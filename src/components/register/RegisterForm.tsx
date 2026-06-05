@@ -4,7 +4,7 @@ import { Risque } from "next/font/google";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faCircleExclamation, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "@/components/layout/PublicNavbar";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
 import { CircleAlert } from "lucide-react";
 
