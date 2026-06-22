@@ -412,3 +412,5 @@ CREATE TABLE child_allergies (
     FOREIGN KEY(allergy_id)
         REFERENCES allergies(id)
 );
+ALTER TABLE users
+ADD COLUMN avatar VARCHAR(500) DEFAULT NULL;
