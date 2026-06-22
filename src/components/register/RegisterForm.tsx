@@ -22,8 +22,7 @@ type Props = {
 };
 
 type FormState = {
-    firstName: string;
-    lastName: string;
+    fullName: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -31,8 +30,7 @@ type FormState = {
 };
 
 type ErrorState = {
-    firstName: string;
-    lastName: string;
+    fullName: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -44,20 +42,16 @@ export default function RegisterForm({
     formData,
     setFormData,
 }: Props) {
-    const [form, setForm] = useState<FormState>(() => ({
-        firstName: formData?.parent?.name?.split(" ")[0] ?? "",
-        lastName: formData?.parent?.name?.split(" ").slice(1).join(" ") ?? "",
+    const [form, setForm] = useState<FormState>({
+        fullName: formData?.parent?.fullName ?? "",
         email: formData?.parent?.email ?? "",
         password: formData?.parent?.password ?? "",
         confirmPassword: formData?.parent?.password ?? "",
         terms: false,
-    }));
-
-    
+    });
 
     const [errors, setErrors] = useState<ErrorState>({
-        firstName: "",
-        lastName: "",
+        fullName: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -65,46 +59,60 @@ export default function RegisterForm({
     });
 
     const validate = () => {
-        let valid = true;
-
         const newErrors: ErrorState = {
-            firstName: "",
-            lastName: "",
+            fullName: "",
             email: "",
             password: "",
             confirmPassword: "",
             terms: "",
         };
 
-        if (!form.firstName) {
-            newErrors.firstName = "First name is required";
+        let valid = true;
+
+        if (!form.fullName.trim()) {
+            newErrors.fullName = "Full name is required";
             valid = false;
         }
 
-        if (!form.lastName) {
-            newErrors.lastName = "Last name is required";
-            valid = false;
-        }
-
-        if (!form.email) {
+        if (!form.email.trim()) {
             newErrors.email = "Email is required";
+            valid = false;
+        } else if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+        ) {
+            newErrors.email = "Invalid email";
             valid = false;
         }
 
         if (!form.password) {
             newErrors.password = "Password is required";
             valid = false;
+        } else if (form.password.length < 6) {
+            newErrors.password =
+                "Password must be at least 6 characters";
+            valid = false;
         }
 
-        if (form.password !== form.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match";
+        if (!form.confirmPassword) {
+            newErrors.confirmPassword =
+                "Confirm password is required";
+            valid = false;
+        } else if (
+            form.password !== form.confirmPassword
+        ) {
+            newErrors.confirmPassword =
+                "Passwords do not match";
             valid = false;
         }
+
         if (!form.terms) {
-            newErrors.terms = "You must agree to Terms of Use";
+            newErrors.terms =
+                "You must agree to Terms of Use";
             valid = false;
         }
+
         setErrors(newErrors);
+
         return valid;
     };
 
@@ -115,20 +123,26 @@ export default function RegisterForm({
         setFormData((prev: any) => ({
             ...prev,
             parent: {
-                firstName: form.firstName,
-                lastName: form.lastName,
-                email: form.email,
+                fullName: form.fullName.trim(),
+                email: form.email.trim(),
                 password: form.password,
             },
         }));
     };
 
-    const updateForm = (field: keyof FormState, value: any) => {
-        setForm((prev) => {
-            const updated = { ...prev, [field]: value };
+    const updateForm = (
+        field: keyof FormState,
+        value: string | boolean,
+    ) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
 
-            return updated;
-        });
+        setErrors((prev) => ({
+            ...prev,
+            [field]: "",
+        }));
     };
 
     return (
@@ -160,64 +174,37 @@ export default function RegisterForm({
                                 /> */}
 
                             {/* Name */}
-                            <div className="flex gap-3">
-                                <div>
-                                    <div className="flex gap-2">
-                                        <label
-                                            htmlFor="firstName"
-                                            className="block text-base font-medium mb-2"
-                                        >
-                                            First Name
-                                        </label>
-                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        id="firstName"
-                                        value={form.firstName}
-                                        onChange={(e) =>
-                                            updateForm(
-                                                "firstName",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
-                                    />
-                                    {errors.firstName && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors.firstName}
-                                        </p>
-                                    )}
+                            <div>
+                                <div className="flex gap-2">
+                                    <label
+                                        htmlFor="fullName"
+                                        className="block text-base font-medium mb-2"
+                                    >
+                                        Full Name
+                                    </label>
+
+                                    <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                 </div>
-                                <div>
-                                    <div className="flex gap-2">
-                                        <label
-                                            htmlFor="lastName"
-                                            className="block text-base font-medium mb-2"
-                                        >
-                                            Last Name
-                                        </label>
-                                        <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        id="lastName"
-                                        value={form.lastName}
-                                        onChange={(e) =>
-                                            updateForm(
-                                                "lastName",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
-                                        placeholder="Last Name"
-                                    />
-                                    {errors.lastName && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors.lastName}
-                                        </p>
-                                    )}
-                                </div>
+
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    value={form.fullName}
+                                    onChange={(e) =>
+                                        updateForm(
+                                            "fullName",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
+                                    placeholder="Enter your full name"
+                                />
+
+                                {errors.fullName && (
+                                    <p className="text-red-500 text-sm">
+                                        {errors.fullName}
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <div className="flex gap-2">
@@ -462,13 +449,14 @@ export default function RegisterForm({
 
                             {/* Button */}
                             <button
-                                type="submit"
+                                type="button"
                                 onClick={() => {
                                     if (!validate()) return;
+
                                     syncToGlobal();
                                     setStep(2);
                                 }}
-                                className="flex w-full justify-center rounded-xl bg-[#FFB405] px-3 py-3 text-lg font-semibold shadow-sm hover:bg-[#FFB405]/50 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#80C700] focus-visible:ring-offset-2"
+                                className="flex w-full justify-center rounded-xl bg-[#FFB405] px-3 py-3 text-lg font-semibold shadow-sm hover:bg-[#FFB405]/50 transition-colors duration-200"
                             >
                                 Create Account
                             </button>

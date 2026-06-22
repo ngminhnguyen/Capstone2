@@ -11,12 +11,12 @@ exports.login = async (req, res) => {
 
         const [users] = await db.query(
             `
-            SELECT
-                u.*,
-                r.name AS role
-            FROM users u
-            JOIN roles r ON u.role_id = r.id
-            WHERE u.email = ?
+          SELECT
+    u.*,
+    r.name AS role
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE u.email = ?
             `,
             [email],
         );
@@ -66,107 +66,227 @@ exports.login = async (req, res) => {
 };
 
 /**
- * REGISTER (AUTO LOGIN FIX)
+ * REGISTER
  */
 exports.register = async (req, res) => {
-    try {
-        const { parent, children, allergy } = req.body;
+    const connection = await db.getConnection();
 
-        // =========================
-        // 1. CHECK EMAIL EXISTS
-        // =========================
-        const [exist] = await db.query("SELECT * FROM users WHERE email = ?", [
-            parent.email,
-        ]);
+    try {
+        const { parent, children = [] } = req.body;
+
+        // ======================
+        // VALIDATION
+        // ======================
+
+        if (!parent) {
+            return res.status(400).json({
+                message: "Parent data required",
+            });
+        }
+
+        const fullName = parent.fullName?.trim();
+        const email = parent.email?.trim().toLowerCase();
+        const password = parent.password;
+
+        if (!fullName) {
+            return res.status(400).json({
+                message: "Full name is required",
+            });
+        }
+
+        if (!email) {
+            return res.status(400).json({
+                message: "Email is required",
+            });
+        }
+
+        if (!password) {
+            return res.status(400).json({
+                message: "Password is required",
+            });
+        }
+
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                message: "Invalid email format",
+            });
+        }
+
+        await connection.beginTransaction();
+
+        // ======================
+        // CHECK EMAIL
+        // ======================
+
+        const [exist] = await connection.query(
+            `
+            SELECT id
+            FROM users
+            WHERE email = ?
+            `,
+            [email]
+        );
 
         if (exist.length > 0) {
+            await connection.rollback();
+
             return res.status(400).json({
                 message: "Email already exists",
             });
         }
 
-        // =========================
-        // 2. CREATE USER (LOGIN SYSTEM)
-        // =========================
-        const hashedPassword = await bcrypt.hash(parent.password, 10);
+        // ======================
+        // CREATE USER
+        // ======================
 
-        const [userResult] = await db.query(
-            `INSERT INTO users (full_name, email, password, role_id)
-             VALUES (?, ?, ?, ?)`,
-            [
-                parent.firstName + " " + parent.lastName,
-                parent.email,
-                hashedPassword,
-                3, // parent role (theo DB bạn)
-            ],
-        );
+        const hashedPassword =
+            await bcrypt.hash(password, 10);
+
+        const [userResult] =
+            await connection.query(
+                `
+            INSERT INTO users
+(
+    full_name,
+    email,
+    password,
+    role_id,
+    avatar
+)
+VALUES (?, ?, ?, ?, ?)
+                `,
+                [
+                    fullName,
+                    parent.email,
+                    hashedPassword,
+                    3,
+                    parent.avatar || null
+                ]
+            );
 
         const userId = userResult.insertId;
 
-        // =========================
-        // 3. INSERT CHILDREN → child_profiles
-        // =========================
-        if (children && children.length > 0) {
-            await Promise.all(
-                children.map((child) =>
-                    db.query(
-                        `INSERT INTO child_profiles 
-                        (parent_id, name, date_of_birth, weight, height, gender, image_url)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        // ======================
+        // CREATE CHILDREN
+        // ======================
+
+        for (const child of children) {
+
+            const [childResult] =
+                await connection.query(
+                    `
+                    INSERT INTO child_profiles
+                    (
+                        parent_id,
+                        name,
+                        date_of_birth,
+                        weight,
+                        height,
+                        gender,
+                        image_url
+                    )
+                    VALUES
+                    (
+                        ?, ?, ?, ?, ?, ?, ?
+                    )
+                    `,
+                    [
+                        userId,
+                        child.name || null,
+                        child.dob || null,
+                        child.weight
+                            ? Number(child.weight)
+                            : null,
+                        child.height
+                            ? Number(child.height)
+                            : null,
+                        child.gender || null,
+                        child.image_url || null,
+                    ]
+                );
+
+            const childId =
+                childResult.insertId;
+
+            // ======================
+            // SAVE ALLERGIES
+            // ======================
+
+            if (
+                Array.isArray(
+                    child.allergies
+                ) &&
+                child.allergies.length > 0
+            ) {
+                for (const allergyId of child.allergies) {
+
+                    await connection.query(
+                        `
+                        INSERT INTO child_allergies
+                        (
+                            child_id,
+                            allergy_id
+                        )
+                        VALUES (?, ?)
+                        `,
                         [
-                            userId,
-                            child.name,
-                            child.dob,
-                            child.weight,
-                            child.height,
-                            child.gender,
-                            child.image_url || null,
-                        ],
-                    ),
-                ),
-            );
+                            childId,
+                            allergyId
+                        ]
+                    );
+                }
+            }
         }
 
-        // =========================
-        // 4. RESPONSE USER (JOIN ROLE)
-        // =========================
-        const [users] = await db.query(
-            `
-            SELECT 
-                u.id,
-                u.full_name,
-                u.email,
-                r.name AS role
-            FROM users u
-            JOIN roles r ON u.role_id = r.id
-            WHERE u.id = ?
-            `,
-            [userId],
-        );
+        await connection.commit();
 
-        const user = users[0];
+        const user = {
+            id: userId,
+            full_name: fullName,
+            email,
+            role: "Parent",
+        };
 
-        // =========================
-        // 5. JWT TOKEN
-        // =========================
         const token = jwt.sign(
             {
                 id: user.id,
                 role: user.role,
             },
             process.env.JWT_SECRET,
-            { expiresIn: "7d" },
+            {
+                expiresIn: "7d",
+            }
         );
 
         return res.status(201).json({
-            user,
+            message:
+                "Account created successfully",
             token,
+            user,
         });
+
     } catch (err) {
-        console.log("REGISTER ERROR:", err);
+
+        try {
+            await connection.rollback();
+        } catch { }
+
+        console.error(
+            "REGISTER ERROR:",
+            err
+        );
+
         return res.status(500).json({
             message: "Server error",
             error: err.message,
         });
+
+    } finally {
+
+        connection.release();
+
     }
 };

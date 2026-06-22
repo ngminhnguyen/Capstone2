@@ -281,7 +281,7 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
                                     <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5">
                                         <MenuItem>
                                             <a
-                                                href="/profile"
+                                                href="/parent/dashboard"
                                                 className="block px-4 py-2 text-xl text-gray-700 hover:bg-[#D9BBA0]"
                                             >
                                                 My profile

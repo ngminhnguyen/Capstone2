@@ -1,25 +1,91 @@
 "use client";
-
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
-import { userProfile } from "@/data/userProfiles";
-
+import { useEffect, useState } from "react";
+import api from "@/lib/api"; // change path if needed
+import { useRouter } from "next/navigation";
 export default function Dashboard() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
-    const babies = userProfile.babies;
+    const [userProfile, setUserProfile] =
+        useState<any>(null);
 
-    const baby = babies[currentIndex];
+    const [babies, setBabies] =
+        useState<any[]>([]);
+
+    useEffect(() => {
+        fetchDashboard();
+    }, []);
+    const token =
+        localStorage.getItem("token");
+    const fetchDashboard = async () => {
+        try {
+            setLoading(true);
+
+            const res = await api.get(
+                "/parent/dashboard"
+            );
+
+            setUserProfile(
+                res.data.parent
+            );
+
+            setBabies(
+                res.data.babies || []
+            );
+
+        } catch (err) {
+            console.error(
+                "Dashboard Error:",
+                err
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handlePrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? babies.length - 1 : prev - 1));
+        setCurrentIndex((prev) =>
+            prev === 0
+                ? babies.length - 1
+                : prev - 1
+        );
     };
 
     const handleNext = () => {
-        setCurrentIndex((prev) => (prev === babies.length - 1 ? 0 : prev + 1));
+        setCurrentIndex((prev) =>
+            prev === babies.length - 1
+                ? 0
+                : prev + 1
+        );
     };
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex justify-center items-center">
+                <div className="text-2xl font-bold">
+                    Loading...
+                </div>
+            </div>
+        );
+    }
+
+    if (!userProfile) {
+        return (
+            <div className="min-h-screen flex justify-center items-center">
+                <div className="text-red-500 text-2xl">
+                    Failed to load dashboard
+                </div>
+            </div>
+        );
+    }
+
+    const baby =
+        babies.length > 0
+            ? babies[currentIndex]
+            : null;
     return (
         <div className="bg-[#FDECE4] p-6">
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 max-w-7xl mx-auto">
@@ -80,42 +146,47 @@ export default function Dashboard() {
 
                     <div className="grid lg:grid-cols-2 items-center h-full">
                         {/* Avatar */}
-                        <div className="flex justify-center">
-                            <div className="w-65 h-65 rounded-full border-4 border-[#6D0000] overflow-hidden shadow-lg">
-                                <img
-                                    src={baby.avatar}
-                                    alt={baby.name}
-                                    className="w-full h-full object-cover"
-                                />
+                        {baby ? (
+                            <>
+                                <div className="flex justify-center">
+                                    <div className="w-65 h-65 rounded-full border-4 border-[#6D0000] overflow-hidden shadow-lg">
+                                        <img
+                                            src={baby.avatar}
+                                            alt={baby.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="text-center">
+                                    <h1 className="text-3xl font-bold text-[#5A0000]">
+                                        {baby.name}
+                                    </h1>
+
+                                    <p className="mt-8 text-xl font-medium text-[#5A0000]">
+                                        {baby.dateOfBirth}
+                                    </p>
+
+                                    <p className="mt-8 text-xl text-[#5A0000]">
+                                        Weight: {baby.weight}
+                                    </p>
+
+                                    <p className="mt-4 text-xl text-[#5A0000]">
+                                        Height: {baby.height}
+                                    </p>
+
+                                    <p className="mt-8 text-xl font-medium text-amber-600">
+                                        {baby.growthStatus}
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="col-span-2 flex justify-center items-center h-full">
+                                <h2 className="text-2xl text-[#5A0000]">
+                                    No children found
+                                </h2>
                             </div>
-                        </div>
-
-                        {/* Info */}
-                        <div className="text-center">
-                            <h1 className="text-3xl font-bold text-[#5A0000]">
-                                {baby.name}
-                            </h1>
-
-                            <p className="mt-8 text-xl font-medium text-[#5A0000]">
-                                {baby.dateOfBirth}
-                            </p>
-
-                            <p className="mt-8 text-xl text-[#5A0000]">
-                                weight: {baby.weight}
-                            </p>
-
-                            <p className="mt-4 text-xl text-[#5A0000]">
-                                height: {baby.height}
-                            </p>
-
-                            <p className="mt-8 text-xl font-medium text-amber-600">
-                                {baby.growthStatus}
-                            </p>
-
-                            <button className="mt-10 bg-[#F2E266] hover:scale-105 transition px-12 py-4 rounded-full text-[#5A0000] text-2xl font-semibold">
-                                More detail
-                            </button>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -138,10 +209,9 @@ export default function Dashboard() {
                     {/* Floating User */}
                     <div className="absolute top-19 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
                         <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-4 border-orange-200 shadow-md bg-white">
-                            <Image
+                            <img
                                 src={userProfile.avatar}
                                 alt={userProfile.fullName}
-                                fill
                                 className="object-cover"
                             />
                         </div>
@@ -170,7 +240,14 @@ export default function Dashboard() {
                             </div>
 
                             {/* Button */}
-                            <button className="w-full bg-[#8CC800] hover:bg-[#7AB500] transition text-[#4A0000] text-xl md:text-2xl font-bold py-4 rounded-2xl mt-3">
+                            <button
+                                onClick={() => router.push("/parent/avatar")}
+                                className="w-full bg-[#8CC800] text-[#4A0000] font-bold py-4 px-6 rounded-2xl shadow-md
+               hover:bg-[#7AB500] hover:shadow-lg hover:scale-[1.02]
+               active:scale-[0.98]
+               transition-all duration-200 ease-in-out
+               border border-[#6D0000]/10"
+                            >
                                 Update Profile
                             </button>
                         </div>
