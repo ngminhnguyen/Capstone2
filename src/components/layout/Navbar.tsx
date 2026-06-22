@@ -63,18 +63,18 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
     const [scrolled, setScrolled] = useState(false);
     const [user, setUser] = useState<any>(null);
 
-    // ===== ROUTE CHECK =====
+
+    const isParentUser = Number(user?.roleID) === 3;
     const isAuthPage = pathname === "/login" || pathname === "/register";
 
-    const isParentRoute = pathname.startsWith("/parent");
+    // ✅ IMPORTANT: wait until user is loaded
+    const isUserLoaded = user !== null;
 
-    const isParentUser = user?.role === "parent";
+    // parent UI logic (ONLY when user is known)
+    const shouldShowParentUI =
+        !isAuthPage && isUserLoaded && isParentUser;
 
-    // ===== NAVIGATION LOGIC =====
-    const shouldShowParentNavigation =
-        !isAuthPage && (isParentUser || isParentRoute);
-
-    const defaultNavigation = shouldShowParentNavigation
+    const defaultNavigation = shouldShowParentUI
         ? [...publicNavigation, ...parentNavigation]
         : publicNavigation;
 
@@ -120,11 +120,10 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
     const pageNavbarColor = currentConfig?.navbarColor;
 
     const recipeNavbarColor = contextBannerColor
-        ? `${
-              isGradient
-                  ? `bg-linear-to-r ${contextBannerColor}`
-                  : contextBannerColor
-          } text-white`
+        ? `${isGradient
+            ? `bg-linear-to-r ${contextBannerColor}`
+            : contextBannerColor
+        } text-white`
         : null;
 
     const activeNavbarColor =
@@ -150,7 +149,21 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
         // redirect
         window.location.href = "/login";
     };
+    const syncUser = () => {
+        const storedUser = localStorage.getItem("user");
+        setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
+    useEffect(() => {
+        const syncUser = () => {
+            const storedUser = localStorage.getItem("user");
+            setUser(storedUser ? JSON.parse(storedUser) : null);
+        };
 
+        syncUser();
+        window.addEventListener("storage", syncUser);
+
+        return () => window.removeEventListener("storage", syncUser);
+    }, []);
     return (
         <Disclosure
             as="nav"
@@ -236,44 +249,39 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
                                 {/* Favorites */}
                                 <Link
                                     href="/parent/favorites"
-                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${
-                                        scrolled
-                                            ? "hover:outline-offset-2 hover:outline-orange-800"
-                                            : "hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                    }`}
+                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${scrolled
+                                        ? "hover:outline-offset-2 hover:outline-orange-800"
+                                        : "hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                        }`}
                                 >
                                     <Heart
-                                        className={`text-xl ${
-                                            scrolled
-                                                ? "text-orange-800 fill-orange-800"
-                                                : "text-[#FDECE4] fill-[#FDECE4]"
-                                        }`}
+                                        className={`text-xl ${scrolled
+                                            ? "text-orange-800 fill-orange-800"
+                                            : "text-[#FDECE4] fill-[#FDECE4]"
+                                            }`}
                                     />
                                 </Link>
 
                                 {/* Profile */}
                                 <Menu as="div" className="relative ml-3">
                                     <MenuButton
-                                        className={`group relative flex rounded-full ${
-                                            scrolled
-                                                ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
-                                                : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                        }`}
+                                        className={`group relative flex rounded-full ${scrolled
+                                            ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                                            : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                            }`}
                                     >
                                         <div
-                                            className={`size-8 rounded-full flex items-center justify-center ${
-                                                scrolled
-                                                    ? "bg-orange-800"
-                                                    : "bg-[#FDECE4]"
-                                            }`}
+                                            className={`size-8 rounded-full flex items-center justify-center ${scrolled
+                                                ? "bg-orange-800"
+                                                : "bg-[#FDECE4]"
+                                                }`}
                                         >
                                             <FontAwesomeIcon
                                                 icon={faUser}
-                                                className={`size-5 ${
-                                                    scrolled
-                                                        ? "text-white"
-                                                        : "text-orange-800"
-                                                }`}
+                                                className={`size-5 ${scrolled
+                                                    ? "text-white"
+                                                    : "text-orange-800"
+                                                    }`}
                                             />
                                         </div>
                                     </MenuButton>
@@ -302,11 +310,10 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
                         ) : (
                             <a
                                 href="/login"
-                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${
-                                    pathname === "/login"
-                                        ? "text-[#4E0706] font-bold border-b border-orange-900"
-                                        : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
-                                }`}
+                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${pathname === "/login"
+                                    ? "text-[#4E0706] font-bold border-b border-orange-900"
+                                    : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
+                                    }`}
                             >
                                 Sign in
                             </a>
@@ -318,7 +325,7 @@ export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
             {/* MOBILE MENU */}
             <DisclosurePanel className="sm:hidden">
                 <div className="space-y-1 px-2 pt-2 pb-3">
-                    {(navigation || defaultNavigation).map((item) => (
+                    {defaultNavigation.map((item) => (
                         <DisclosureButton
                             key={item.name}
                             as="a"

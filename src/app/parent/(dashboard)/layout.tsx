@@ -43,7 +43,7 @@ export default function ParentDashboardLayout({
             className={`min-h-screen bg-[#FDECE4] flex flex-col ${baloo.className}`}
         >
             {/* Navbar */}
-            <Navbar bannerColor={currentBanner?.color} />
+            {/* <Navbar bannerColor={currentBanner?.color} /> */}
 
             {/* Banner (not fixed) */}
             {currentBanner && (
@@ -58,7 +58,7 @@ export default function ParentDashboardLayout({
                 <div className="mx-auto px-4 py-6 md:px-8">{children}</div>
 
                 {/* Footer */}
-                <Footer />
+                {/* <Footer /> */}
             </main>
         </div>
     );

@@ -9,9 +9,9 @@ export default function PublicLayout({
 }) {
     return (
         <BannerColorProvider>
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
-            <Footer />
+            {/* <Footer /> */}
         </BannerColorProvider>
     );
 }

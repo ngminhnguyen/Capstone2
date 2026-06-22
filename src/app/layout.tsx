@@ -1,12 +1,6 @@
-import "./globals.css";
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
-
-export const metadata = {
-    title: "BabyNutri",
-    description: "Nutrition support for parents and babies",
-};
+import "./globals.css"
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/PublicFooter";
 
 export default function RootLayout({
     children,
@@ -14,8 +8,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body>{children}</body>
+        <html lang="en">
+            <body>
+                <Navbar />
+                {children}
+                <Footer />
+            </body>
         </html>
     );
 }
