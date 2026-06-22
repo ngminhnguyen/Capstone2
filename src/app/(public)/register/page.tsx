@@ -1,15 +1,43 @@
 "use client";
 
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/PublicFooter";
 import RegisterForm from "@/components/register/RegisterForm";
 import Step1 from "@/components/register/Step1";
 import Step2 from "@/components/register/Step2";
-import Result from "@/components/register/Result";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import type { RegisterData } from "@/typeData/register";
 
 export default function RegisterPage() {
     const [step, setStep] = useState(1);
+
+    const STEP = {
+        REGISTER: 1,
+        CHILD: 2,
+        ALLERGY: 3,
+    };
+
+    const [formData, setFormData] = useState<RegisterData>({
+        parent: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            terms: false,
+        },
+        children: [
+            {
+                name: "",
+                weight: "",
+                height: "",
+                dob: "",
+                gender: "",
+            },
+        ],
+        allergy: null,
+    });
+
+    const router = useRouter();
 
     const goToStep = (newStep: number) => {
         setStep(newStep);
@@ -32,25 +60,37 @@ export default function RegisterPage() {
         };
     }, []);
 
+    const goToParentDashboard = () => {
+        router.replace("/parent/dashboard");
+    };
+
     return (
         <div className="min-h-screen bg-[#fdece4] text-[#4e0706]">
-            {step === 1 && <RegisterForm setStep={goToStep} />}
+            {step === STEP.REGISTER && (
+                <RegisterForm
+                    setStep={goToStep}
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+            )}
 
-            {step === 2 && (
+            {step === STEP.CHILD && (
                 <Step1
-                    nextStep={() => goToStep(3)}
-                    prevStep={() => goToStep(1)}
+                    nextStep={() => goToStep(STEP.ALLERGY)}
+                    prevStep={() => goToStep(STEP.REGISTER)}
+                    formData={formData}
+                    setFormData={setFormData}
                 />
             )}
 
-            {step === 3 && (
+            {step === STEP.ALLERGY && (
                 <Step2
-                    nextStep={() => goToStep(4)}
-                    prevStep={() => goToStep(2)}
+                    nextStep={goToParentDashboard}
+                    prevStep={() => goToStep(STEP.CHILD)}
+                    formData={formData}
+                    setFormData={setFormData}
                 />
             )}
-
-            {step === 4 && <Result prevStep={() => goToStep(3)} />}
         </div>
     );
 }

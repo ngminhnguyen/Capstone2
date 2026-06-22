@@ -54,64 +54,6 @@ const weaningJourney = [
     },
 ];
 
-//Recipes
-// const articles = [
-//     {
-//         id: "1",
-//         title: "bright starts brekkie bowl",
-//         desc: "Perfect for hot summer days...",
-//         img: "/images/recipe1.webp",
-//         mealTime: "Luch",
-//         color: "bg-purple-500",
-//         colorMonth: "bg-green-500",
-//     },
-//     {
-//         id: "2",
-//         title: "three ways with yummy yogurt pots",
-//         desc: "Yogurt is one of our go-to...",
-//         img: "/images/recipe2.webp",
-//         mealTime: "Snack",
-//         color: "bg-yellow-500",
-//         colorMonth: "bg-green-500",
-//     },
-//     {
-//         id: "3",
-//         title: "rise + shine scrambly eggs",
-//         desc: "These speedy scrambly eggs...",
-//         img: "/images/recipe3.webp",
-//         mealTime: "Breakfast",
-//         color: "bg-pink-500",
-//         colorMonth: "bg-green-500",
-//     },
-//     {
-//         id: "4",
-//         title: "broc n roll cheesy chive pasta",
-//         desc: "Ready in just 15 minutes...",
-//         img: "/images/recipe4.webp",
-//         mealTime: "Dinner",
-//         color: "bg-pink-500",
-//         colorMonth: "bg-green-500",
-//     },
-//     {
-//         id: "5",
-//         title: "my first chicken curry",
-//         desc: "This recipe is a great way...",
-//         img: "/images/recipe5.webp",
-//         mealTime: "Snack",
-//         color: "bg-pink-500",
-//         colorMonth: "bg-green-500",
-//     },
-//     {
-//         id: "6",
-//         title: "my first chicken curry",
-//         desc: "This recipe is a great way...",
-//         img: "/images/recipe6.webp",
-//         mealTime: "Luch",
-//         color: "bg-orange-500",
-//         colorMonth: "bg-green-500",
-//     },
-// ];
-
 const articles = [
     {
         id: 1,

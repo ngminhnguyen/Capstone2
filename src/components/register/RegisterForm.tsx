@@ -1,12 +1,9 @@
+"use client";
 import { Nunito, Handlee } from "next/font/google";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Risque } from "next/font/google";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faCircleExclamation, faStar } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/PublicFooter";
 import { CircleAlert } from "lucide-react";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const handlee = Handlee({
     subsets: ["latin"],
@@ -20,15 +17,126 @@ const risque = Risque({
 
 type Props = {
     setStep: (step: number) => void;
+    formData: any;
+    setFormData: any;
 };
 
-export default function RegisterPage({ setStep }: Props) {
+type FormState = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    terms: boolean;
+};
+
+type ErrorState = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    terms: string;
+};
+
+export default function RegisterForm({
+    setStep,
+    formData,
+    setFormData,
+}: Props) {
+    const [form, setForm] = useState<FormState>(() => ({
+        firstName: formData?.parent?.name?.split(" ")[0] ?? "",
+        lastName: formData?.parent?.name?.split(" ").slice(1).join(" ") ?? "",
+        email: formData?.parent?.email ?? "",
+        password: formData?.parent?.password ?? "",
+        confirmPassword: formData?.parent?.password ?? "",
+        terms: false,
+    }));
+
+    
+
+    const [errors, setErrors] = useState<ErrorState>({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        terms: "",
+    });
+
+    const validate = () => {
+        let valid = true;
+
+        const newErrors: ErrorState = {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            terms: "",
+        };
+
+        if (!form.firstName) {
+            newErrors.firstName = "First name is required";
+            valid = false;
+        }
+
+        if (!form.lastName) {
+            newErrors.lastName = "Last name is required";
+            valid = false;
+        }
+
+        if (!form.email) {
+            newErrors.email = "Email is required";
+            valid = false;
+        }
+
+        if (!form.password) {
+            newErrors.password = "Password is required";
+            valid = false;
+        }
+
+        if (form.password !== form.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match";
+            valid = false;
+        }
+        if (!form.terms) {
+            newErrors.terms = "You must agree to Terms of Use";
+            valid = false;
+        }
+        setErrors(newErrors);
+        return valid;
+    };
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const syncToGlobal = () => {
+        setFormData((prev: any) => ({
+            ...prev,
+            parent: {
+                firstName: form.firstName,
+                lastName: form.lastName,
+                email: form.email,
+                password: form.password,
+            },
+        }));
+    };
+
+    const updateForm = (field: keyof FormState, value: any) => {
+        setForm((prev) => {
+            const updated = { ...prev, [field]: value };
+
+            return updated;
+        });
+    };
+
     return (
         <main>
             <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8  ">
-                <div className="grid grid-cols-[1.2fr_0.8fr] gap-12 items-center bg-[url('/images/loginBgR.png')] bg-cover bg-center">
+                <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] min-h-screen bg-[url('/images/loginBgR.png')] bg-cover bg-center">
                     {/* Left image */}
-                    <div className="flex justify-center">
+                    <div className="flex items-center justify-center p-6">
                         <img
                             src="/images/loginBg.png"
                             alt="Login background"
@@ -66,9 +174,20 @@ export default function RegisterPage({ setStep }: Props) {
                                     <input
                                         type="text"
                                         id="firstName"
+                                        value={form.firstName}
+                                        onChange={(e) =>
+                                            updateForm(
+                                                "firstName",
+                                                e.target.value,
+                                            )
+                                        }
                                         className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
-                                        placeholder="First Name"
                                     />
+                                    {errors.firstName && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.firstName}
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <div className="flex gap-2">
@@ -83,9 +202,21 @@ export default function RegisterPage({ setStep }: Props) {
                                     <input
                                         type="text"
                                         id="lastName"
+                                        value={form.lastName}
+                                        onChange={(e) =>
+                                            updateForm(
+                                                "lastName",
+                                                e.target.value,
+                                            )
+                                        }
                                         className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
                                         placeholder="Last Name"
                                     />
+                                    {errors.lastName && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.lastName}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div>
@@ -101,9 +232,18 @@ export default function RegisterPage({ setStep }: Props) {
                                 <input
                                     type="email"
                                     id="email"
+                                    value={form.email}
+                                    onChange={(e) =>
+                                        updateForm("email", e.target.value)
+                                    }
                                     className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
                                     placeholder="you@example.com"
                                 />
+                                {errors.email && (
+                                    <p className="text-red-500 text-sm">
+                                        {errors.email}
+                                    </p>
+                                )}
                             </div>
 
                             {/* Password */}
@@ -118,12 +258,47 @@ export default function RegisterPage({ setStep }: Props) {
                                         </label>
                                         <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
-                                    <input
-                                        type="password"
-                                        id="createPassword"
-                                        className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
-                                        placeholder="••••••••"
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            id="createPassword"
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            value={form.password}
+                                            onChange={(e) =>
+                                                updateForm(
+                                                    "password",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
+                                            placeholder="••••••••"
+                                        />
+                                        {errors.password && (
+                                            <p className="text-red-500 text-sm">
+                                                {errors.password}
+                                            </p>
+                                        )}
+
+                                        {form.password.length > 0 && (
+                                            <div
+                                                onClick={() =>
+                                                    setShowPassword(
+                                                        !showPassword,
+                                                    )
+                                                }
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-[#ff7a00] transition"
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff size={20} />
+                                                ) : (
+                                                    <Eye size={20} />
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <div className="flex gap-2">
@@ -135,12 +310,46 @@ export default function RegisterPage({ setStep }: Props) {
                                         </label>
                                         <CircleAlert className="text-white bg-amber-300 rounded-full w-5 h-5" />
                                     </div>
-                                    <input
-                                        type="password"
-                                        id="confirmPassword"
-                                        className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
-                                        placeholder="••••••••"
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            id="confirmPassword"
+                                            type={
+                                                showConfirmPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            value={form.confirmPassword}
+                                            onChange={(e) =>
+                                                updateForm(
+                                                    "confirmPassword",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="block w-full rounded-xl px-4 py-3 shadow-sm ring-1 ring-inset ring-orange-900/60 placeholder:text-orange-900/40 focus:ring-2 focus:ring-orange-700 outline-none"
+                                            placeholder="••••••••"
+                                        />
+                                        {errors.confirmPassword && (
+                                            <p className="text-red-500 text-sm">
+                                                {errors.confirmPassword}
+                                            </p>
+                                        )}
+                                        {form.confirmPassword.length > 0 && (
+                                            <div
+                                                onClick={() =>
+                                                    setShowConfirmPassword(
+                                                        !showConfirmPassword,
+                                                    )
+                                                }
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-[#ff7a00] transition"
+                                            >
+                                                {showConfirmPassword ? (
+                                                    <EyeOff size={20} />
+                                                ) : (
+                                                    <Eye size={20} />
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -224,6 +433,13 @@ export default function RegisterPage({ setStep }: Props) {
                             <div className="flex items-center gap-2">
                                 <input
                                     type="checkbox"
+                                    checked={form.terms}
+                                    onChange={(e) =>
+                                        setForm({
+                                            ...form,
+                                            terms: e.target.checked,
+                                        })
+                                    }
                                     id="terms"
                                     className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                 />
@@ -238,11 +454,20 @@ export default function RegisterPage({ setStep }: Props) {
                                 </label>
                                 <div className="justify-between items-center text-xl"></div>
                             </div>
+                            {errors.terms && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.terms}
+                                </p>
+                            )}
 
                             {/* Button */}
                             <button
                                 type="submit"
-                                onClick={() => setStep(2)}
+                                onClick={() => {
+                                    if (!validate()) return;
+                                    syncToGlobal();
+                                    setStep(2);
+                                }}
                                 className="flex w-full justify-center rounded-xl bg-[#FFB405] px-3 py-3 text-lg font-semibold shadow-sm hover:bg-[#FFB405]/50 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#80C700] focus-visible:ring-offset-2"
                             >
                                 Create Account

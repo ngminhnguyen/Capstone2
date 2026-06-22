@@ -25,68 +25,12 @@ const risque = Risque({
     weight: ["400"],
 });
 
-// fake data
-// const fakeUsers = [
-//     {
-//         email: "admin@gmail.com",
-//         password: "123456",
-//         role: "admin",
-//     },
-//     {
-//         email: "expert@gmail.com",
-//         password: "123456",
-//         role: "expert",
-//     },
-//     {
-//         email: "parent@gmail.com",
-//         password: "123456",
-//         role: "parent",
-//     },
-// ];
-
 export default function LoginPage() {
     const router = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    // const handleLogin = () => {
-    //     const user = fakeUsers.find(
-    //         (u) => u.email === email && u.password === password,
-    //     );
-
-    //     if (!user) {
-    //         alert("Sai email hoặc mật khẩu!");
-    //         return;
-    //     }
-
-    //     // lưu user để navbar đọc
-    //     localStorage.setItem("user", JSON.stringify(user));
-
-    //     // lưu token
-    //     document.cookie = "token=fake-token; path=/";
-
-    //     // lưu role
-    //     document.cookie = `role=${user.role}; path=/`;
-
-    //     // chuyển trang theo role
-    //     switch (user.role) {
-    //         case "admin":
-    //             router.push("/admin/dashboard");
-    //             break;
-
-    //         case "expert":
-    //             router.push("/expert");
-    //             break;
-
-    //         case "parent":
-    //             router.push("/parent/dashboard");
-    //             break;
-
-    //         default:
-    //             router.push("/home");
-    //     }
-    // };
     const handleLogin = async () => {
         try {
             const res = await api.post("/auth/login", {
@@ -103,10 +47,7 @@ export default function LoginPage() {
 
             localStorage.setItem("token", token);
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(user)
-            );
+            localStorage.setItem("user", JSON.stringify(user));
             window.dispatchEvent(new Event("storage"));
             const role = (user?.role || "").toLowerCase();
 
@@ -126,19 +67,12 @@ export default function LoginPage() {
             }
 
             router.push("/home");
-
         } catch (error: any) {
             console.error("LOGIN ERROR:", error);
 
-            console.error(
-                "RESPONSE:",
-                error?.response?.data
-            );
+            console.error("RESPONSE:", error?.response?.data);
 
-            alert(
-                error?.response?.data?.message ||
-                "Login failed"
-            );
+            alert(error?.response?.data?.message || "Login failed");
         }
     };
     return (

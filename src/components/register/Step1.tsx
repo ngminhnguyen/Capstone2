@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Handlee } from "next/font/google";
 
 type Props = {
     nextStep?: () => void;
     prevStep?: () => void;
+    formData: RegisterData;
+    setFormData: React.Dispatch<React.SetStateAction<RegisterData>>;
 };
 
 const handlee = Handlee({
@@ -21,33 +23,75 @@ type ChildProfile = {
     gender: string;
 };
 
-export default function Step1({ nextStep, prevStep }: Props) {
-    const [children, setChildren] = useState<ChildProfile[]>([
-        {
-            name: "",
-            weight: "",
-            height: "",
-            dob: "",
-            gender: "",
-        },
-    ]);
+type RegisterData = {
+    parent: any;
+    children: ChildProfile[];
+    allergy: number | null;
+};
+
+export default function Step1({
+    nextStep,
+    prevStep,
+    formData,
+    setFormData,
+}: Props) {
+    // const [formData, setFormData] = useState<RegisterData>({
+    //     parent: {},
+    //     children: [],
+    //     allergy: null,
+    // });
+
+    const children = formData?.children ?? [];
 
     const addChildForm = () => {
-        setChildren([
-            ...children,
-            {
-                name: "",
-                weight: "",
-                height: "",
-                dob: "",
-                gender: "",
-            },
-        ]);
+        setFormData((prev) => ({
+            ...prev,
+            children: [
+                ...(prev.children || []),
+                {
+                    name: "",
+                    weight: "",
+                    height: "",
+                    dob: "",
+                    gender: "",
+                },
+            ],
+        }));
+    };
+
+    // useEffect(() => {
+    //     console.log("🔥 GLOBAL formData:", formData);
+    //     console.log("🔥 UPDATE:", Date.now());
+    // }, [formData]);
+
+    const [error, setError] = useState("");
+
+    const handleNext = () => {
+        const hasCompleteChild = formData?.children?.some(
+            (child: ChildProfile) =>
+                child.name.trim() !== "" &&
+                child.weight.trim() !== "" &&
+                child.height.trim() !== "" &&
+                child.dob !== "" &&
+                child.gender !== "",
+        );
+
+        if (!hasCompleteChild) {
+            setError(
+                "Please complete all information for at least one little one before continuing.",
+            );
+            return;
+        }
+
+        setError("");
+        nextStep?.();
     };
 
     const removeChildForm = (index: number) => {
-        const updated = children.filter((_, i) => i !== index);
-        setChildren(updated);
+        setFormData((prev) => ({
+            ...prev,
+            children: prev.children.filter((_, i: number) => i !== index),
+        }));
     };
 
     const handleChange = (
@@ -55,9 +99,19 @@ export default function Step1({ nextStep, prevStep }: Props) {
         field: keyof ChildProfile,
         value: string,
     ) => {
-        const updated = [...children];
-        updated[index][field] = value;
-        setChildren(updated);
+        setFormData((prev) => {
+            const updated = [...prev.children];
+
+            updated[index] = {
+                ...updated[index],
+                [field]: value,
+            };
+
+            return {
+                ...prev,
+                children: updated,
+            };
+        });
     };
 
     return (
@@ -135,36 +189,49 @@ export default function Step1({ nextStep, prevStep }: Props) {
                             <label className="block mb-2">
                                 My little one’s weight is...
                             </label>
-                            <input
-                                type="text"
-                                value={child.weight}
-                                onChange={(e) =>
-                                    handleChange(
-                                        index,
-                                        "weight",
-                                        e.target.value,
-                                    )
-                                }
-                                className="w-full border rounded-xl px-4 py-3 bg-white"
-                            />
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    value={child.weight}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            index,
+                                            "weight",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full border rounded-xl px-4 py-2 pr-12 bg-white"
+                                    step="0.01"
+                                />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                    kg
+                                </span>
+                            </div>
                         </div>
 
                         <div>
                             <label className="block mb-2">
                                 My little one’s height is...
                             </label>
-                            <input
-                                type="text"
-                                value={child.height}
-                                onChange={(e) =>
-                                    handleChange(
-                                        index,
-                                        "height",
-                                        e.target.value,
-                                    )
-                                }
-                                className="w-full border rounded-xl px-4 py-3 bg-white"
-                            />
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    value={child.height}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            index,
+                                            "height",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full border rounded-xl px-4 py-2 pr-12 bg-white"
+                                />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                    cm
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -173,6 +240,7 @@ export default function Step1({ nextStep, prevStep }: Props) {
                             <label className="block mb-2">
                                 My little one’s date of birth is...
                             </label>
+
                             <input
                                 type="date"
                                 value={child.dob}
@@ -250,6 +318,11 @@ export default function Step1({ nextStep, prevStep }: Props) {
                     </button>
                 </div>
             </div>
+            {error && (
+                <div className="w-[60%] mb-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-red-600">
+                    {error}
+                </div>
+            )}
             {/* Button Step*/}
             <div className="w-[60%] flex justify-between mt-8 pr-10 pl-10">
                 <button
@@ -259,7 +332,7 @@ export default function Step1({ nextStep, prevStep }: Props) {
                     Back
                 </button>
                 <button
-                    onClick={nextStep}
+                    onClick={handleNext}
                     className="bg-yellow-400 px-9 py-2 rounded-xl font-bold hover:bg-yellow-300 transition-colors duration-200"
                 >
                     Next

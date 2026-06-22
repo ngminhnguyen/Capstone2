@@ -112,7 +112,7 @@ export default function PageBanner({ title, bgColor }: Props) {
             {/* Content */}
             <div className="relative z-10 h-full px-8 md:px-20 pt-14">
                 {/* Breadcrumb */}
-                <div className="py-4">
+                <div className="">
                     <Breadcrumb />
                 </div>
 

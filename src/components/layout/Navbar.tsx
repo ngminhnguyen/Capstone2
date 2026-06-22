@@ -31,13 +31,13 @@ const nunito = Nunito({
     weight: ["400", "700"],
 });
 
-const shopMenu = [
-    { name: "Coffee", href: "#" },
-    { name: "Subscriptions", href: "#" },
-    { name: "Amps Gear", href: "#" },
-    { name: "Brewing Equipment", href: "#" },
-    { name: "Shop All", href: "#" },
-];
+// const shopMenu = [
+//     { name: "Coffee", href: "#" },
+//     { name: "Subscriptions", href: "#" },
+//     { name: "Amps Gear", href: "#" },
+//     { name: "Brewing Equipment", href: "#" },
+//     { name: "Shop All", href: "#" },
+// ];
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -53,10 +53,7 @@ type PublicNavbarProps = {
     bannerColor?: string;
 };
 
-export default function Navbar({
-    navigation,
-    bannerColor,
-}: PublicNavbarProps) {
+export default function Navbar({ navigation, bannerColor }: PublicNavbarProps) {
     const pathname = usePathname();
 
     const currentConfig = pageConfig[pathname];
@@ -123,10 +120,11 @@ export default function Navbar({
     const pageNavbarColor = currentConfig?.navbarColor;
 
     const recipeNavbarColor = contextBannerColor
-        ? `${isGradient
-            ? `bg-linear-to-r ${contextBannerColor}`
-            : contextBannerColor
-        } text-white`
+        ? `${
+              isGradient
+                  ? `bg-linear-to-r ${contextBannerColor}`
+                  : contextBannerColor
+          } text-white`
         : null;
 
     const activeNavbarColor =
@@ -189,7 +187,7 @@ export default function Navbar({
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
                                 {/* Shop */}
-                                <li className="relative group inline-flex items-center px-3 pt-2 text-xl font-medium">
+                                {/* <li className="relative group inline-flex items-center px-3 pt-2 text-xl font-medium">
                                     <button className="flex items-center gap-1 text-xl font-medium border-b-2 border-transparent hover:border-orange-900">
                                         Shop
                                         <ChevronDown size={20} />
@@ -207,7 +205,7 @@ export default function Navbar({
                                             </li>
                                         ))}
                                     </ul>
-                                </li>
+                                </li> */}
 
                                 {/* Navigation */}
                                 {(navigation || defaultNavigation).map(
@@ -238,39 +236,44 @@ export default function Navbar({
                                 {/* Favorites */}
                                 <Link
                                     href="/parent/favorites"
-                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${scrolled
-                                        ? "hover:outline-offset-2 hover:outline-orange-800"
-                                        : "hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                        }`}
+                                    className={`group flex h-8 w-8 items-center justify-center rounded-full hover:outline-2 ${
+                                        scrolled
+                                            ? "hover:outline-offset-2 hover:outline-orange-800"
+                                            : "hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                    }`}
                                 >
                                     <Heart
-                                        className={`text-xl ${scrolled
-                                            ? "text-orange-800 fill-orange-800"
-                                            : "text-[#FDECE4] fill-[#FDECE4]"
-                                            }`}
+                                        className={`text-xl ${
+                                            scrolled
+                                                ? "text-orange-800 fill-orange-800"
+                                                : "text-[#FDECE4] fill-[#FDECE4]"
+                                        }`}
                                     />
                                 </Link>
 
                                 {/* Profile */}
                                 <Menu as="div" className="relative ml-3">
                                     <MenuButton
-                                        className={`group relative flex rounded-full ${scrolled
-                                            ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
-                                            : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
-                                            }`}
+                                        className={`group relative flex rounded-full ${
+                                            scrolled
+                                                ? "hover:outline-2 hover:outline-offset-2 hover:outline-orange-800"
+                                                : "hover:outline-2 hover:outline-offset-2 hover:outline-[#FDECE4]"
+                                        }`}
                                     >
                                         <div
-                                            className={`size-8 rounded-full flex items-center justify-center ${scrolled
-                                                ? "bg-orange-800"
-                                                : "bg-[#FDECE4]"
-                                                }`}
+                                            className={`size-8 rounded-full flex items-center justify-center ${
+                                                scrolled
+                                                    ? "bg-orange-800"
+                                                    : "bg-[#FDECE4]"
+                                            }`}
                                         >
                                             <FontAwesomeIcon
                                                 icon={faUser}
-                                                className={`size-5 ${scrolled
-                                                    ? "text-white"
-                                                    : "text-orange-800"
-                                                    }`}
+                                                className={`size-5 ${
+                                                    scrolled
+                                                        ? "text-white"
+                                                        : "text-orange-800"
+                                                }`}
                                             />
                                         </div>
                                     </MenuButton>
@@ -299,10 +302,11 @@ export default function Navbar({
                         ) : (
                             <a
                                 href="/login"
-                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${pathname === "/login"
-                                    ? "text-[#4E0706] font-bold border-b border-orange-900"
-                                    : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
-                                    }`}
+                                className={`block px-4 py-2 text-lg font-medium rounded-xl ${
+                                    pathname === "/login"
+                                        ? "text-[#4E0706] font-bold border-b border-orange-900"
+                                        : "hover:bg-[#D9BBA0] hover:text-amber-950 transition"
+                                }`}
                             >
                                 Sign in
                             </a>

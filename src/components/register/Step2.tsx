@@ -1,9 +1,14 @@
+import { Handlee } from "next/font/google";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
 type Props = {
     nextStep?: () => void;
     prevStep?: () => void;
+    formData: any;
+    setFormData: React.Dispatch<React.SetStateAction<any>>;
 };
-import { Handlee } from "next/font/google";
-import { useState } from "react";
 const handlee = Handlee({
     subsets: ["latin"],
     weight: ["400"],
@@ -32,8 +37,60 @@ const allergiesData = [
         symptoms: ["Hives", "Runny nose", "Vomiting"],
     },
 ];
-export default function Step2({ nextStep, prevStep }: Props) {
+export default function Step2({
+    nextStep,
+    prevStep,
+    formData,
+    setFormData,
+}: Props) {
+    const handleSelect = (id: number) => {
+        const newId = selectedId === id ? null : id;
+
+        setSelectedId(newId);
+
+        setFormData((prev: any) => ({
+            ...prev,
+            allergy: newId,
+        }));
+    };
+
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const router = useRouter();
+
+    <pre style={{ color: "black" }}>
+        {JSON.stringify(formData.children, null, 2)}
+    </pre>;
+
+    const handleSubmit = async () => {
+        try {
+            const payload = {
+                parent: formData.parent,
+                children: formData.children,
+                allergy: formData.allergy,
+            };
+
+            console.log("🚀 SUBMIT PAYLOAD:", payload);
+
+            const res = await axios.post(
+                "http://localhost:5000/api/auth/register",
+                payload,
+            );
+
+            console.log("🔥 REGISTER HIT");
+
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+
+            router.replace("/parent/dashboard");
+        } catch (err) {
+            console.log("❌ REGISTER ERROR:", err);
+        }
+    };
+
+    useEffect(() => {
+        console.log("🔥 STEP2 RECEIVED DATA:", formData);
+    }, [formData]);
+
     return (
         <div className="sm:w-[80%] mx-auto bg-[#fdece4] text-[#5a0000] flex flex-col items-center py-5">
             {/* Progress */}
@@ -81,11 +138,7 @@ export default function Step2({ nextStep, prevStep }: Props) {
                         <div key={item.id} className="flex gap-2 items-start">
                             {/* CIRCLE BUTTON */}
                             <button
-                                onClick={() =>
-                                    setSelectedId(
-                                        selectedId === item.id ? null : item.id,
-                                    )
-                                }
+                                onClick={() => handleSelect(item.id)}
                                 className={`mt-1 w-5 h-5 rounded-full border border-amber-950 hover:bg-amber-300 flex items-center justify-center transition ${selectedId === item.id ? "bg-amber-300" : "bg-white"}`}
                             >
                                 {/* inner dot when active */}
@@ -127,11 +180,15 @@ export default function Step2({ nextStep, prevStep }: Props) {
                 >
                     Back
                 </button>
+
                 <button
-                    onClick={nextStep}
-                    className="bg-yellow-400 px-9 py-2 rounded-xl font-bold hover:bg-yellow-300 transition-colors duration-200"
+                    onClick={() => {
+                        console.log("CLICKED FINISH");
+                        handleSubmit();
+                    }}
+                    className="bg-yellow-400 px-9 py-2 rounded-xl font-bold hover:bg-yellow-200 transition-colors duration-200"
                 >
-                    Next
+                    Finish
                 </button>
             </div>
         </div>

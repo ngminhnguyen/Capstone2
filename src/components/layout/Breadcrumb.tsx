@@ -45,7 +45,7 @@ export default function Breadcrumb({ recipeTitle }: BreadcrumbProps) {
     return (
         <div
             className={`
-                text-white text-sm md:text-base flex items-center gap-2 pb-10
+                text-white text-sm md:text-base flex items-center gap-2 pb-1
                 ${handlee.className}
             `}
         >
