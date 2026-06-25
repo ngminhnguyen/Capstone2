@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { useState } from "react";
 import Image from "next/image";
 import { Camera } from "lucide-react";
@@ -110,6 +112,19 @@ export default function CreateRecipePage() {
             ingredientSteps.filter((ingredient) => ingredient.id !== id),
         );
     };
+
+    useEffect(() => {
+        if (!recipe) return;
+
+        setTitle(recipe.title || "");
+        setDescription(recipe.desc || "");
+
+        setBabyAge(recipe.ageMonths ? `${recipe.ageMonths} month` : "");
+        setWeaningMethod(recipe.tags?.type || "");
+        setDietaryNeeds(recipe.tags?.diet?.[0] || "");
+        setRecipeType(recipe.tags?.type || "");
+        setOccasion(recipe.tags?.occasion || "");
+    }, [recipe]);
 
     const [babyAge, setBabyAge] = useState("");
 
@@ -225,6 +240,8 @@ export default function CreateRecipePage() {
                 <CustomDropdown
                     label="Baby Age"
                     placeholder="Select baby age"
+                    selectedValues={babyAge}
+                    setSelectedValues={setBabyAge}
                     options={[
                         "5 month",
                         "6 month",
@@ -245,6 +262,8 @@ export default function CreateRecipePage() {
                 <CustomDropdown
                     label="Weaning method"
                     placeholder="Select weaning method"
+                    selectedValues={weaningMethod}
+                    setSelectedValues={setWeaningMethod}
                     options={[
                         "Baby-led Weaning",
                         "Traditional Weaning",
@@ -254,6 +273,8 @@ export default function CreateRecipePage() {
                 <CustomDropdown
                     label="Dietary needs"
                     placeholder="Select dietary needs"
+                    selectedValues={dietaryNeeds}
+                    setSelectedValues={setDietaryNeeds}
                     options={[
                         "Vegetarian",
                         "Soy-Free",
@@ -266,6 +287,8 @@ export default function CreateRecipePage() {
                 <CustomDropdown
                     label="Recipe Type"
                     placeholder="Select recipe type"
+                    selectedValues={recipeType}
+                    setSelectedValues={setRecipeType}
                     options={[
                         "First taste",
                         "Veg purees",
@@ -276,6 +299,8 @@ export default function CreateRecipePage() {
                 <CustomDropdown
                     label="Occasion"
                     placeholder="Select occasion"
+                    selectedValues={occasion}
+                    setSelectedValues={setOccasion}
                     options={[
                         "Breakfast",
                         "Lunch",

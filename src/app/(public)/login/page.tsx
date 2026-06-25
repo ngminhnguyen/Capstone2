@@ -78,10 +78,10 @@ export default function LoginPage() {
     return (
         <div className={`min-h-full ${styles.pageBg} ${nunito.className}`}>
             <main>
-                <div className="mx-auto max-w-400 px-5 py-8">
-                    <div className="grid grid-cols-[1.2fr_0.8fr] gap-12 items-center bg-[url('/images/loginBgR.png')] bg-cover bg-center">
+                <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] min-h-screen bg-[url('/images/loginBgR.png')] bg-cover bg-center">
                         {/* Left image */}
-                        <div className="flex justify-center">
+                        <div className="flex items-center justify-center p-6">
                             <img
                                 src="/images/loginBg.png"
                                 alt="Login background"

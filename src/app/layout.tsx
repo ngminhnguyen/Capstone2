@@ -1,7 +1,7 @@
-import "./globals.css"
+import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/PublicFooter";
-
+import { BannerColorProvider } from "@/components/layout/ui/BannerColorContext";
 export default function RootLayout({
     children,
 }: {
@@ -10,9 +10,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <Navbar />
-                {children}
-                <Footer />
+                <BannerColorProvider>
+                    {/* <Navbar /> */}
+                    {children}
+                    {/* <Footer /> */}
+                </BannerColorProvider>
             </body>
         </html>
     );

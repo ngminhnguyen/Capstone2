@@ -7,12 +7,132 @@ import CustomDropdown from "@/components/layout/CustomDropdown";
 import Link from "next/link";
 // import { recipes } from "@/data/recipes";
 import Breadcrumb from "@/components/layout/Breadcrumb";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/api";
 const baloo = Baloo_2({
     subsets: ["latin"],
     weight: ["400", "600", "700"],
 });
+
+type RecipeApi = Record<string, any>;
+
+const normalizeText = (value: unknown) =>
+    String(value ?? "")
+        .trim()
+        .toLowerCase();
+
+const toTextArray = (value: unknown): string[] => {
+    if (Array.isArray(value)) {
+        return value.flatMap(toTextArray);
+    }
+
+    if (value && typeof value === "object") {
+        return Object.values(value as Record<string, unknown>).flatMap(
+            toTextArray,
+        );
+    }
+
+    return String(value ?? "")
+        .split(/[,;|/]/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+};
+
+const getRecipeValue = (recipe: RecipeApi, keys: string[]) => {
+    for (const key of keys) {
+        const value = recipe[key];
+
+        if (value !== undefined && value !== null && value !== "") {
+            return value;
+        }
+    }
+
+    return undefined;
+};
+
+const matchesAnySelectedValue = (
+    recipeValue: unknown,
+    selectedValues: string[],
+) => {
+    if (selectedValues.length === 0) return true;
+
+    const recipeValues = toTextArray(recipeValue).map(normalizeText);
+
+    return selectedValues.some((selectedValue) => {
+        const target = normalizeText(selectedValue);
+
+        return recipeValues.some(
+            (recipeText) =>
+                recipeText === target ||
+                recipeText.includes(target) ||
+                target.includes(recipeText),
+        );
+    });
+};
+
+const matchesAllSelectedValues = (
+    recipeValue: unknown,
+    selectedValues: string[],
+) => {
+    if (selectedValues.length === 0) return true;
+
+    const recipeValues = toTextArray(recipeValue).map(normalizeText);
+
+    return selectedValues.every((selectedValue) => {
+        const target = normalizeText(selectedValue);
+
+        return recipeValues.some(
+            (recipeText) =>
+                recipeText === target ||
+                recipeText.includes(target) ||
+                target.includes(recipeText),
+        );
+    });
+};
+
+type AgeRange = {
+    min: number;
+    max: number;
+};
+
+const getAgeRange = (value: unknown): AgeRange | null => {
+    const text = String(value ?? "").toLowerCase();
+    const numbers = text.match(/\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+
+    if (numbers.length === 0) return null;
+
+    if (numbers.length >= 2 && /-|to/.test(text)) {
+        return {
+            min: Math.min(numbers[0], numbers[1]),
+            max: Math.max(numbers[0], numbers[1]),
+        };
+    }
+
+    if (text.includes("+") || text.includes("and up")) {
+        return { min: numbers[0], max: Number.POSITIVE_INFINITY };
+    }
+
+    return { min: numbers[0], max: numbers[0] };
+};
+
+const matchesAgeFilter = (recipeAge: unknown, selectedValues: string[]) => {
+    if (selectedValues.length === 0) return true;
+
+    const recipeRange = getAgeRange(recipeAge);
+
+    if (!recipeRange) return false;
+
+    return selectedValues.some((selectedValue) => {
+        const selectedRange = getAgeRange(selectedValue);
+
+        if (!selectedRange) return false;
+
+        return (
+            recipeRange.min <= selectedRange.max &&
+            recipeRange.max >= selectedRange.min
+        );
+    });
+};
 
 export default function Recipes() {
     // FILTER STATES
@@ -21,7 +141,6 @@ export default function Recipes() {
     const [dietaryFilter, setDietaryFilter] = useState<string[]>([]);
     const [recipeTypeFilter, setRecipeTypeFilter] = useState<string[]>([]);
     const [occasionFilter, setOccasionFilter] = useState<string[]>([]);
-    const [open, setOpen] = useState(false);
     const [recipes, setRecipes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -85,19 +204,6 @@ export default function Recipes() {
             setSelectedValues: setOccasionFilter,
         },
     ];
-    // DATA demo
-    const recipesFind = [
-        { name: "Recipe 1", age: "6 months +" },
-        { name: "Recipe 2", age: "7 months +" },
-        { name: "Recipe 3", age: "10 months +" },
-    ];
-
-    // FILTER LOGIC
-    const filteredData =
-        ageFilter.length === 0
-            ? recipesFind
-            : recipesFind.filter((item) => ageFilter.includes(item.age));
-
     //Recipes Popular
     const recipesPopular = [
         {
@@ -139,7 +245,6 @@ export default function Recipes() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     // const currentData = recipes.slice(startIndex, startIndex + itemsPerPage);
 
-
     //Love button
     const [liked, setLiked] = useState<Record<string, boolean>>({});
     useEffect(() => {
@@ -161,22 +266,121 @@ export default function Recipes() {
 
         fetchRecipes();
     }, []);
-    const totalPages = Math.ceil(recipes.length / itemsPerPage);
-    const normalizedRecipes = recipes.map((r: any) => ({
-        id: r.id,
-        title: r.name,
-        desc: r.description,
-        img: r.image_url,
-        mealTime: r.mealType,
-        prepTime: r.prep_time,
-        cookTime: r.cooking_time,
-        serves: r.serves,
-        calories: r.calories,
-        age: r.month_age,
-        color: "from-purple-500 to-pink-500",
-        colorMonth: "bg-green-500",
-    }));
-    const currentData = normalizedRecipes.slice(startIndex, startIndex + itemsPerPage); if (loading) {
+    const normalizedRecipes = useMemo(
+        () =>
+            recipes.map((r: RecipeApi) => ({
+                id: r.id,
+                title: r.name,
+                desc: r.description,
+                img: r.image_url,
+                mealTime: getRecipeValue(r, [
+                    "mealType",
+                    "meal_type",
+                    "mealTime",
+                ]),
+                prepTime: r.prep_time,
+                cookTime: r.cooking_time,
+                serves: r.serves,
+                calories: r.calories,
+                age: getRecipeValue(r, [
+                    "month_age",
+                    "monthAge",
+                    "recommended_age",
+                    "age",
+                ]),
+                weaningMethod: getRecipeValue(r, [
+                    "weaning_method",
+                    "weaningMethod",
+                    "method",
+                ]),
+                dietaryNeeds: getRecipeValue(r, [
+                    "dietary_needs",
+                    "dietaryNeeds",
+                    "dietary_need",
+                    "dietary",
+                ]),
+                recipeType: getRecipeValue(r, [
+                    "recipe_type",
+                    "recipeType",
+                    "type",
+                    "category",
+                ]),
+                occasion: getRecipeValue(r, [
+                    "occasion",
+                    "mealType",
+                    "meal_type",
+                    "mealTime",
+                ]),
+                color: "from-purple-500 to-pink-500",
+                colorMonth: "bg-green-500",
+            })),
+        [recipes],
+    );
+
+    const filteredRecipes = useMemo(
+        () =>
+            normalizedRecipes.filter(
+                (recipe) =>
+                    matchesAgeFilter(recipe.age, ageFilter) &&
+                    matchesAnySelectedValue(
+                        recipe.weaningMethod,
+                        methodFilter,
+                    ) &&
+                    matchesAllSelectedValues(
+                        recipe.dietaryNeeds,
+                        dietaryFilter,
+                    ) &&
+                    matchesAnySelectedValue(
+                        recipe.recipeType,
+                        recipeTypeFilter,
+                    ) &&
+                    matchesAnySelectedValue(recipe.occasion, occasionFilter),
+            ),
+        [
+            normalizedRecipes,
+            ageFilter,
+            methodFilter,
+            dietaryFilter,
+            recipeTypeFilter,
+            occasionFilter,
+        ],
+    );
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [
+        ageFilter,
+        methodFilter,
+        dietaryFilter,
+        recipeTypeFilter,
+        occasionFilter,
+    ]);
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredRecipes.length / itemsPerPage),
+    );
+
+    const currentData = filteredRecipes.slice(
+        startIndex,
+        startIndex + itemsPerPage,
+    );
+
+    const hasActiveFilters =
+        ageFilter.length > 0 ||
+        methodFilter.length > 0 ||
+        dietaryFilter.length > 0 ||
+        recipeTypeFilter.length > 0 ||
+        occasionFilter.length > 0;
+
+    const clearAllFilters = () => {
+        setAgeFilter([]);
+        setMethodFilter([]);
+        setDietaryFilter([]);
+        setRecipeTypeFilter([]);
+        setOccasionFilter([]);
+    };
+    if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 Loading recipes...
@@ -265,7 +469,7 @@ export default function Recipes() {
                         <span className="font-medium">Filter by:</span>
 
                         {/* FILTERS */}
-                        <div className="flex flex-wrap gap-6">
+                        <div className="flex flex-wrap items-center gap-6">
                             {filterData.map((filter, index) => (
                                 <CustomDropdown
                                     key={index}
@@ -280,6 +484,16 @@ export default function Recipes() {
                                                 bg-[#F5E7DF]"
                                 />
                             ))}
+
+                            {hasActiveFilters && (
+                                <button
+                                    type="button"
+                                    onClick={clearAllFilters}
+                                    className="px-4 py-2 underline hover:opacity-70"
+                                >
+                                    Clear filters
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -296,30 +510,31 @@ export default function Recipes() {
                                 </div> */}
                 </div>
                 {/* RECIPES POPULAR*/}
-                <section className="relative w-full py-16">
-                    {/* BACKGROUND 1/2 */}
-                    <div className="absolute top-0 left-0 w-full h-1/2 bg-[#EFD36A] z-0"></div>
+                {!hasActiveFilters && (
+                    <section className="relative w-full py-16">
+                        {/* BACKGROUND 1/2 */}
+                        <div className="absolute top-0 left-0 w-full h-1/2 bg-[#EFD36A] z-0"></div>
 
-                    {/* CONTENT */}
-                    <div className="relative z-10">
-                        {/* TITLE */}
-                        <h2 className="text-center text-4xl md:text-5xl font-serif text-[#5A0A0A] mb-12">
-                            most popular recipes
-                        </h2>
+                        {/* CONTENT */}
+                        <div className="relative z-10">
+                            {/* TITLE */}
+                            <h2 className="text-center text-4xl md:text-5xl font-serif text-[#5A0A0A] mb-12">
+                                most popular recipes
+                            </h2>
 
-                        {/* CARDS */}
-                        <div className="flex justify-center gap-6 px-6">
-                            {recipesPopular.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="relative flex flex-col items-center"
-                                >
-                                    {/* BADGE */}
+                            {/* CARDS */}
+                            <div className="flex justify-center gap-6 px-6">
+                                {recipesPopular.map((item, index) => (
                                     <div
-                                        className={`absolute -top-8 left-1/2 -translate-x-1/2 z-20`}
+                                        key={index}
+                                        className="relative flex flex-col items-center"
                                     >
+                                        {/* BADGE */}
                                         <div
-                                            className={`
+                                            className={`absolute -top-8 left-1/2 -translate-x-1/2 z-20`}
+                                        >
+                                            <div
+                                                className={`
                                      ${item.color}
                                     w-15 h-15
                                     flex flex-col items-center justify-center
@@ -329,65 +544,75 @@ export default function Recipes() {
                                     rotate-[8deg]
                                     rounded-[60%_40%_55%_45%/55%_60%_40%_45%]
                                     `}
-                                        >
-                                            <span className="text-[14px] font-bold leading-none">
-                                                {item.age.split(" ")[0]}
-                                            </span>
-                                            <span className="text-[12px] leading-none">
-                                                {item.age.split(" ")[1]}
-                                            </span>
+                                            >
+                                                <span className="text-[14px] font-bold leading-none">
+                                                    {item.age.split(" ")[0]}
+                                                </span>
+                                                <span className="text-[12px] leading-none">
+                                                    {item.age.split(" ")[1]}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {/* CARD */}
-                                    <div className=" w-55 overflow-visible">
-                                        {/* IMAGE */}
-                                        <div className="border-3 border-amber-950 rounded-2xl">
-                                            <img
-                                                src={item.img}
-                                                alt={item.title}
-                                                className="w-full object-cover rounded-2xl"
-                                                width={400}
-                                                height={300}
-                                            />
+                                        {/* CARD */}
+                                        <div className=" w-55 overflow-visible">
+                                            {/* IMAGE */}
+                                            <div className="border-3 border-amber-950 rounded-2xl">
+                                                <img
+                                                    src={item.img}
+                                                    alt={item.title}
+                                                    className="w-full object-cover rounded-2xl"
+                                                    width={400}
+                                                    height={300}
+                                                />
+                                            </div>
                                         </div>
+
+                                        {/* TITLE */}
+                                        <p className="mt-4 text-center text-[#5A0A0A] font-medium max-w-50">
+                                            {item.title}
+                                        </p>
                                     </div>
+                                ))}
+                            </div>
 
-                                    {/* TITLE */}
-                                    <p className="mt-4 text-center text-[#5A0A0A] font-medium max-w-50">
-                                        {item.title}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* DOTS */}
-                        <div className="flex justify-center gap-4 mt-6">
-                            {[0, 1, 2, 3, 4].map((dot) => (
-                                <div
-                                    key={dot}
-                                    className={`w-5 h-5 rounded-full border-2 border-white ${dot === 2
-                                        ? "bg-orange-400"
-                                        : "bg-[#E6C06A]"
+                            {/* DOTS */}
+                            <div className="flex justify-center gap-4 mt-6">
+                                {[0, 1, 2, 3, 4].map((dot) => (
+                                    <div
+                                        key={dot}
+                                        className={`w-5 h-5 rounded-full border-2 border-white ${
+                                            dot === 2
+                                                ? "bg-orange-400"
+                                                : "bg-[#E6C06A]"
                                         }`}
-                                />
-                            ))}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                )}
 
                 {/* RECIPES */}
                 <section className="w-full">
                     <h2 className="text-center text-[#5A0A0A] text-lg font-semibold mb-6">
-                        {recipes.length} Recipe{recipes.length !== 1 && "s"}{" "}
-                        Found
+                        {filteredRecipes.length} Recipe
+                        {filteredRecipes.length !== 1 && "s"} Found
                     </h2>
                     {/* GRID */}
                     <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {currentData.map((item) => (
-                            <Link key={item.id} href={`/recipes/${item.id}`}>
-                                <div
+                        {currentData.length === 0 ? (
+                            <div className="col-span-full rounded-2xl border-2 border-[#8B2A16] bg-[#F5E7DF] p-8 text-center">
+                                No recipes match these filters.
+                            </div>
+                        ) : (
+                            currentData.map((item) => (
+                                <Link
                                     key={item.id}
-                                    className={`relative bg-linear-to-b ${item.color}
+                                    href={`/recipes/${item.id}`}
+                                >
+                                    <div
+                                        key={item.id}
+                                        className={`relative bg-linear-to-b ${item.color}
                                         text-white rounded-2xl p-4
                                         h-120
                                         transition-all duration-300
@@ -395,129 +620,135 @@ export default function Recipes() {
                                         hover:rotate-2
                                         hover:shadow-[0_25px_50px_rgba(0,0,0,0.3)]
                                         "`}
-                                >
-                                    {/* Meal Time */}
-                                    <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-xl px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
-                                        {item.mealTime}
-                                    </div>
+                                    >
+                                        {/* Meal Time */}
+                                        <div className="absolute -top-3 right-4 bg-pink-200 text-[#5A0A0A] text-xl px-6 py-1 rotate-5 rounded-sm border-2 border-amber-950 ">
+                                            {item.mealTime}
+                                        </div>
 
-                                    {/* IMG */}
-                                    <div className="rounded-xl overflow-hidden mb-4">
-                                        <img
-                                            src={item.img}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
+                                        {/* IMG */}
+                                        <div className="rounded-xl overflow-hidden mb-4">
+                                            <img
+                                                src={item.img}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
 
-                                    {/* TITLE */}
-                                    <h3 className="font-bold text-xl mb-2">
-                                        {item.title}
-                                    </h3>
+                                        {/* TITLE */}
+                                        <h3 className="font-bold text-xl mb-2">
+                                            {item.title}
+                                        </h3>
 
-                                    {/* DESC */}
-                                    <p className="text-xs text-gray-200 mb-4">
-                                        {item.desc}
-                                    </p>
+                                        {/* DESC */}
+                                        <p className="text-xs text-gray-200 mb-4">
+                                            {item.desc}
+                                        </p>
 
-                                    <div className="absolute bottom-4 left-4 right-3 mt-4">
-                                        {/* DOTTED LINE */}
-                                        <div
-                                            className="w-full h-2 mb-4 
+                                        <div className="absolute bottom-4 left-4 right-3 mt-4">
+                                            {/* DOTTED LINE */}
+                                            <div
+                                                className="w-full h-2 mb-4 
                                                         bg-[radial-gradient(circle,#ffffff_3px,transparent_3px)] 
                                                         bg-size-[14px_8px] bg-repeat-x"
-                                        ></div>
-                                        {/* INFO ROW */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center justify-start gap-3">
-                                                {/* Pre Time */}
-                                                <div className="flex flex-col items-center gap-1">
-                                                    <span className="text-xs opacity-80">
-                                                        Prep
-                                                    </span>
-                                                    <div className="relative">
-                                                        <img
-                                                            src="/images/recipeCircle2.png"
-                                                            alt="Recipe Circle 2"
-                                                            className="w-10 h-10"
-                                                        />
-                                                        <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                            <span className="text-[16px] font-bold">
-                                                                {item.prepTime}
-                                                            </span>
-                                                            <span className="text-[8px]">
-                                                                min
-                                                            </span>
+                                            ></div>
+                                            {/* INFO ROW */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center justify-start gap-3">
+                                                    {/* Pre Time */}
+                                                    <div className="flex flex-col items-center gap-1">
+                                                        <span className="text-xs opacity-80">
+                                                            Prep
                                                         </span>
+                                                        <div className="relative">
+                                                            <img
+                                                                src="/images/recipeCircle2.png"
+                                                                alt="Recipe Circle 2"
+                                                                className="w-10 h-10"
+                                                            />
+                                                            <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                                <span className="text-[16px] font-bold">
+                                                                    {
+                                                                        item.prepTime
+                                                                    }
+                                                                </span>
+                                                                <span className="text-[8px]">
+                                                                    min
+                                                                </span>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Cook */}
-                                                <div className="flex flex-col items-center gap-1">
-                                                    <span className="text-xs opacity-80">
-                                                        Cook
-                                                    </span>
-                                                    <div className="relative">
-                                                        <img
-                                                            src="/images/recipeCircle2.png"
-                                                            alt="Recipe Circle 2"
-                                                            className="w-10 h-10"
-                                                        />
-                                                        <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
-                                                            <span className="text-[16px] font-bold">
-                                                                {item.cookTime}
-                                                            </span>
-                                                            <span className="text-[8px]">
-                                                                min
-                                                            </span>
+                                                    {/* Cook */}
+                                                    <div className="flex flex-col items-center gap-1">
+                                                        <span className="text-xs opacity-80">
+                                                            Cook
                                                         </span>
+                                                        <div className="relative">
+                                                            <img
+                                                                src="/images/recipeCircle2.png"
+                                                                alt="Recipe Circle 2"
+                                                                className="w-10 h-10"
+                                                            />
+                                                            <span className="absolute top-2 left-3.5 text-[#5A0A0A] flex flex-col items-center leading-none">
+                                                                <span className="text-[16px] font-bold">
+                                                                    {
+                                                                        item.cookTime
+                                                                    }
+                                                                </span>
+                                                                <span className="text-[8px]">
+                                                                    min
+                                                                </span>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* AGE */}
-                                                <div className="flex flex-col items-center gap-1">
-                                                    <span className="text-xs opacity-80 invisible">
-                                                        Age
-                                                    </span>
-                                                    <div
-                                                        className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
-                                                    >
-                                                        <div className="text-cente leading-none">
-                                                            <div>
-                                                                {item.age}
+                                                    {/* AGE */}
+                                                    <div className="flex flex-col items-center gap-1">
+                                                        <span className="text-xs opacity-80 invisible">
+                                                            Age
+                                                        </span>
+                                                        <div
+                                                            className={`w-12 h-12 text-white rounded-full flex items-center justify-center text-[11px] font-semibold border-2 border-[#5A0A0A] ${item.colorMonth}`}
+                                                        >
+                                                            <div className="text-cente leading-none">
+                                                                <div>
+                                                                    {item.age}
+                                                                </div>
+                                                                <div>
+                                                                    months
+                                                                </div>
                                                             </div>
-                                                            <div>months</div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            {/* Prep */}
+                                                {/* Prep */}
 
-                                            {/* Love Button*/}
-                                            <div
-                                                onClick={(e) => {
-                                                    e.preventDefault(); // chặn Link
-                                                    e.stopPropagation(); // chặn bubble
+                                                {/* Love Button*/}
+                                                <div
+                                                    onClick={(e) => {
+                                                        e.preventDefault(); // chặn Link
+                                                        e.stopPropagation(); // chặn bubble
 
-                                                    setLiked((prev) => ({
-                                                        ...prev,
-                                                        [item.id]:
-                                                            !prev[item.id],
-                                                    }));
+                                                        setLiked((prev) => ({
+                                                            ...prev,
+                                                            [item.id]:
+                                                                !prev[item.id],
+                                                        }));
 
-                                                    // TODO: call API save favorite
-                                                }}
-                                                className="w-14 h-14 cursor-pointer"
-                                            >
-                                                <svg
-                                                    viewBox="0 0 200 200"
-                                                    className="w-full h-full"
+                                                        // TODO: call API save favorite
+                                                    }}
+                                                    className="w-14 h-14 cursor-pointer"
                                                 >
-                                                    {/* background giữ nguyên */}
-                                                    {/* <rect width="200" height="200" fill="#6B21A8" /> */}
+                                                    <svg
+                                                        viewBox="0 0 200 200"
+                                                        className="w-full h-full"
+                                                    >
+                                                        {/* background giữ nguyên */}
+                                                        {/* <rect width="200" height="200" fill="#6B21A8" /> */}
 
-                                                    {/* ❤️ HEART SHAPE (chuẩn hơn) */}
-                                                    <path
-                                                        d="
+                                                        {/* ❤️ HEART SHAPE (chuẩn hơn) */}
+                                                        <path
+                                                            d="
                                                                 M100 170
                                                                 C 40 120, 20 70, 60 50
                                                                 C 80 40, 100 60, 100 60
@@ -525,11 +756,11 @@ export default function Recipes() {
                                                                 C 180 70, 160 120, 100 170
                                                                 Z
                                                                 "
-                                                        stroke="#4A0F0F"
-                                                        strokeWidth="6"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        className={`
+                                                            stroke="#4A0F0F"
+                                                            strokeWidth="6"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            className={`
                                                                     transition-all duration-300
                                                                     hover:fill-pink-500
                                                                     hover:scale-110
@@ -537,51 +768,55 @@ export default function Recipes() {
                                                                     origin-center
                                                                     ${liked[item.id] ? "fill-pink-500" : "fill-white"}
                                                         `}
-                                                    />
-                                                </svg>
+                                                        />
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            ))
+                        )}
                     </div>
 
                     {/* PAGINATION */}
-                    <div className="flex justify-center gap-4 mt-10">
-                        {Array.from(
-                            { length: totalPages },
-                            (_, i) => i + 1,
-                        ).map((page) => (
-                            <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`
+                    {totalPages > 1 && (
+                        <div className="flex justify-center gap-4 mt-10">
+                            {Array.from(
+                                { length: totalPages },
+                                (_, i) => i + 1,
+                            ).map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page)}
+                                    className={`
                                                 w-10 h-10 rounded-full border-2 flex items-center justify-center
                                                 transition-all duration-200
                 
-                                                ${currentPage === page
-                                        ? "bg-orange-400 border-[#5A0A0A]"
-                                        : "border-[#5A0A0A] text-[#5A0A0A] hover:bg-[#f3d9c9]"
-                                    }
+                                                ${
+                                                    currentPage === page
+                                                        ? "bg-orange-400 border-[#5A0A0A]"
+                                                        : "border-[#5A0A0A] text-[#5A0A0A] hover:bg-[#f3d9c9]"
+                                                }
                                             `}
-                            >
-                                {page}
-                            </button>
-                        ))}
+                                >
+                                    {page}
+                                </button>
+                            ))}
 
-                        {/* NEXT */}
-                        <button
-                            onClick={() =>
-                                setCurrentPage((prev) =>
-                                    prev < totalPages ? prev + 1 : prev,
-                                )
-                            }
-                            className="ml-2 text-[#5A0A0A] hover:underline"
-                        >
-                            next &gt;
-                        </button>
-                    </div>
+                            {/* NEXT */}
+                            <button
+                                onClick={() =>
+                                    setCurrentPage((prev) =>
+                                        prev < totalPages ? prev + 1 : prev,
+                                    )
+                                }
+                                className="ml-2 text-[#5A0A0A] hover:underline"
+                            >
+                                next &gt;
+                            </button>
+                        </div>
+                    )}
                 </section>
             </main>
         </div>

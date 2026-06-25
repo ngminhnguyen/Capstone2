@@ -27,7 +27,7 @@ const BreadcrumbComp = ({ title }: BreadCrumbType) => {
                     >
                         <li className="flex items-center">
                             <a
-                                href="/"
+                                href="dashboard"
                                 className="text-fuchsia-700 hover:text-fuchsia-900 transition-colors"
                             >
                                 Home

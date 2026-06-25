@@ -273,7 +273,7 @@ export default function Step2({
             </div>
 
             {/* Debug */}
-            <div className="w-[60%] mt-6">
+            {/* <div className="w-[60%] mt-6">
                 <pre className="text-xs bg-white p-3 rounded">
                     {JSON.stringify(
                         selectedIds,
@@ -281,7 +281,7 @@ export default function Step2({
                         2
                     )}
                 </pre>
-            </div>
+            </div> */}
 
             {/* Buttons */}
             <div className="w-[60%] flex justify-between gap-2 mt-8 pl-10 pr-10">

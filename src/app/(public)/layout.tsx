@@ -7,11 +7,12 @@ export default function PublicLayout({
 }: {
     children: React.ReactNode;
 }) {
+    // return <>{children}</>;
     return (
         <BannerColorProvider>
-            {/* <Navbar /> */}
+            <Navbar />
             {children}
-            {/* <Footer /> */}
+            <Footer />
         </BannerColorProvider>
     );
 }

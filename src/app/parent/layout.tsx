@@ -5,6 +5,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/expert/theme-provider";
 import { Suspense } from "react";
 import AuthGuard from "@/components/AuthGuard";
+import { BannerColorProvider } from "@/components/layout/ui/BannerColorContext";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/PublicFooter";
 
 export default function ParentLayout({
     children,
@@ -21,7 +24,11 @@ export default function ParentLayout({
             >
                 <Suspense fallback={null}>
                     <div className="min-h-screen">
-                        {children}
+                        <BannerColorProvider>
+                            <Navbar />
+                            {children}
+                            <Footer />
+                        </BannerColorProvider>
                         <Analytics />
                     </div>
                 </Suspense>

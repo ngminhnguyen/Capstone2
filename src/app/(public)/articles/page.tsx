@@ -1,6 +1,4 @@
 "use client";
-import Footer from "@/components/layout/PublicFooter";
-import Navbar from "@/components/layout/Navbar";
 import { color, motion } from "framer-motion";
 import { Baloo_2 } from "next/font/google";
 import { useCallback, useState } from "react";

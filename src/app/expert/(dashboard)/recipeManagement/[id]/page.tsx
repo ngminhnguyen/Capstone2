@@ -69,7 +69,7 @@ export default async function RecipeDetailPage({ params }: PageProps) {
 
                                 <div>
                                     <h3 className="text-lg font-semibold">
-                                        {recipe.author}
+                                        {recipe.author.name}
                                     </h3>
 
                                     <p className="text-xl text-amber-950/60">
@@ -97,8 +97,8 @@ export default async function RecipeDetailPage({ params }: PageProps) {
                             </div>
 
                             <div className="flex items-center gap-2 px-6 py-4 rounded-2xl border">
-                                <Baby className="text-amber-400" /> {recipe.age}{" "}
-                                months+
+                                <Baby className="text-amber-400" />{" "}
+                                {recipe.ageMonths} months+
                             </div>
                         </div>
                         {/* ACTION BUTTONS */}
@@ -152,6 +152,20 @@ export default async function RecipeDetailPage({ params }: PageProps) {
                                 ))}
                             </ul>
                         </div>
+
+                        <div className="flex flex-wrap gap-2 mt-6">
+                            {/* <span className="px-3 py-1 bg-amber-100 rounded-full text-sm">
+                                {recipe.ageMonths} months+
+                            </span> */}
+
+                            <span className="px-3 py-1 bg-amber-100 rounded-full text-sm">
+                                {recipe.tags?.type || "Puree"}
+                            </span>
+
+                            {/* <span className="px-3 py-1 bg-amber-100 rounded-full text-sm">
+                                {recipe.tags?.type || "Puree"}
+                            </span> */}
+                        </div>
                     </div>
 
                     {/* Right Side */}
@@ -181,39 +195,43 @@ export default async function RecipeDetailPage({ params }: PageProps) {
                         </div>
                     </div>
                 </div>
-                {/* ACTION BUTTONS */}
-                <div className="flex flex-wrap gap-4 mt-10 border-t border-t-amber-950/20 pt-6">
-                    <Link
-                        href={`/expert/recipeManagement/${recipe.id}/edit`}
-                        className="border border-[#7A2E2E] rounded-2xl px-8 py-5 flex items-center gap-3 hover:bg-[#7A2E2E] hover:text-white transition"
-                    >
-                        Edit
-                    </Link>
-                    <button className="flex items-center gap-2 border border-orange-400 text-orange-500 px-5 py-3 rounded-xl font-medium hover:bg-orange-50">
-                        <Pencil size={18} />
-                        Edit
-                    </button>
-
-                    <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
-                        <BarChart3 size={18} />
-                        View Reports
-                    </button>
-
-                    {/* <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
-                        <FolderPlus size={18} />
-                        Add to Collection
-                    </button> */}
-
-                    <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
-                        <Share2 size={18} />
-                        Share
-                    </button>
-
-                    <button className="border px-4 rounded-xl hover:bg-gray-100">
-                        <MoreHorizontal />
-                    </button>
-                </div>
             </div>
         </div>
     );
 }
+
+{
+    /* ACTION BUTTONS */
+}
+
+// <div className="flex flex-wrap gap-4 mt-10 border-t border-t-amber-950/20 pt-6">
+//     <Link
+//         href={`/expert/recipeManagement/${recipe.id}/edit`}
+//         className="border border-[#7A2E2E] rounded-2xl px-8 py-5 flex items-center gap-3 hover:bg-[#7A2E2E] hover:text-white transition"
+//     >
+//         Edit
+//     </Link>
+//     <button className="flex items-center gap-2 border border-orange-400 text-orange-500 px-5 py-3 rounded-xl font-medium hover:bg-orange-50">
+//         <Pencil size={18} />
+//         Edit
+//     </button>
+
+//     <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
+//         <BarChart3 size={18} />
+//         View Reports
+//     </button>
+
+//     {/* <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
+//         <FolderPlus size={18} />
+//         Add to Collection
+//     </button> */}
+
+//     <button className="flex items-center gap-2 border px-5 py-3 rounded-xl hover:bg-gray-100">
+//         <Share2 size={18} />
+//         Share
+//     </button>
+
+//     <button className="border px-4 rounded-xl hover:bg-gray-100">
+//         <MoreHorizontal />
+//     </button>
+// </div>

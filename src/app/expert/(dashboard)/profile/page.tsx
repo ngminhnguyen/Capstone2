@@ -37,7 +37,7 @@ export default function UserProfile() {
         lastName: "Anderson",
         email: "mathew.anderson@gmail.com",
         phone: "(347) 528-1947",
-        position: "Team Leader",
+        position: "Expert",
         facebook: "#!",
         twitter: "#!",
         github: "#!",

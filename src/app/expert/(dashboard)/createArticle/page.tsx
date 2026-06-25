@@ -190,19 +190,19 @@ export default function CreateArticles() {
                     placeholder="Write heading of your article here..."
                     value={heading}
                     onChange={(e) => setHeading(e.target.value)}
-                    className="w-full min-h-80 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
+                    className="w-full min-h-50 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
                 />
                 <textarea
                     placeholder="Write a little note for your article here..."
                     value={paragraph}
                     onChange={(e) => setParagraph(e.target.value)}
-                    className="w-full min-h-120 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
+                    className="w-full min-h-50 bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl mb-8"
                 />
                 <textarea
                     placeholder="Write your article content here..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full min-h-120  bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl"
+                    className="w-full min-h-50  bg-[#f7f5f2] p-8 resize-none outline-none text-lg text-amber-950 placeholder:text-[#A88C7D] rounded-2xl"
                 />
             </div>
         </div>

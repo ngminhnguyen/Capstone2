@@ -30,8 +30,7 @@ export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
         11: "bg-rose-500",
         12: "bg-fuchsia-500",
     };
-    const colorMonth =
-        monthColorMap[Number(recipe?.month_age)];
+    const colorMonth = monthColorMap[Number(recipe?.month_age)];
 
     const sticker1 =
         recipe?.stickerImg1 ||
@@ -54,6 +53,10 @@ export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
         };
     }, [colorMonth, setBannerColor]);
 
+    useEffect(() => {
+        console.log("🎨 RecipeHeader set color:", colorMonth);
+        setBannerColor(colorMonth);
+    }, [colorMonth, setBannerColor]);
     return (
         <section
             className={`
@@ -131,9 +134,7 @@ export default function RecipeHeader({ recipe }: RecipeHeaderProps) {
                         ${colorMonth}
                     `}
                 >
-                    <span className="text-3xl">
-                        {age || "--"}
-                    </span>
+                    <span className="text-3xl">{age || "--"}</span>
                     <span className="text-xl">months</span>
                 </div>
             </div>

@@ -444,7 +444,7 @@ export default function RecipeDetail() {
                 </section>
                 {/* Rating Reviews*/}
 
-                <div className="max-w-7xl mx-auto px-4 mt-8">
+                <div className="max-w-7xl mx-auto px-4 py-8">
                     <div className="flex justify-center">
                         <RatingReviews
                             averageRating={ratingSummary.averageRating}

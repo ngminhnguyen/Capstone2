@@ -102,8 +102,13 @@ export default function CreateRecipePage() {
     };
 
     // dropDownMenu
-    const [openAge, setOpenAge] = useState(false);
-    const [selectedAge, setSelectedAge] = useState("Select baby age");
+    // const [openAge, setOpenAge] = useState(false);
+    // const [selectedAge, setSelectedAge] = useState("Select baby age");
+    const [babyAge, setBabyAge] = useState("");
+    const [weaningMethod, setWeaningMethod] = useState("");
+    const [dietaryNeeds, setDietaryNeeds] = useState("");
+    const [recipeType, setRecipeType] = useState("");
+    const [occasion, setOccasion] = useState("");
 
     return (
         <div className="p-8 ">
@@ -220,9 +225,11 @@ export default function CreateRecipePage() {
                         "16 month",
                         "17 month",
                         "18 month",
-                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
+                    ]}
+                    selectedValues={babyAge}
+                    setSelectedValues={setBabyAge}
+                />
+
                 <CustomDropdown
                     label="Weaning method"
                     placeholder="Select weaning method"
@@ -230,9 +237,11 @@ export default function CreateRecipePage() {
                         "Baby-led Weaning",
                         "Traditional Weaning",
                         "Japanese Weaning",
-                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
+                    ]}
+                    selectedValues={weaningMethod}
+                    setSelectedValues={setWeaningMethod}
+                />
+
                 <CustomDropdown
                     label="Dietary needs"
                     placeholder="Select dietary needs"
@@ -243,9 +252,11 @@ export default function CreateRecipePage() {
                         "Gluten-Free",
                         "Dairy-Free",
                         "Egg-Free",
-                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
+                    ]}
+                    selectedValues={dietaryNeeds}
+                    setSelectedValues={setDietaryNeeds}
+                />
+
                 <CustomDropdown
                     label="Recipe Type"
                     placeholder="Select recipe type"
@@ -254,9 +265,11 @@ export default function CreateRecipePage() {
                         "Veg purees",
                         "Finger foods",
                         "Dips",
-                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
+                    ]}
+                    selectedValues={recipeType}
+                    setSelectedValues={setRecipeType}
+                />
+
                 <CustomDropdown
                     label="Occasion"
                     placeholder="Select occasion"
@@ -266,9 +279,10 @@ export default function CreateRecipePage() {
                         "Dinner",
                         "Snack",
                         "Pudding",
-                    ]} selectedValues={""} setSelectedValues={function (value: SetStateAction<string>): void {
-                        throw new Error("Function not implemented.");
-                    } }                />
+                    ]}
+                    selectedValues={occasion}
+                    setSelectedValues={setOccasion}
+                />
             </div>
             <div className="grid grid-cols-12 gap-10 mt-10">
                 {/* Ingredients Section */}
